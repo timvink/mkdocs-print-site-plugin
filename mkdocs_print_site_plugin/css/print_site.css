@@ -1,0 +1,63 @@
+
+#print-site-banner {
+    border:2px; 
+    border-style:solid; 
+    border-color:#000000; 
+    padding: 0em 1em 0em 1em; 
+    margin-bottom: 2em;
+}
+#print-site-banner h3 {
+    margin-top: 1rem;
+}
+
+
+@media print {    
+
+    /* included bookmarks on h1 and h2
+    Doesn't work, but included In case Chrome gets support 
+    for these experimental CSS features that define PDF bookmarks */
+    h1 {
+        bookmark-label: content(); 
+        -ah-bookmark-level: 1;
+        -ro-pdf-bookmark-level: 1;
+    }
+    h2 {
+        bookmark-label: content(); 
+        -ah-bookmark-level: 2;
+        -ro-pdf-bookmark-level: 2;
+    }
+
+    #print-site-banner { display: none; }
+
+    /* PDF page breaks on each MkDocs page, except the first one */
+    section.print-page {
+        page-break-before: always;
+    }
+    section.print-page:first-of-type {
+        page-break-before: avoid;
+    }
+
+    pre, blockquote {
+        page-break-inside: avoid;
+    }
+
+    /* Avoid a page break immediately after a heading */
+    /* Credits https://stackoverflow.com/a/9238898/5525118 */
+    h1 {
+        page-break-inside: avoid;
+    }
+    h1::after {
+        content: "";
+        display: block;
+        height: 100px;
+        margin-bottom: -100px;
+    }
+
+}
+
+@page {
+
+    /* Prevent image page overflow */
+    img { max-width: 500px !important; }
+
+}

@@ -1,0 +1,12 @@
+site_name: Test
+
+theme:
+    name: material
+
+plugins:
+    - print-site
+ 
+nav:
+    - Home: index.md
+    - Page Z: z.md
+    - Page A: a.md

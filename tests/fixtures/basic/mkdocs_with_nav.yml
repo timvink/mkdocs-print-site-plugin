@@ -1,0 +1,9 @@
+site_name: Test
+
+plugins:
+    - print-site
+ 
+nav:
+    - Home: index.md
+    - Page Z: z.md
+    - Page A: a.md

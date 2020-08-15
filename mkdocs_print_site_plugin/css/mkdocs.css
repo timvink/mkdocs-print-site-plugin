@@ -1,0 +1,19 @@
+/* Print styles for default MkDocs theme  */
+
+@media print {
+    .col-md-3 { display: none !important; }
+}
+
+@page {
+
+    size: a4 portrait;
+    margin: 15mm 10mm 15mm 10mm;
+    counter-increment: page;
+
+    @bottom-center {
+        content: string(chapter);
+    }
+    @bottom-right {
+        content: 'Page ' counter(page);
+    }
+}

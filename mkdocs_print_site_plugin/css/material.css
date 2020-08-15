@@ -1,0 +1,21 @@
+/* print styles for mkdocs material theme 
+https://github.com/squidfunk/mkdocs-material */
+
+@media print {
+
+}
+
+@page {
+
+    size: a4 portrait;
+    margin: 15mm 10mm 25mm 10mm;
+    counter-increment: page;
+
+    @bottom-center {
+        content: string(chapter);
+    }
+    @bottom-right {
+        content: 'Page ' counter(page);
+    }
+
+}
