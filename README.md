@@ -1,6 +1,6 @@
-**This plugin is under development and the first version has not yet been released**
-
 # mkdocs-print-site-plugin
+
+> ⚠️ **This plugin is under development and the first version has not yet been released. Expected end of August :)**
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a page to your site combining all pages, allowing your site visitors to *File > Print > Save as PDF* the entire site.
 
@@ -31,6 +31,9 @@ plugins:
 
 > If you have no `plugins` entry in your config file yet, you'll likely also want to add the `search` plugin. MkDocs enables it by default if there is no `plugins` entry set.
 
+## Documentation
+
+Available at [timvink.github.io/mkdocs-print-page-plugin](https://timvink.github.io/mkdocs-print-page-plugin/).
 
 ## TODO
 
@@ -55,11 +58,10 @@ plugins:
             permalink: "#"
     ```
 - ensure support of 'use_directory_urls' settings https://www.mkdocs.org/user-guide/configuration/#use_directory_urls
-
-```python
-[p.url for p in self.pages]
-['index.html', 'z.html', 'a.html']
-```
+    ```python
+    [p.url for p in self.pages]
+    ['index.html', 'z.html', 'a.html']
+    ```
 
 ## Contributing
 
