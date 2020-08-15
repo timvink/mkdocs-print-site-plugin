@@ -94,6 +94,7 @@ class PrintSitePlugin(BasePlugin):
         # TODO: make this an option
         self.print_page = self.print_file.page
         self.print_page.title = "Print Site"
+        self.print_page.edit_url = "" # No edit icon
 
         # Save the (order of) pages in the navigation
         nav_pages = [p for p in nav.pages if p != self.print_page]
