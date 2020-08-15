@@ -1,6 +1,7 @@
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 import os
+import warnings
 
 from pathlib import Path
 from functools import wraps
@@ -45,30 +46,21 @@ class PrintSitePlugin(BasePlugin):
         with self.print_file_path.open(mode="w", encoding="UTF8") as f:
             f.write("")
 
-        self.renderer = Renderer()
-
         # Append printpage to nav.
         # prevents INFO warning that 'print_page.md' is not in nav
         if config.get("nav"):
             config.get("nav").append({"Print": "print_page.md"})
 
-        # Add generic print styles
-        config["extra_css"].append(os.path.join("css", "print_site.css"))
-
         # Insert print CSS styles corresponding to current theme
-        # Downside: this is added to every page, not just print site page.
-        # TODO: insert print CSS only to CSS page, by inserting into <head>:
-        # <link href="css/print_site.css" rel="stylesheet">
-        # <link href="css/{theme_name}.css" rel="stylesheet">
         theme_name = config.get("theme").name
         theme_css_files = [Path(f).stem for f in os.listdir(TEMPLATES_DIR)]
-        if theme_name in theme_css_files:
-            config["extra_css"].append(os.path.join("css", theme_name + ".css"))
-        else:
-            raise UserWarning(
+        if theme_name not in theme_css_files:
+            warnings.warn(
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
                 % theme_name
             )
+        
+        self.renderer = Renderer(theme_name = theme_name)
 
         return config
 
@@ -126,6 +118,13 @@ class PrintSitePlugin(BasePlugin):
             html = self.renderer.write_combined()
 
         return html
+    
+    def on_post_page(self, output, page, config, **kwargs):
+        
+        if page == self.print_page:
+            output = self.renderer.insert_css_statements(output)
+
+        return output
 
     def on_post_build(self, config: config_options.Config, **kwargs) -> dict:
 
