@@ -37,28 +37,24 @@ plugins:
   - print-site
 ```
 
+> ⚠️ Make sure to put `print-site` to the **bottom** of the plugin list. This is because other plugins might alter your site (like the navigation), and you want these changes included in the print page.
+
 > If you have no `plugins` entry in your config file yet, you'll likely also want to add the `search` plugin. MkDocs enables it by default if there is no `plugins` entry set.
 
 ## Documentation
 
 Available at [timvink.github.io/mkdocs-print-page-plugin](https://timvink.github.io/mkdocs-print-page-plugin/).
 
-## TODO
+## TODO for 1st release
 
 - Perhaps prevent the write file, by having the .md file be part of the package? Or put it in a tmp folder? See # https://github.com/greenape/mknotebooks/blob/master/mknotebooks/plugin.py#L126
-- Document known issues 
+- Document known limitations
     - PDF bookmarks https://github.com/timvink/mkdocs-print-page-plugin/issues/1
     -  [instant loading](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#instant-loading) feature with mkdocs material) 
-- Add print button to every page? See approach described at https://github.com/danielfrg/mkdocs-jupyter
-- Ensure order of pages is consistent with navigation order, by making sure the plugin has been added last in the list.
-- ensure this plugin is defined last (to allow other plugins to make any modifications first). Return a warning if this is not the case.
+- Return a warning to the user if the `print-site` plugin is not defined last (to allow other plugins to make any modifications first).
 - Add option to change the print page title.
-- Add option to insert a Table of contents page. Here is how to create the leader dots and page numbers using CSS https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
-- Add option to insert a frontcover page http://blog.michaelperrin.fr/2019/11/04/printing-the-web-part-2-html-and-css-for-printing-books/
-- Display current chapter title in the footer http://blog.michaelperrin.fr/2019/11/04/printing-the-web-part-2-html-and-css-for-printing-books/ 
 - check if appending print page does not break nested navigations (perhaps unit test?)
 - check tables with lots of columns, deal with overflow
-- Option to add print url after links? https://css-tricks.com/snippets/css/print-url-after-links/
 - support different anchor links, or at least throw warning if different than #
   https://www.mkdocs.org/user-guide/writing-your-docs/
     ```yml
@@ -71,6 +67,15 @@ Available at [timvink.github.io/mkdocs-print-page-plugin](https://timvink.github
     [p.url for p in self.pages]
     ['index.html', 'z.html', 'a.html']
     ```
+
+## TOOD create issues for
+
+- Add option to insert a Table of contents page. Here is how to create the leader dots and page numbers using CSS https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
+- Add option to insert a frontcover page http://blog.michaelperrin.fr/2019/11/04/printing-the-web-part-2-html-and-css-for-printing-books/
+- Display current chapter title in the footer http://blog.michaelperrin.fr/2019/11/04/printing-the-web-part-2-html-and-css-for-printing-books/ 
+- Option to add print url after links? https://css-tricks.com/snippets/css/print-url-after-links/
+- Add print button to every page? See approach described at https://github.com/danielfrg/mkdocs-jupyter
+
 
 ## Contributing
 

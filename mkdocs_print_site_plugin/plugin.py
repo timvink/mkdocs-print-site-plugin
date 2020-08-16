@@ -65,9 +65,11 @@ class PrintSitePlugin(BasePlugin):
         return config
 
     # @delete_file_on_exception(self.print_file_path)
-    def on_files(self, files, config):
+    def on_files(self, files, config, **kwargs):
 
         # Finds and moves the print file to be the last file.
+        # This ensures we can capture all other page HTMLs
+        # before inserting all of them into the print page.
         self.print_file = files.src_paths["print_page.md"]
         new_files = [f for f in files._files if f != self.print_file]
         new_files.append(self.print_file)
@@ -97,10 +99,12 @@ class PrintSitePlugin(BasePlugin):
         self.print_page.edit_url = "" # No edit icon
 
         # Save the (order of) pages in the navigation
+        # Because other plugins can alter the navigation
+        # it is important 'print-site' in defined last in the 'plugins'
         nav_pages = [p for p in nav.pages if p != self.print_page]
         self.renderer.pages = nav_pages
 
-        # Append print page
+        # Append print page to the navigation
         nav_pages_with_printpage = nav_pages + [self.print_page]
         nav.pages = nav_pages_with_printpage
         nav.items = nav_pages_with_printpage
@@ -110,7 +114,8 @@ class PrintSitePlugin(BasePlugin):
     # @delete_file_on_exception(self.print_file_path)
     def on_page_content(self, html, page, config, files, **kwargs):
 
-        # Note that we made sure print page is the last file to be processed in the on_files() event
+        # Note that we made sure print page is the last file 
+        # to be processed in the on_files() event
         if page != self.print_page:
             # Save the page HTML inside the page class
             page.html = html
@@ -122,6 +127,8 @@ class PrintSitePlugin(BasePlugin):
     
     def on_post_page(self, output, page, config, **kwargs):
         
+        # Here we make sure to insert our CSS for printing
+        # only to the print site page.
         if page == self.print_page:
             output = self.renderer.insert_css_statements(output)
 
