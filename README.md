@@ -1,3 +1,11 @@
+[![Actions Status](https://github.com/timvink/mkdocs-print-site-plugin/workflows/pytest/badge.svg)](https://github.com/timvink/mkdocs-print-site-plugin/actions)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-print-site-plugin)
+![PyPI](https://img.shields.io/pypi/v/mkdocs-print-site-plugin)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mkdocs-print-site-plugin)
+[![codecov](https://codecov.io/gh/timvink/mkdocs-print-page-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/timvink/mkdocs-print-page-plugin)
+![GitHub contributors](https://img.shields.io/github/contributors/timvink/mkdocs-print-site-plugin)
+![PyPI - License](https://img.shields.io/pypi/l/mkdocs-print-site-plugin)
+
 # mkdocs-print-site-plugin
 
 > ⚠️ **This plugin is under development and the first version has not yet been released. Expected end of August :)**
@@ -38,12 +46,9 @@ Available at [timvink.github.io/mkdocs-print-page-plugin](https://timvink.github
 ## TODO
 
 - Perhaps prevent the write file, by having the .md file be part of the package? Or put it in a tmp folder? See # https://github.com/greenape/mknotebooks/blob/master/mknotebooks/plugin.py#L126
-- Add a demo website
 - Document known issues 
-    - (PDF bookmarks
+    - PDF bookmarks https://github.com/timvink/mkdocs-print-page-plugin/issues/1
     -  [instant loading](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#instant-loading) feature with mkdocs material) 
-- tabbed content, only first tab prints.. (try to fix)
-- Try to get PDF bookmarks working. Standards: https://www.w3.org/TR/2014/WD-css-gcpm-3-20140513/#bookmarks , lessons https://print-css.rocks/lessons
 - Add print button to every page? See approach described at https://github.com/danielfrg/mkdocs-jupyter
 - Ensure order of pages is consistent with navigation order, by making sure the plugin has been added last in the list.
 - ensure this plugin is defined last (to allow other plugins to make any modifications first). Return a warning if this is not the case.
