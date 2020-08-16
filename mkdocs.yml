@@ -19,19 +19,48 @@ nav:
 
 theme:
     name: material
-    font:
-        text: Ubuntu
-        code: Ubuntu Mono
     palette:
         primary: indigo
         accent: blue
 
 markdown_extensions:
-    - codehilite
-    - pymdownx.inlinehilite
+    - codehilite:
+        linenums: false
+        guess_lang: false
+    - attr_list
+    - def_list
+    - admonition
+    - footnotes
     - pymdownx.details
     - pymdownx.tabbed
+    - pymdownx.superfences
+    - pymdownx.details
+    - pymdownx.keys
+    - pymdownx.snippets
+    - pymdownx.emoji:
+        emoji_index: !!python/name:materialx.emoji.twemoji
+        emoji_generator: !!python/name:materialx.emoji.to_svg
+    - pymdownx.inlinehilite
     - pymdownx.highlight:
         use_pygments: true
+    - pymdownx.critic:
+        mode: view
+    - pymdownx.betterem:
+        smart_enable: all
+    - pymdownx.tasklist:
+        custom_checkbox: true
+    - pymdownx.tasklist:
+        clickable_checkbox: true
+    - pymdownx.arithmatex:
+        generic: true
+    - pymdownx.caret
+    - pymdownx.mark
+    - pymdownx.tilde
+    - pymdownx.smartsymbols
     - toc:
         permalink: true
+
+extra_javascript:
+    - javascripts/config.js
+    - https://polyfill.io/v3/polyfill.min.js?features=es6
+    - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
