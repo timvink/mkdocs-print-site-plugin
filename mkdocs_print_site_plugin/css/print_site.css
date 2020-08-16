@@ -17,11 +17,13 @@
     Doesn't work, but included In case Chrome gets support 
     for these experimental CSS features that define PDF bookmarks */
     h1 {
+        bookmark-level: 1;
         bookmark-label: content(); 
         -ah-bookmark-level: 1;
         -ro-pdf-bookmark-level: 1;
     }
     h2 {
+        bookmark-level: 2;
         bookmark-label: content(); 
         -ah-bookmark-level: 2;
         -ro-pdf-bookmark-level: 2;
