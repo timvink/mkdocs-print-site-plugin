@@ -39,6 +39,10 @@ Available at [timvink.github.io/mkdocs-print-page-plugin](https://timvink.github
 
 - Perhaps prevent the write file, by having the .md file be part of the package? Or put it in a tmp folder? See # https://github.com/greenape/mknotebooks/blob/master/mknotebooks/plugin.py#L126
 - Add a demo website
+- Document known issues 
+    - (PDF bookmarks
+    -  [instant loading](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#instant-loading) feature with mkdocs material) 
+- tabbed content, only first tab prints.. (try to fix)
 - Try to get PDF bookmarks working. Standards: https://www.w3.org/TR/2014/WD-css-gcpm-3-20140513/#bookmarks , lessons https://print-css.rocks/lessons
 - Add print button to every page? See approach described at https://github.com/danielfrg/mkdocs-jupyter
 - Ensure order of pages is consistent with navigation order, by making sure the plugin has been added last in the list.

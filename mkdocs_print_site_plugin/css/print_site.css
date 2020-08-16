@@ -29,6 +29,11 @@
 
     #print-site-banner { display: none; }
 
+    /* Ensure all tabbed content is displayed and printed
+    https://squidfunk.github.io/mkdocs-material/reference/content-tabs/ */
+    div.tabbed-content { display: block !important; }
+
+
     /* PDF page breaks on each MkDocs page, except the first one */
     section.print-page {
         page-break-before: always;
@@ -37,7 +42,7 @@
         page-break-before: avoid;
     }
 
-    pre, blockquote {
+    p, pre, blockquote, .tabbed-set {
         page-break-inside: avoid;
     }
 
