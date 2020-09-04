@@ -37,7 +37,10 @@ def delete_file_on_exception(path):
 
 class PrintSitePlugin(BasePlugin):
 
-    # config_scheme = (("add_to_navigation", config_options.Type(bool, default=True)),)
+    config_scheme = (
+        # m("add_to_navigation", config_options.Type(bool, default=True)),
+        ("print_page_title", config_options.Type(str, default="Print Site")),
+    )
 
     def on_config(self, config, **kwargs):
 
@@ -95,7 +98,7 @@ class PrintSitePlugin(BasePlugin):
         # Give the print page a nice title
         # TODO: make this an option
         self.print_page = self.print_file.page
-        self.print_page.title = "Print Site"
+        self.print_page.title = self.config.get("print_page_title")
         self.print_page.edit_url = "" # No edit icon
 
         # Save the (order of) pages in the navigation
