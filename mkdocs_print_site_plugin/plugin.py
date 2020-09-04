@@ -62,8 +62,8 @@ class PrintSitePlugin(BasePlugin):
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
                 % theme_name
             )
-        
-        self.renderer = Renderer(theme_name = theme_name)
+
+        self.renderer = Renderer(theme_name=theme_name)
 
         return config
 
@@ -98,16 +98,16 @@ class PrintSitePlugin(BasePlugin):
         # Give the print page a nice title
         self.print_page = self.print_file.page
         self.print_page.title = self.config.get("print_page_title")
-        self.print_page.edit_url = "" # No edit icon on the print page.
+        self.print_page.edit_url = ""  # No edit icon on the print page.
 
         # Save the (order of) pages in the navigation
         # Because other plugins can alter the navigation
         # it is important 'print-site' in defined last in the 'plugins'
         nav_pages = [p for p in nav.pages if p != self.print_page]
         self.renderer.pages = nav_pages
-        
+
         # Optionally remove the print page from the navigation
-        if not self.config.get('add_to_navigation'):
+        if not self.config.get("add_to_navigation"):
             nav.pages = [p for p in nav.pages if p is not self.print_page]
             nav.items = [p for p in nav.items if p is not self.print_page]
 
@@ -116,7 +116,7 @@ class PrintSitePlugin(BasePlugin):
     # @delete_file_on_exception(self.print_file_path)
     def on_page_content(self, html, page, config, files, **kwargs):
 
-        # Note that we made sure print page is the last file 
+        # Note that we made sure print page is the last file
         # to be processed in the on_files() event
         if page != self.print_page:
             # Save the page HTML inside the page class
@@ -126,9 +126,9 @@ class PrintSitePlugin(BasePlugin):
             html = self.renderer.write_combined()
 
         return html
-    
+
     def on_post_page(self, output, page, config, **kwargs):
-        
+
         # Here we make sure to insert our CSS for printing
         # only to the print site page.
         if page == self.print_page:

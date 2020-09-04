@@ -25,11 +25,14 @@ So within a page:
 
 import re
 
+
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
 
+
 def is_anchor(url):
     return url.startswith("#")
+
 
 def url_to_anchor(url):
     """

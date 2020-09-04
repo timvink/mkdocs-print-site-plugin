@@ -7,9 +7,9 @@ class Renderer(object):
         Args:
             theme_name (str): Used to insert the corresponding CSS into the print page
         """
-        
+
         self.theme_name = theme_name
-        
+
         self.pages = []
         self.insert_explain_block = True
 
@@ -32,15 +32,17 @@ class Renderer(object):
             <p><em>This message will disappear when printing this page</em></p>
         </div>
         """
-    
+
     def insert_css_statements(self, html):
         """
         Inserts CSS links into a HTML page
         """
-        css = """
+        css = (
+            """
         <link href="/css/print_site.css" rel="stylesheet">
         <link href="/css/%s.css" rel="stylesheet">
-        """ % self.theme_name
-        
+        """
+            % self.theme_name
+        )
+
         return html.replace("</head>", css + "</head>")
-        

@@ -24,10 +24,9 @@ import re
 import os
 import shutil
 import logging
-import pytest
-import sys
 from click.testing import CliRunner
 from mkdocs.__main__ import build_command
+
 
 def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     """
@@ -87,9 +86,7 @@ def build_docs_setup(testproject_path):
 
 
 def check_build(tmp_path, project_mkdocs, exit_code=0):
-    tmp_proj = setup_clean_mkdocs_folder(
-        "tests/fixtures/%s" % project_mkdocs, tmp_path
-    )
+    tmp_proj = setup_clean_mkdocs_folder("tests/fixtures/%s" % project_mkdocs, tmp_path)
     result = build_docs_setup(tmp_proj)
     assert result.exit_code == exit_code, result
     return tmp_proj
@@ -104,62 +101,76 @@ def check_text_in_page(tmp_proj, page_path, text):
 
 #### Tests ####
 
+
 def test_basic_build(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs.yml")
-    
+
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A<")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z")
+    check_text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
+    )
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
 
 
 def test_basic_build2(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_directory_urls.yml")
-    
+
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page.html", "<h1 id=\"index-homepage\">Homepage</h1>")
-    check_text_in_page(prj_path, "print_page.html", "<h1 id=\"a-a\">A</h1>")
-    check_text_in_page(prj_path, "print_page.html", "<h1 id=\"z-z\">Z</h1>")
-    
+    check_text_in_page(
+        prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
+    check_text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
+    check_text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
+
+
 def test_basic_build3(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav.yml")
-    
+
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z</h1>")
-    
+    check_text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
+
+
 def test_basic_build4(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav_and_theme.yml")
-    
+
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z</h1>")
+    check_text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build5(tmp_path):
     prj_path = check_build(tmp_path, "with_markdown_ext/mkdocs.yml")
-    
+
     # Sample some of the pages and make sure they are present in print page
     check_text_in_page(prj_path, "print_page/index.html", "PyMdown Extensions")
     check_text_in_page(prj_path, "print_page/index.html", "Footnotes")
     check_text_in_page(prj_path, "print_page/index.html", "Page two")
-    
+
+
 def test_basic_build6(tmp_path):
     # this test mainly checks if adding subsection to the navigation does not break plugin
     prj_path = check_build(tmp_path, "basic/mkdocs_weird_nav.yml")
-    
+
     # Make sure the subsection pages are also in the page.
     check_text_in_page(prj_path, "print_page/index.html", "Subsec 1")
     check_text_in_page(prj_path, "print_page/index.html", "Subsec 2")
-    
+
 
 def test_basic_build99(tmp_path):
     # This is a weird test, as the markdown extension toc permalink setting seems to persist across subsequent test runs..
     prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")
-    
+
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z")
+    check_text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
+    )
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
+    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
