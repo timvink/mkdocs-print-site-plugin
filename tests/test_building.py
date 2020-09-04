@@ -59,6 +59,7 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     shutil.copytree(yml_dir, str(testproject_path))
     shutil.copyfile(mkdocs_yml_path, str(testproject_path / "mkdocs.yml"))
 
+    assert os.path.exists(testproject_path / "mkdocs.yml")
     return testproject_path
 
 
@@ -90,7 +91,7 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
         "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
     )
     result = build_docs_setup(tmp_proj)
-    assert result.exit_code == exit_code, result
+    assert result.exit_code == exit_code, "cwd: %s, output: %s" (os.getcwd(), result.output)
     return tmp_proj
 
 
