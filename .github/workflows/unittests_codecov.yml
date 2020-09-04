@@ -32,7 +32,7 @@ jobs:
       run: |
         pip install -r tests/test_requirements.txt
         pip install -e .
-        pytest --cov=mkdocs_print_site_plugin --cov-report=xml
+        pytest --cov=mkdocs_print_site_plugin --cov-report=xml -vvv
     - name: Upload coverage to Codecov
       if: "contains(env.USING_COVERAGE, matrix.python-version)"
       uses: codecov/codecov-action@v1
