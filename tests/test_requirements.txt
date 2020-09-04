@@ -2,3 +2,4 @@ mkdocs-material
 pyflakes
 pytest
 pytest-cov
+click
