@@ -86,7 +86,9 @@ def build_docs_setup(testproject_path):
 
 
 def check_build(tmp_path, project_mkdocs, exit_code=0):
-    tmp_proj = setup_clean_mkdocs_folder("tests/fixtures/%s" % project_mkdocs, tmp_path)
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
+    )
     result = build_docs_setup(tmp_proj)
     assert result.exit_code == exit_code, result
     return tmp_proj
