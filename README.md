@@ -49,20 +49,6 @@ Available at [timvink.github.io/mkdocs-print-site-plugin](https://timvink.github
 
 - Perhaps prevent the write file, by having the .md file be part of the package? Or put it in a tmp folder? See # https://github.com/greenape/mknotebooks/blob/master/mknotebooks/plugin.py#L126
 - Return a warning to the user if the `print-site` plugin is not defined last (to allow other plugins to make any modifications first).
-- check if appending print page does not break nested navigations (perhaps unit test?)
-- check tables with lots of columns, deal with overflow
-- support different anchor links, or at least throw warning if different than #
-  https://www.mkdocs.org/user-guide/writing-your-docs/
-    ```yml
-    markdown_extensions:
-        - toc:
-            permalink: "#"
-    ```
-- ensure support of 'use_directory_urls' settings https://www.mkdocs.org/user-guide/configuration/#use_directory_urls
-    ```python
-    [p.url for p in self.pages]
-    ['index.html', 'z.html', 'a.html']
-    ```
 
 
 ## Contributing

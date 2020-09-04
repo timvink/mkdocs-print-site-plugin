@@ -38,7 +38,7 @@ def delete_file_on_exception(path):
 class PrintSitePlugin(BasePlugin):
 
     config_scheme = (
-        # m("add_to_navigation", config_options.Type(bool, default=True)),
+        ("add_to_navigation", config_options.Type(bool, default=True)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
     )
 
@@ -49,7 +49,7 @@ class PrintSitePlugin(BasePlugin):
         with self.print_file_path.open(mode="w", encoding="UTF8") as f:
             f.write("")
 
-        # Append printpage to nav.
+        # Append printpage to the end of the nav.
         # prevents INFO warning that 'print_page.md' is not in nav
         if config.get("nav"):
             config.get("nav").append({"Print": "print_page.md"})
@@ -96,21 +96,20 @@ class PrintSitePlugin(BasePlugin):
     def on_nav(self, nav, config, files, **kwargs):
 
         # Give the print page a nice title
-        # TODO: make this an option
         self.print_page = self.print_file.page
         self.print_page.title = self.config.get("print_page_title")
-        self.print_page.edit_url = "" # No edit icon
+        self.print_page.edit_url = "" # No edit icon on the print page.
 
         # Save the (order of) pages in the navigation
         # Because other plugins can alter the navigation
         # it is important 'print-site' in defined last in the 'plugins'
         nav_pages = [p for p in nav.pages if p != self.print_page]
         self.renderer.pages = nav_pages
-
-        # Append print page to the navigation
-        nav_pages_with_printpage = nav_pages + [self.print_page]
-        nav.pages = nav_pages_with_printpage
-        nav.items = nav_pages_with_printpage
+        
+        # Optionally remove the print page from the navigation
+        if not self.config.get('add_to_navigation'):
+            nav.pages = [p for p in nav.pages if p is not self.print_page]
+            nav.items = [p for p in nav.items if p is not self.print_page]
 
         return nav
 

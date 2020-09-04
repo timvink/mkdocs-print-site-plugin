@@ -14,20 +14,22 @@ So within a page:
     href="a/#anchor" to href="#a-anchor"`
 
 
+# with use_directory_urls = True
 [p.url for p in self.pages]
 ['', 'z/', 'a/']
+
+# use_directory_urls = False
+[p.url for p in self.pages]
+['index.html', 'z.html', 'a.html']
 """
 
 import re
 
-
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
 
-
 def is_anchor(url):
     return url.startswith("#")
-
 
 def url_to_anchor(url):
     """
