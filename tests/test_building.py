@@ -91,7 +91,9 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
         "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
     )
     result = build_docs_setup(tmp_proj)
-    assert result.exit_code == exit_code, "cwd: %s, output: %s" (os.getcwd(), result.output)
+    
+    msg = "cwd: %s, output: %s" % (os.getcwd(), result.output)
+    assert result.exit_code == exit_code, msg
     return tmp_proj
 
 
