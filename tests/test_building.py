@@ -108,10 +108,11 @@ def test_basic_build(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs.yml")
     
     # Make sure all 3 pages are combined and present
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A</h1>")
-    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z</h1>")
-    
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage")
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A<")
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z")
+
+
 def test_basic_build2(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_directory_urls.yml")
     
@@ -135,7 +136,8 @@ def test_basic_build4(tmp_path):
     check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage</h1>")
     check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A</h1>")
     check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z</h1>")
-    
+
+
 def test_basic_build5(tmp_path):
     prj_path = check_build(tmp_path, "with_markdown_ext/mkdocs.yml")
     
@@ -144,3 +146,20 @@ def test_basic_build5(tmp_path):
     check_text_in_page(prj_path, "print_page/index.html", "Footnotes")
     check_text_in_page(prj_path, "print_page/index.html", "Page two")
     
+def test_basic_build6(tmp_path):
+    # this test mainly checks if adding subsection to the navigation does not break plugin
+    prj_path = check_build(tmp_path, "basic/mkdocs_weird_nav.yml")
+    
+    # Make sure the subsection pages are also in the page.
+    check_text_in_page(prj_path, "print_page/index.html", "Subsec 1")
+    check_text_in_page(prj_path, "print_page/index.html", "Subsec 2")
+    
+
+def test_basic_build99(tmp_path):
+    # This is a weird test, as the markdown extension toc permalink setting seems to persist across subsequent test runs..
+    prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")
+    
+    # Make sure all 3 pages are combined and present
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"index-homepage\">Homepage")
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"a-a\">A")
+    check_text_in_page(prj_path, "print_page/index.html", "<h1 id=\"z-z\">Z")
