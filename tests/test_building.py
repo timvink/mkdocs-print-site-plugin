@@ -81,7 +81,7 @@ def build_docs_setup(testproject_path):
     os.chdir(str(testproject_path))
     
     try:
-        run = CliRunner().invoke(build_command)
+        run = CliRunner().invoke(build_command, catch_exceptions=True)
         os.chdir(cwd)
         return run
     except:
@@ -95,7 +95,7 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
     )
     result = build_docs_setup(tmp_proj)
     
-    msg = "cwd: %s, output: %s" % (os.getcwd(), result.stdout)
+    msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (os.getcwd(), result, result.exception, result.exc_info)
     assert result.exit_code == exit_code, msg
     return tmp_proj
 
