@@ -2,7 +2,7 @@
 
 This content is here to demonstrate what it looks like while printing.
 
-Go ahead and visit the [print page](print_page.md) and check it out!
+:point_right: Go ahead and visit the [print page](print_page.md) and check it out!
 
 ## Links to other pages
 
@@ -225,7 +225,7 @@ $$
 
 The homomorphism $f$ is injective if and only if its kernel is only the 
 singleton set $e_G$, because otherwise $\exists a,b\in G$ with $a\neq b$ such 
-that $f(a)=f(b)$.
+that $f(a)=f(b)$00.
 
 ## Dummy section
 
