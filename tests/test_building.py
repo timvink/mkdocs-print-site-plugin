@@ -99,67 +99,78 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
     return tmp_proj
 
 
-def check_text_in_page(tmp_proj, page_path, text):
+def text_in_page(tmp_proj, page_path, text):
     page = tmp_proj / "site" / page_path
     assert page.exists(), "%s does not exist" % page_path
     contents = page.read_text(encoding="utf-8")
-    assert re.search(text, contents)
+    return re.search(text, contents)
 
 
 #### Tests ####
 
 
+
+def test_add_to_nav_works(tmp_path):
+    prj_path = check_build(tmp_path, "basic/mkdocs_addtonav_false.yml")
+    
+    # print page should not be in navigation
+    assert not text_in_page(prj_path, "print_page/index.html", "class=\"nav-link\">Print Site</a>")
+    
+
 def test_basic_build(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(prj_path, "print_page/index.html", "class=\"nav-link\">Print Site</a>")
+    
     # Make sure all 3 pages are combined and present
-    check_text_in_page(
+    assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
     )
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
 
 
 def test_basic_build2(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_directory_urls.yml")
 
     # Make sure all 3 pages are combined and present
-    check_text_in_page(
+    assert text_in_page(
         prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
     )
-    check_text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
-    check_text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
+    assert text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
+    assert text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build3(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav.yml")
 
     # Make sure all 3 pages are combined and present
-    check_text_in_page(
+    assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
     )
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build4(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav_and_theme.yml")
 
     # Make sure all 3 pages are combined and present
-    check_text_in_page(
+    assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
     )
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build5(tmp_path):
     prj_path = check_build(tmp_path, "with_markdown_ext/mkdocs.yml")
 
     # Sample some of the pages and make sure they are present in print page
-    check_text_in_page(prj_path, "print_page/index.html", "PyMdown Extensions")
-    check_text_in_page(prj_path, "print_page/index.html", "Footnotes")
-    check_text_in_page(prj_path, "print_page/index.html", "Page two")
+    assert text_in_page(prj_path, "print_page/index.html", "PyMdown Extensions")
+    assert text_in_page(prj_path, "print_page/index.html", "Footnotes")
+    assert text_in_page(prj_path, "print_page/index.html", "Page two")
 
 
 def test_basic_build6(tmp_path):
@@ -167,8 +178,8 @@ def test_basic_build6(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_weird_nav.yml")
 
     # Make sure the subsection pages are also in the page.
-    check_text_in_page(prj_path, "print_page/index.html", "Subsec 1")
-    check_text_in_page(prj_path, "print_page/index.html", "Subsec 2")
+    assert text_in_page(prj_path, "print_page/index.html", "Subsec 1")
+    assert text_in_page(prj_path, "print_page/index.html", "Subsec 2")
 
 
 def test_basic_build99(tmp_path):
@@ -176,8 +187,8 @@ def test_basic_build99(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")
 
     # Make sure all 3 pages are combined and present
-    check_text_in_page(
+    assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
     )
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
-    check_text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
