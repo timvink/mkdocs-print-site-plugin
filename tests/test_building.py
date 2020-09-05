@@ -44,7 +44,10 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
         testproject_path (Path): Path to test project
     """
 
+    assert os.path.exists(mkdocs_yml_path)
+    
     testproject_path = output_path / "testproject"
+    os.makedirs(testproject_path, exist_ok=True)
 
     # Create empty 'testproject' folder
     if os.path.exists(str(testproject_path)):
@@ -76,7 +79,7 @@ def build_docs_setup(testproject_path):
 
     cwd = os.getcwd()
     os.chdir(str(testproject_path))
-
+    
     try:
         run = CliRunner().invoke(build_command)
         os.chdir(cwd)
@@ -92,7 +95,7 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
     )
     result = build_docs_setup(tmp_proj)
     
-    msg = "cwd: %s, output: %s" % (os.getcwd(), result.output)
+    msg = "cwd: %s, output: %s" % (os.getcwd(), result.stdout)
     assert result.exit_code == exit_code, msg
     return tmp_proj
 
