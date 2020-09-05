@@ -47,7 +47,6 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     assert os.path.exists(mkdocs_yml_path)
     
     testproject_path = output_path / "testproject"
-    os.makedirs(testproject_path, exist_ok=True)
 
     # Create empty 'testproject' folder
     if os.path.exists(str(testproject_path)):
@@ -62,7 +61,7 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     shutil.copytree(yml_dir, str(testproject_path))
     shutil.copyfile(mkdocs_yml_path, str(testproject_path / "mkdocs.yml"))
 
-    assert os.path.exists(testproject_path / "mkdocs.yml")
+    assert os.path.exists(str(testproject_path / "mkdocs.yml"))
     return testproject_path
 
 
