@@ -139,6 +139,6 @@ class PrintSitePlugin(BasePlugin):
     def on_post_build(self, config: config_options.Config, **kwargs):
 
         # Delete print markdown file
-        if os.path.exists(self.print_file_path):
-            os.remove(self.print_file_path)
+        if os.path.exists(str(self.print_file_path)):
+            os.remove(str(self.print_file_path))
         
