@@ -11,7 +11,7 @@ from mkdocs.structure.files import File
 from mkdocs_print_site_plugin.renderer import Renderer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TEMPLATES_DIR = os.path.join(HERE, "CSS")
+TEMPLATES_DIR = os.path.join(HERE, "css")
 
 
 def delete_file_on_exception(path):
