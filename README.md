@@ -45,11 +45,6 @@ plugins:
 
 Available at [timvink.github.io/mkdocs-print-site-plugin](https://timvink.github.io/mkdocs-print-site-plugin/).
 
-## TODO for 1st release
-
-- Return a warning to the user if the `print-site` plugin is not defined last (to allow other plugins to make any modifications first).
-- Write a test for the URLs?
-
 ## Contributing
 
 Contributions are very welcome! Start by reading the [contribution guidelines](https://timvink.github.io/mkdocs-print-site-plugin/contributing.html).

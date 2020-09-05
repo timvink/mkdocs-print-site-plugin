@@ -24,7 +24,15 @@ class PrintSitePlugin(BasePlugin):
 
     def on_config(self, config, **kwargs):
 
-        # Create empty file in temp directory
+        # Because other plugins can alter the navigation 
+        # (and thus which pages should be in the print page)
+        # it is important 'print-site' is defined last in the 'plugins'
+        plugins = config.get('plugins')
+        print_site_position = [*dict(plugins)].index('print-site')
+        if print_site_position != len(plugins) - 1:
+            warnings.warn("[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml")
+        
+        # Create the (empty) print page file in temp directory
         tmp_dir = tempfile.gettempdir()
         tmp_path = os.path.join(tmp_dir, "print_page.md")
         f = open(tmp_path, "w")
@@ -88,8 +96,6 @@ class PrintSitePlugin(BasePlugin):
         self.print_page.edit_url = None # Ensure no edit icon on the print page.
         
         # Save the (order of) pages in the navigation
-        # Because other plugins can alter the navigation
-        # it is important 'print-site' in defined last in the 'plugins'
         nav_pages = [p for p in nav.pages if p != self.print_page]
         self.renderer.pages = nav_pages
 
