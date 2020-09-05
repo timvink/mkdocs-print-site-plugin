@@ -45,8 +45,7 @@ class PrintSitePlugin(BasePlugin):
         if config.get('nav'):
             config.get("nav").append({"updated_later_on": "print_page.md"})
 
-        # Insert print CSS styles corresponding to current theme
-        # TODO still necessary? See renderer.
+        # Warn if we don't have CSS styles corresponding to current theme
         theme_name = config.get("theme").name
         theme_css_files = [Path(f).stem for f in os.listdir(TEMPLATES_DIR)]
         if theme_name not in theme_css_files:

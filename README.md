@@ -48,7 +48,6 @@ Available at [timvink.github.io/mkdocs-print-site-plugin](https://timvink.github
 ## TODO for 1st release
 
 - Return a warning to the user if the `print-site` plugin is not defined last (to allow other plugins to make any modifications first).
-- Check very wide table with mkdocs-material vs base theme.
 - Write a test for the URLs?
 
 ## Contributing

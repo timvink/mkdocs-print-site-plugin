@@ -2,7 +2,9 @@
 https://github.com/squidfunk/mkdocs-material */
 
 @media print {
-
+    td {
+        word-wrap: break-word;
+    }
 }
 
 @page {
