@@ -1,7 +1,11 @@
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+# Read README in UTF-8
+with open("README.md", 'r',encoding='UTF-8') as f:
+    description = ""
+    for line in f:
+        description += line
+
 
 setup(
     name="mkdocs-print-site-plugin",
