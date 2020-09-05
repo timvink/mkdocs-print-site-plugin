@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 # Read README in UTF-8
-with open("README.md", 'r',encoding='UTF-8') as f:
+with open("README.md", "r", encoding="UTF-8") as f:
     long_description = ""
     for line in f:
         long_description += line
@@ -9,11 +9,11 @@ with open("README.md", 'r',encoding='UTF-8') as f:
 
 setup(
     name="mkdocs-print-site-plugin",
-    version="0.0.1",
-    description="Add print site page",
+    version="0.1",
+    description="MkDocs plugin that adds a page to your site combining all pages, allowing your site visitors to *File > Print > Save as PDF* the entire site.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    keywords="mkdocs plugin",
+    keywords="mkdocs plugin print pdf",
     url="https://github.com/timvink/mkdocs-print-site-plugin",
     author="Tim Vink",
     author_email="vinktim@gmail.com",

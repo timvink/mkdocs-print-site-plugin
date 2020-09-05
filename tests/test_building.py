@@ -45,7 +45,7 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     """
 
     assert os.path.exists(mkdocs_yml_path)
-    
+
     testproject_path = output_path / "testproject"
 
     # Create empty 'testproject' folder
@@ -78,7 +78,7 @@ def build_docs_setup(testproject_path):
 
     cwd = os.getcwd()
     os.chdir(str(testproject_path))
-    
+
     try:
         run = CliRunner().invoke(build_command, catch_exceptions=True)
         os.chdir(cwd)
@@ -93,8 +93,13 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
         "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
     )
     result = build_docs_setup(tmp_proj)
-    
-    msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (os.getcwd(), result, result.exception, result.exc_info)
+
+    msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (
+        os.getcwd(),
+        result,
+        result.exception,
+        result.exc_info,
+    )
     assert result.exit_code == exit_code, msg
     return tmp_proj
 
@@ -109,20 +114,23 @@ def text_in_page(tmp_proj, page_path, text):
 #### Tests ####
 
 
-
 def test_add_to_nav_works(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_addtonav_false.yml")
-    
+
     # print page should not be in navigation
-    assert not text_in_page(prj_path, "print_page/index.html", "class=\"nav-link\">Print Site</a>")
-    
+    assert not text_in_page(
+        prj_path, "print_page/index.html", 'class="nav-link">Print Site</a>'
+    )
+
 
 def test_basic_build(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs.yml")
 
     # Print page should be in the navigation
-    assert text_in_page(prj_path, "print_page/index.html", "class=\"nav-link\">Print Site</a>")
-    
+    assert text_in_page(
+        prj_path, "print_page/index.html", 'class="nav-link">Print Site</a>'
+    )
+
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'

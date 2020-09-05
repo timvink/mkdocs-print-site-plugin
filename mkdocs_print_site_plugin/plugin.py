@@ -24,14 +24,16 @@ class PrintSitePlugin(BasePlugin):
 
     def on_config(self, config, **kwargs):
 
-        # Because other plugins can alter the navigation 
+        # Because other plugins can alter the navigation
         # (and thus which pages should be in the print page)
         # it is important 'print-site' is defined last in the 'plugins'
-        plugins = config.get('plugins')
-        print_site_position = [*dict(plugins)].index('print-site')
+        plugins = config.get("plugins")
+        print_site_position = [*dict(plugins)].index("print-site")
         if print_site_position != len(plugins) - 1:
-            warnings.warn("[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml")
-        
+            warnings.warn(
+                "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml"
+            )
+
         # Create the (empty) print page file in temp directory
         tmp_dir = tempfile.gettempdir()
         tmp_path = os.path.join(tmp_dir, "print_page.md")
@@ -39,18 +41,18 @@ class PrintSitePlugin(BasePlugin):
         f.write("")
         f.close()
         assert os.path.exists(tmp_path)
-        
+
         self.print_file = File(
             path="print_page.md",
             src_dir=tmp_dir,
             dest_dir=config["site_dir"],
-            use_directory_urls=config.get('use_directory_urls'),
+            use_directory_urls=config.get("use_directory_urls"),
         )
 
         # Insert 'print page' to the end of the nav, if it exists
         # We'll optionally remove the print page from navigation later on
         # Because when nav is not defined, all files incl print_page are part of the nav
-        if config.get('nav'):
+        if config.get("nav"):
             config.get("nav").append({"updated_later_on": "print_page.md"})
 
         # Warn if we don't have CSS styles corresponding to current theme
@@ -72,7 +74,7 @@ class PrintSitePlugin(BasePlugin):
         # This ensures we can capture all other page HTMLs
         # before inserting all of them into the print page.
         files.append(self.print_file)
-        
+
         # Add all plugin CSS files to files directory
         # Note we only insert the relevant css files per theme into the print page file
         css_dest_dir = os.path.join(config["site_dir"], "css")
@@ -93,8 +95,8 @@ class PrintSitePlugin(BasePlugin):
         # Save print file
         self.print_page = self.print_file.page
         self.print_page.title = self.config.get("print_page_title")
-        self.print_page.edit_url = None # Ensure no edit icon on the print page.
-        
+        self.print_page.edit_url = None  # Ensure no edit icon on the print page.
+
         # Save the (order of) pages in the navigation
         nav_pages = [p for p in nav.pages if p != self.print_page]
         self.renderer.pages = nav_pages
