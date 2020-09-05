@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 # Read README in UTF-8
 with open("README.md", 'r',encoding='UTF-8') as f:
-    description = ""
+    long_description = ""
     for line in f:
-        description += line
+        long_description += line
 
 
 setup(
