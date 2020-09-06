@@ -22,9 +22,6 @@ jobs:
         pip install -r tests/test_requirements.txt
         pip install -e .
         pytest
-    - name: Build & publish docs to gh-pages
-      run: |
-        mkdocs gh-deploy
     - name: Build package & publish to PyPi
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
