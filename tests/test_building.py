@@ -119,7 +119,7 @@ def test_add_to_nav_works(tmp_path):
 
     # print page should not be in navigation
     assert not text_in_page(
-        prj_path, "print_page/index.html", 'class="nav-link">Print Site</a>'
+        prj_path, "index.html", 'class="nav-link">Print Site</a>'
     )
 
 
@@ -128,7 +128,7 @@ def test_basic_build(tmp_path):
 
     # Print page should be in the navigation
     assert text_in_page(
-        prj_path, "print_page/index.html", 'class="nav-link">Print Site</a>'
+        prj_path, "index.html", 'class="nav-link">Print Site</a>'
     )
 
     # Make sure all 3 pages are combined and present
@@ -142,6 +142,11 @@ def test_basic_build(tmp_path):
 def test_basic_build2(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_directory_urls.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'class="nav-link">Print Site</a>'
+    )
+    
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
@@ -153,6 +158,11 @@ def test_basic_build2(tmp_path):
 def test_basic_build3(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'class="nav-link">Print Site</a>'
+    )
+    
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
@@ -164,6 +174,11 @@ def test_basic_build3(tmp_path):
 def test_basic_build4(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav_and_theme.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'href=\"print_page\/\" title=\"Print Site\" class=\"md-nav__link\"'
+    )
+    
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
@@ -175,6 +190,11 @@ def test_basic_build4(tmp_path):
 def test_basic_build5(tmp_path):
     prj_path = check_build(tmp_path, "with_markdown_ext/mkdocs.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'href="print_page/" title="Print Site" class="md-nav__link"'
+    )
+    
     # Sample some of the pages and make sure they are present in print page
     assert text_in_page(prj_path, "print_page/index.html", "PyMdown Extensions")
     assert text_in_page(prj_path, "print_page/index.html", "Footnotes")
@@ -185,6 +205,11 @@ def test_basic_build6(tmp_path):
     # this test mainly checks if adding subsection to the navigation does not break plugin
     prj_path = check_build(tmp_path, "basic/mkdocs_weird_nav.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'href="print_page/" title="Print Site" class="md-nav__link"'
+    )
+    
     # Make sure the subsection pages are also in the page.
     assert text_in_page(prj_path, "print_page/index.html", "Subsec 1")
     assert text_in_page(prj_path, "print_page/index.html", "Subsec 2")
@@ -194,6 +219,11 @@ def test_basic_build99(tmp_path):
     # This is a weird test, as the markdown extension toc permalink setting seems to persist across subsequent test runs..
     prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")
 
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path, "index.html", 'class="nav-link">Print Site</a>'
+    )
+    
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
