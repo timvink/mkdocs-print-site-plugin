@@ -2,7 +2,7 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 import os
 import tempfile
-import warnings
+import logging
 
 from pathlib import Path
 
@@ -32,7 +32,7 @@ class PrintSitePlugin(BasePlugin):
         plugins = config.get("plugins")
         print_site_position = [*dict(plugins)].index("print-site")
         if print_site_position != len(plugins) - 1:
-            warnings.warn(
+            logging.warning(
                 "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml"
             )
 
@@ -61,7 +61,7 @@ class PrintSitePlugin(BasePlugin):
         theme_name = config.get("theme").name
         theme_css_files = [Path(f).stem for f in os.listdir(CSS_DIR)]
         if theme_name not in theme_css_files:
-            warnings.warn(
+            logging.warning(
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
                 % theme_name
             )
