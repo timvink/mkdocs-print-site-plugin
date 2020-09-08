@@ -1,3 +1,11 @@
+[![Actions Status](https://github.com/timvink/mkdocs-print-site-plugin/workflows/pytest/badge.svg)](https://github.com/timvink/mkdocs-print-site-plugin/actions)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mkdocs-print-site-plugin)
+![PyPI](https://img.shields.io/pypi/v/mkdocs-print-site-plugin)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mkdocs-print-site-plugin)
+[![codecov](https://codecov.io/gh/timvink/mkdocs-print-site-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/timvink/mkdocs-print-site-plugin)
+![GitHub contributors](https://img.shields.io/github/contributors/timvink/mkdocs-print-site-plugin)
+![PyPI - License](https://img.shields.io/pypi/l/mkdocs-print-site-plugin)
+
 # mkdocs-print-site-plugin
 
 [MkDocs](https://www.mkdocs.org/) plugin that adds a page to your site combining all pages, allowing your site visitors to *File > Print > Save as PDF* the entire site.

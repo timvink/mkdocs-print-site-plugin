@@ -1,23 +1,42 @@
-from mkdocs_print_site_plugin.urls import fix_internal_links
+import packaging
+from mkdocs_print_site_plugin.urls import fix_internal_links, get_page_key
 
 
 class Renderer(object):
-    def __init__(self, theme_name):
+    def __init__(self, theme_name, insert_toc = True, insert_explain_block = True):
         """
         Args:
             theme_name (str): Used to insert the corresponding CSS into the print page
+            insert_toc (bool): Insert a table of contents?
+            insert_explain_block (bool): Insert a block explaining that this is a print page
         """
 
         self.theme_name = theme_name
-
+        self.insert_toc = insert_toc
+        self.insert_explain_block = insert_explain_block
+        
         self.pages = []
-        self.insert_explain_block = True
 
     def write_combined(self):
+        
+        # def fix_link(page, url):
+        #     page_key = get_page_key(page.url)
+        #     return "#" + page_key + "-" + url[1:]
+         
+        # for page in self.pages: 
+        #     print(f"Page {page.title}")
+        #     for item in page.toc.items: 
+        #         print(f"'{item.title}' with link '{item.url}', new link {fix_link(page, item.url)}")
+        #         for child in item.children:
+        #             print(f"\tChild '{child.title}' with link '{child.url}', new link {fix_link(page, child.url)}")
+        
         html = ""
 
         if self.insert_explain_block:
             html += self._explain_block()
+
+        if self.insert_toc:
+            html += self._toc()
 
         page_htmls = [fix_internal_links(p.html, p.url) for p in self.pages]
         html += "".join(page_htmls)
@@ -27,22 +46,38 @@ class Renderer(object):
     def _explain_block():
         return """
         <div id="print-site-banner">
-            <h3>Print Site Page</h3>
+            <h13Print Site Page</h3>
+            <p>
+                <em>This box will disappear when printing</em>
+                <span style="float: right"><a href="https://timvink.github.io/mkdocs-print-site-plugin/">mkdocs-print-site-plugin</a></span>
+            </p>
             <p>This page combines all pages in the site. This makes it easy to print or export to PDF (<b>File > Print > Save as PDF</b>)</p>
-            <p><em>This message will disappear when printing this page</em></p>
         </div>
         """
 
-    def insert_css_statements(self, html):
+    @staticmethod
+    def _toc():
+        return """
+        <section class="print-page">
+            <div id="print-page-toc"></div>
+        </section>
+        """
+        
+    def insert_js_css_statements(self, html):
         """
         Inserts CSS links into a HTML page
         """
-        css = (
-            """
+        js_css = (
+        """
         <link href="/css/print_site.css" rel="stylesheet">
         <link href="/css/%s.css" rel="stylesheet">
         """
             % self.theme_name
         )
+        
+        if self.insert_toc:
+            js_css += """
+            <script type="text/javascript" src="/js/toc.js"></script>
+            """
 
-        return html.replace("</head>", css + "</head>")
+        return html.replace("</head>", js_css + "</head>")

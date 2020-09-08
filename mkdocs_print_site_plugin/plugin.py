@@ -12,7 +12,8 @@ from mkdocs_print_site_plugin.renderer import Renderer
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TEMPLATES_DIR = os.path.join(HERE, "css")
+CSS_DIR = os.path.join(HERE, "css")
+JS_DIR = os.path.join(HERE, "js")
 
 
 class PrintSitePlugin(BasePlugin):
@@ -20,6 +21,7 @@ class PrintSitePlugin(BasePlugin):
     config_scheme = (
         ("add_to_navigation", config_options.Type(bool, default=True)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
+        ("add_table_of_contents", config_options.Type(bool, default=True)),
     )
 
     def on_config(self, config, **kwargs):
@@ -57,14 +59,17 @@ class PrintSitePlugin(BasePlugin):
 
         # Warn if we don't have CSS styles corresponding to current theme
         theme_name = config.get("theme").name
-        theme_css_files = [Path(f).stem for f in os.listdir(TEMPLATES_DIR)]
+        theme_css_files = [Path(f).stem for f in os.listdir(CSS_DIR)]
         if theme_name not in theme_css_files:
             warnings.warn(
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
                 % theme_name
             )
 
-        self.renderer = Renderer(theme_name=theme_name)
+        self.renderer = Renderer(
+            theme_name=theme_name,
+            insert_toc=self.config.get("add_table_of_contents")
+        )
 
         return config
 
@@ -75,18 +80,26 @@ class PrintSitePlugin(BasePlugin):
         # before inserting all of them into the print page.
         files.append(self.print_file)
 
-        # Add all plugin CSS files to files directory
-        # Note we only insert the relevant css files per theme into the print page file
+        # Add all plugin JS and CSS files to files directory
+        # Note we only include the relevant css and js files per theme into the print page file
+        # in renderer.py
         css_dest_dir = os.path.join(config["site_dir"], "css")
-
-        for file in os.listdir(TEMPLATES_DIR):
-            print_site_css = File(
+        for file in os.listdir(CSS_DIR):
+            files.append(File(
                 path=file,
-                src_dir=TEMPLATES_DIR,
+                src_dir=CSS_DIR,
                 dest_dir=css_dest_dir,
                 use_directory_urls=False,
-            )
-            files.append(print_site_css)
+            ))
+        
+        js_dest_dir = os.path.join(config["site_dir"], "js")
+        for file in os.listdir(JS_DIR):
+            files.append(File(
+                path=file,
+                src_dir=JS_DIR,
+                dest_dir=js_dest_dir,
+                use_directory_urls=False,
+            ))
 
         return files
 
@@ -126,6 +139,6 @@ class PrintSitePlugin(BasePlugin):
         # Here we make sure to insert our CSS for printing
         # only to the print site page.
         if page == self.print_page:
-            output = self.renderer.insert_css_statements(output)
+            output = self.renderer.insert_js_css_statements(output)
 
         return output

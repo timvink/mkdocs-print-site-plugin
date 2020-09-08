@@ -10,6 +10,15 @@
     margin-top: 1rem;
 }
 
+/* Print site table of contents styling */
+h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
+    animation: highlight 1s ease;
+}
+@keyframes highlight {
+    from { background: yellow; }
+    to { background: white; }
+}
+
 
 @media print {    
 
@@ -59,6 +68,8 @@
         height: 100px;
         margin-bottom: -100px;
     }
+
+    footer { display : none; }
 
 }
 

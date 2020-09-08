@@ -82,6 +82,38 @@ def anchor_add_page(url, page_url):
     return "#" + page_url + url[1:]
 
 
+def get_page_key(page_url):
+    """
+    Get the page key.
+    
+    Used to prepend a unique key to internal anchorlinks,
+    so when we combine all pages into one, we don't get conflicting (duplicate) URLs
+    
+    Works the same when use_directory_urls is set to true or false in mkdocs.yml
+    
+    Examples
+        get_page_key('index.html') --> 'homepage'
+        get_page_key('/') --> 'homepage'
+        get_page_key('abc/') --> 'abc'
+        get_page_key('abc.html') --> 'abc'
+    
+
+    Args:
+        page_url (str): The MkDocs url of the page
+    """
+    # Get the page key. For example
+    # 'index.html' or '/' will be 'homepage'
+    # 'abc.html' or 'abc/' will be 'abc'
+    if len(page_url) > 0:
+        page_key = (
+            page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-")
+        )
+    else:
+        page_key = "index"
+        
+    return page_key
+    
+
 def fix_internal_links(html, page_url):
     """
     Updates links to internal pages to anchor links.
@@ -95,15 +127,7 @@ def fix_internal_links(html, page_url):
         html (str): HTML of part of the print page with working internal links
     """
 
-    # Get the page key. For example
-    # 'index.html' or '/' will be 'homepage'
-    # 'abc.html' or 'abc/' will be 'abc'
-    if len(page_url) > 0:
-        page_key = (
-            page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-")
-        )
-    else:
-        page_key = "index"
+    page_key = get_page_key(page_url)
 
     # Loop over href links (example in https://regex101.com/r/rMAHrE/520)
     href_regex = re.compile(r"<a\s+([^>]*?\s+)?href=\"(.*?)\"", flags=re.IGNORECASE)

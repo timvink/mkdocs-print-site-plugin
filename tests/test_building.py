@@ -113,6 +113,11 @@ def text_in_page(tmp_proj, page_path, text):
 
 #### Tests ####
 
+def test_no_toc(tmp_path):
+    prj_path = check_build(tmp_path, "basic/mkdocs_no_toc.yml")
+
+    # Table of contents should NOT be there
+    assert not text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
 
 def test_add_to_nav_works(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_addtonav_false.yml")
@@ -131,6 +136,9 @@ def test_basic_build(tmp_path):
         prj_path, "index.html", 'class="nav-link">Print Site</a>'
     )
 
+    # Table of contents should be there
+    assert text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
+
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
@@ -146,7 +154,10 @@ def test_basic_build2(tmp_path):
     assert text_in_page(
         prj_path, "index.html", 'class="nav-link">Print Site</a>'
     )
-    
+   
+    # Table of contents should be there
+    assert text_in_page(prj_path, "print_page.html", '<div id="print-page-toc"')
+     
     # Make sure all 3 pages are combined and present
     assert text_in_page(
         prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
