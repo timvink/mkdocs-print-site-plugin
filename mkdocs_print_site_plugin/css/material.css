@@ -34,6 +34,12 @@ ul.print-site-toc-level-2 li a {
 }
 
 
+/* Box shadows don't do well in PDFs */
+table {
+    border: 1px solid hsla(200, 18%, 26%, 1); /* #EFEFEF */
+    box-shadow: none !important;
+}
+
 @media print {
     td {
         word-wrap: break-word;
