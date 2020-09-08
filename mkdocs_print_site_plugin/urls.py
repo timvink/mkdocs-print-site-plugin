@@ -110,9 +110,9 @@ def get_page_key(page_url):
         )
     else:
         page_key = "index"
-        
+
     return page_key
-    
+
 
 def fix_internal_links(html, page_url):
     """

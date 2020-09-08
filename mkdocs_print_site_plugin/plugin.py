@@ -67,8 +67,7 @@ class PrintSitePlugin(BasePlugin):
             )
 
         self.renderer = Renderer(
-            theme_name=theme_name,
-            insert_toc=self.config.get("add_table_of_contents")
+            theme_name=theme_name, insert_toc=self.config.get("add_table_of_contents")
         )
 
         return config
@@ -85,21 +84,25 @@ class PrintSitePlugin(BasePlugin):
         # in renderer.py
         css_dest_dir = os.path.join(config["site_dir"], "css")
         for file in os.listdir(CSS_DIR):
-            files.append(File(
-                path=file,
-                src_dir=CSS_DIR,
-                dest_dir=css_dest_dir,
-                use_directory_urls=False,
-            ))
-        
+            files.append(
+                File(
+                    path=file,
+                    src_dir=CSS_DIR,
+                    dest_dir=css_dest_dir,
+                    use_directory_urls=False,
+                )
+            )
+
         js_dest_dir = os.path.join(config["site_dir"], "js")
         for file in os.listdir(JS_DIR):
-            files.append(File(
-                path=file,
-                src_dir=JS_DIR,
-                dest_dir=js_dest_dir,
-                use_directory_urls=False,
-            ))
+            files.append(
+                File(
+                    path=file,
+                    src_dir=JS_DIR,
+                    dest_dir=js_dest_dir,
+                    use_directory_urls=False,
+                )
+            )
 
         return files
 
