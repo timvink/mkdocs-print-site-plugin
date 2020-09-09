@@ -8,7 +8,7 @@ Only included when print-site-plugin option 'add_table_of_contents' is set to tr
 TODO: Look at https://www.cssscript.com/easy-table-of-contents/ and just change the list style.
 */
 
-window.onload = function get_toc() {
+function generate_toc() {
 
   var ToC = "<nav role='navigation' class='print-page-toc-nav'>" +
       "<h1>Table of Contents</h1>"
@@ -54,3 +54,5 @@ window.onload = function get_toc() {
     document.querySelectorAll("#print-page-toc")[0].innerHTML = ToC;
 
 }
+
+generate_toc();

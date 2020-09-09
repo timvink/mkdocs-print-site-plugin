@@ -66,7 +66,8 @@ class Renderer(object):
         """
         Inserts CSS and JS links into a HTML page
         """
-        js_css = (
+        js = ""
+        css = (
             """
         <link href="/css/print_site.css" rel="stylesheet">
         <link href="/css/%s.css" rel="stylesheet">
@@ -75,13 +76,15 @@ class Renderer(object):
         )
 
         if self.insert_toc:
-            js_css += """
+            js += """
             <script type="text/javascript" src="/js/toc.js"></script>
             """
-            
+
         if self.theme_name == "material":
-            js_css += """
+            js += """
             <script type="text/javascript" src="/js/material.js"></script>
             """
 
-        return html.replace("</head>", js_css + "</head>")
+        html = html.replace("</head>", css + "</head>")
+        html = html.replace("</body>", js + "</body>")
+        return html
