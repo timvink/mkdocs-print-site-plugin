@@ -1,12 +1,14 @@
+/* 
+Generates a table of contents for the print site page.
+
+Only included when print-site-plugin option 'add_table_of_contents' is set to true
+*/
 
 /* 
 TODO: Look at https://www.cssscript.com/easy-table-of-contents/ and just change the list style.
 */
 
 window.onload = function get_toc() {
-
-  // body = document.getElementsByTagName('body')[0];
-
 
   var ToC = "<nav role='navigation' class='print-page-toc-nav'>" +
       "<h1>Table of Contents</h1>"
@@ -18,7 +20,6 @@ window.onload = function get_toc() {
   var current_heading_depth = 0
 
   for (var i = 0; i < toc_elements.length; i++) {
-
     
     el = toc_elements[i]
     title = el.innerHTML;

@@ -64,7 +64,7 @@ class Renderer(object):
 
     def insert_js_css_statements(self, html):
         """
-        Inserts CSS links into a HTML page
+        Inserts CSS and JS links into a HTML page
         """
         js_css = (
             """
@@ -77,6 +77,11 @@ class Renderer(object):
         if self.insert_toc:
             js_css += """
             <script type="text/javascript" src="/js/toc.js"></script>
+            """
+            
+        if self.theme_name == "material":
+            js_css += """
+            <script type="text/javascript" src="/js/material.js"></script>
             """
 
         return html.replace("</head>", js_css + "</head>")
