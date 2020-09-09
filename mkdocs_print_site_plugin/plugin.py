@@ -7,6 +7,8 @@ import logging
 from pathlib import Path
 
 from mkdocs.structure.files import File
+from mkdocs.structure.pages import Page
+from mkdocs.utils import write_file
 
 from mkdocs_print_site_plugin.renderer import Renderer
 
@@ -44,18 +46,19 @@ class PrintSitePlugin(BasePlugin):
         f.close()
         assert os.path.exists(tmp_path)
 
+        # Create MkDocs Page and File instances
         self.print_file = File(
             path="print_page.md",
             src_dir=tmp_dir,
             dest_dir=config["site_dir"],
             use_directory_urls=config.get("use_directory_urls"),
         )
-
-        # Insert 'print page' to the end of the nav, if it exists
-        # We'll optionally remove the print page from navigation later on
-        # Because when nav is not defined, all files incl print_page are part of the nav
-        if config.get("nav"):
-            config.get("nav").append({"updated_later_on": "print_page.md"})
+        self.print_page = Page(
+            title=self.config.get("print_page_title"),
+            file=self.print_file,
+            config=config,
+        )
+        self.print_page.edit_url = None
 
         # Warn if we don't have CSS styles corresponding to current theme
         theme_name = config.get("theme").name
@@ -66,18 +69,16 @@ class PrintSitePlugin(BasePlugin):
                 % theme_name
             )
 
+        # Save instance of the print page renderer
         self.renderer = Renderer(
-            theme_name=theme_name, insert_toc=self.config.get("add_table_of_contents")
+            theme_name=theme_name,
+            insert_toc=self.config.get("add_table_of_contents"),
+            insert_explain_block=True,
         )
 
         return config
 
     def on_files(self, files, config, **kwargs):
-
-        # Appending makes sure the print file is the last (page) file.
-        # This ensures we can capture all other page HTMLs
-        # before inserting all of them into the print page.
-        files.append(self.print_file)
 
         # Add all plugin JS and CSS files to files directory
         # Note we only include the relevant css and js files per theme into the print page file
@@ -108,40 +109,47 @@ class PrintSitePlugin(BasePlugin):
 
     def on_nav(self, nav, config, files, **kwargs):
 
-        # Save print file
-        self.print_page = self.print_file.page
-        self.print_page.title = self.config.get("print_page_title")
-        self.print_page.edit_url = None  # Ensure no edit icon on the print page.
-
         # Save the (order of) pages in the navigation
-        nav_pages = [p for p in nav.pages if p != self.print_page]
-        self.renderer.pages = nav_pages
+        self.renderer.pages = nav.pages.copy()  # nav_pages
 
-        # Optionally remove the print page from the navigation
-        if not self.config.get("add_to_navigation"):
-            nav.pages = [p for p in nav.pages if p is not self.print_page]
-            nav.items = [p for p in nav.items if p is not self.print_page]
+        # Optionally add the print page to the site navigation
+        if self.config.get("add_to_navigation"):
+            nav.items.append(self.print_page)
+            nav.pages.append(self.print_page)
 
         return nav
 
     def on_page_content(self, html, page, config, files, **kwargs):
 
-        # Note that we made sure print page is the last file
-        # to be processed in the on_files() event
+        # Save each page HTML *before* a template is applied inside the page class
         if page != self.print_page:
-            # Save the page HTML inside the page class
             page.html = html
-        else:
-            # Write the combined HTML of all pages in the navigation
-            html = self.renderer.write_combined()
 
         return html
 
-    def on_post_page(self, output, page, config, **kwargs):
+    def on_page_context(self, context, page, config, nav):
 
-        # Here we make sure to insert our CSS for printing
-        # only to the print site page.
-        if page == self.print_page:
-            output = self.renderer.insert_js_css_statements(output)
+        # Save the page context
+        # We'll use the same context of the last rendered page
+        # And apply it to the print page as well (in on_post_build event)
+        self.context = context
 
-        return output
+    def on_post_build(self, config):
+
+        # Combine the HTML of all pages present in the navigation
+        self.print_page.content = self.renderer.write_combined()
+
+        # Get the info for MkDocs to be able to apply a theme template on our print page
+        env = config["theme"].get_env()
+        template = env.get_template("main.html")
+        self.context["page"] = self.print_page
+
+        # Render the theme template and insert additional JS / CSS
+        html = template.render(self.context)
+        html = self.renderer.insert_js_css_statements(html)
+
+        # Write the file to the output folder
+        write_file(
+            html.encode("utf-8", errors="xmlcharrefreplace"),
+            self.print_page.file.abs_dest_path,
+        )
