@@ -1,5 +1,9 @@
 /* Print styles for default MkDocs theme  */
 
+#print-site-banner { 
+    padding-top: 1em;
+ }
+
 @media print {
     .col-md-3 { display: none !important; }
 }
