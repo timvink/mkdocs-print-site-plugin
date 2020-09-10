@@ -1,0 +1,15 @@
+site_name: Test
+
+theme:
+    name: material
+    palette:
+        scheme: slate
+
+plugins:
+    - enumerate-headings
+    - print-site
+
+nav:
+    - Home: index.md
+    - Page Z: z.md
+    - Page A: a.md

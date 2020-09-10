@@ -69,19 +69,19 @@ class Renderer(object):
         css = (
             """
         <link href="/css/print_site.css" rel="stylesheet">
-        <link href="/css/%s.css" rel="stylesheet">
+        <link href="/css/print-site-%s.css" rel="stylesheet">
         """
             % self.theme_name
         )
 
         if self.insert_toc:
             js += """
-            <script type="text/javascript" src="/js/toc.js"></script>
+            <script type="text/javascript" src="/js/print-site-toc.js"></script>
             """
 
         if self.theme_name == "material":
             js += """
-            <script type="text/javascript" src="/js/material.js"></script>
+            <script type="text/javascript" src="/js/print-site-material.js"></script>
             """
 
         html = html.replace("</head>", css + "</head>")
