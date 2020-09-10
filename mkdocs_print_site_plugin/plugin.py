@@ -63,6 +63,7 @@ class PrintSitePlugin(BasePlugin):
         # Warn if we don't have CSS styles corresponding to current theme
         theme_name = config.get("theme").name
         theme_css_files = [Path(f).stem for f in os.listdir(CSS_DIR)]
+        theme_css_files = [f[11:] for f in theme_css_files if f != 'print_site'] # remove 'print-site' prefix
         if theme_name not in theme_css_files:
             logging.warning(
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
