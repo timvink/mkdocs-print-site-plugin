@@ -8,7 +8,7 @@
 
 # mkdocs-print-site-plugin
 
-[MkDocs](https://www.mkdocs.org/) plugin that adds a page to your site combining all pages, allowing your site visitors to *File > Print > Save as PDF* the entire site.
+[MkDocs](https://www.mkdocs.org/) plugin that adds a page to your site combining all pages, allowing your site visitors to *File > Print > Save as PDF* the entire site. See [demo](https://timvink.github.io/mkdocs-print-site-plugin/print_page.html).
 
 ## Features :star2:
 
