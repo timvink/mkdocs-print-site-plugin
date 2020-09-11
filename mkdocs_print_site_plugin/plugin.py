@@ -9,6 +9,7 @@ from pathlib import Path
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file
+from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_print_site_plugin.renderer import Renderer
 
@@ -38,6 +39,13 @@ class PrintSitePlugin(BasePlugin):
                 "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml"
             )
 
+        # Raise error when using instant loading
+        if "features" in config.get("theme"):
+            if "instant" in config.get("theme")["features"]:
+                raise ConfigurationError(
+                    "[mkdocs-print-site] plugin is not compatible with instant loading. Remove the theme feature 'instant' in your mkdocs.yml file, or disable this plugin."
+                )
+
         # Create the (empty) print page file in temp directory
         tmp_dir = tempfile.gettempdir()
         tmp_path = os.path.join(tmp_dir, "print_page.md")
@@ -63,7 +71,9 @@ class PrintSitePlugin(BasePlugin):
         # Warn if we don't have CSS styles corresponding to current theme
         theme_name = config.get("theme").name
         theme_css_files = [Path(f).stem for f in os.listdir(CSS_DIR)]
-        theme_css_files = [f[11:] for f in theme_css_files if f != 'print_site'] # remove 'print-site' prefix
+        theme_css_files = [
+            f[11:] for f in theme_css_files if f != "print_site"
+        ]  # remove 'print-site' prefix
         if theme_name not in theme_css_files:
             logging.warning(
                 "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."

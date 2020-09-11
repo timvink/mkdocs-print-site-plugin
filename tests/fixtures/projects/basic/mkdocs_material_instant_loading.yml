@@ -1,0 +1,16 @@
+site_name: Test
+
+theme:
+    name: material
+    features:
+        - instant
+    palette:
+        scheme: slate
+
+plugins:
+    - print-site
+
+nav:
+    - Home: index.md
+    - Page Z: z.md
+    - Page A: a.md

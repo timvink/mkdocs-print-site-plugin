@@ -114,6 +114,10 @@ def text_in_page(tmp_proj, page_path, text):
 #### Tests ####
 
 
+def test_instant_loading_gives_error(tmp_path):
+    check_build(tmp_path, "basic/mkdocs_material_instant_loading.yml", exit_code=1)
+
+
 def test_no_toc(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_toc.yml")
 
