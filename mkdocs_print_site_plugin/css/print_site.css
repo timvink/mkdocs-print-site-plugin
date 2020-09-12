@@ -19,7 +19,6 @@ h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
     to { background: white; }
 }
 
-
 @media print {    
 
     /* included bookmarks on h1 and h2

@@ -2,32 +2,19 @@ from mkdocs_print_site_plugin.urls import fix_internal_links
 
 
 class Renderer(object):
-    def __init__(self, theme_name, insert_toc=True, insert_explain_block=True):
+    def __init__(self, insert_toc=True, insert_explain_block=True):
         """
         Args:
-            theme_name (str): Used to insert the corresponding CSS into the print page
             insert_toc (bool): Insert a table of contents?
             insert_explain_block (bool): Insert a block explaining that this is a print page
         """
 
-        self.theme_name = theme_name
         self.insert_toc = insert_toc
         self.insert_explain_block = insert_explain_block
 
         self.pages = []
 
     def write_combined(self):
-
-        # def fix_link(page, url):
-        #     page_key = get_page_key(page.url)
-        #     return "#" + page_key + "-" + url[1:]
-
-        # for page in self.pages:
-        #     print(f"Page {page.title}")
-        #     for item in page.toc.items:
-        #         print(f"'{item.title}' with link '{item.url}', new link {fix_link(page, item.url)}")
-        #         for child in item.children:
-        #             print(f"\tChild '{child.title}' with link '{child.url}', new link {fix_link(page, child.url)}")
 
         html = ""
 
@@ -61,29 +48,22 @@ class Renderer(object):
         </section>
         """
 
-    def insert_js_css_statements(self, html):
-        """
-        Inserts CSS and JS links into a HTML page
-        """
-        js = ""
+    @staticmethod
+    def insert_css(html, file_path):
         css = (
             """
-        <link href="css/print_site.css" rel="stylesheet">
-        <link href="css/print-site-%s.css" rel="stylesheet">
+        <link href="%s" rel="stylesheet"> 
         """
-            % self.theme_name
+            % file_path
         )
+        return html.replace("</head>", css + "</head>")
 
-        if self.insert_toc:
-            js += """
-            <script type="text/javascript" src="js/print-site-toc.js"></script>
+    @staticmethod
+    def insert_js(html, file_path):
+        js = (
             """
-
-        if self.theme_name == "material":
-            js += """
-            <script type="text/javascript" src="js/print-site-material.js"></script>
-            """
-
-        html = html.replace("</head>", css + "</head>")
-        html = html.replace("</body>", js + "</body>")
-        return html
+        <script type="text/javascript" src="%s"></script>
+        """
+            % file_path
+        )
+        return html.replace("</body>", js + "</body>")
