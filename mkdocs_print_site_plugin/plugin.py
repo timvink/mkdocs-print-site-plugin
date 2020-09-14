@@ -184,7 +184,13 @@ class PrintSitePlugin(BasePlugin):
         html = template.render(self.context)
 
         # Inject JS into print page
-        print_site_js = '<script type="text/javascript">%s</script>' % js_calls
+        print_site_js = """
+        <script type="text/javascript">
+        window.addEventListener('load', function () {
+            %s
+        })
+        </script>
+        """ % js_calls
         html = html.replace("</body>", print_site_js + "</body>")
 
         # Write the print_page file to the output folder
