@@ -2,7 +2,9 @@ from mkdocs_print_site_plugin.urls import fix_internal_links
 
 
 class Renderer(object):
-    def __init__(self, insert_toc=True, insert_explain_block=True):
+    def __init__(
+        self, insert_toc=True, insert_explain_block=True, insert_full_urls=False
+    ):
         """
         Args:
             insert_toc (bool): Insert a table of contents?
@@ -11,12 +13,17 @@ class Renderer(object):
 
         self.insert_toc = insert_toc
         self.insert_explain_block = insert_explain_block
+        self.insert_full_urls = insert_full_urls
 
         self.pages = []
 
     def write_combined(self):
 
-        html = '<div id="print-site-page">'
+        enabled_classes = []
+        if self.insert_full_urls:
+            enabled_classes.append("print-site-add-full-url")
+
+        html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 
         if self.insert_explain_block:
             html += self._explain_block()

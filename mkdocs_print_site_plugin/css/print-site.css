@@ -1,4 +1,10 @@
 
+
+/* Change a link to link (target) */
+div.print-site-add-full-url section.print-page a[href^="http"]::after{
+    content: " (" attr(href) ") ";
+}
+
 #print-site-banner {
     border:2px; 
     border-style:solid; 

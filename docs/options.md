@@ -8,6 +8,7 @@ plugins:
       add_to_navigation: true
       print_page_title: 'Print Site'
       add_table_of_contents: true
+      add_full_urls: false
 ```
 
 ## `add_to_navigation`
@@ -21,3 +22,7 @@ Default is 'Print Site'. When `add_to_navigation` is set to `true` this setting 
 ## `add_table_of_contents`
 
 Default is `true`. Adds a table of contents section at the beginning of the print page.
+
+## `add_full_urls`
+
+Default is `false`. When printing a page, you cannot see the target of a link. This option adds the target url in parenthesis behind a link. For example "[google.com](https://www.google.com)" will be replaced by "[google.com](https://www.google.com) (https://www.google.com)"

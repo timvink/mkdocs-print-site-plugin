@@ -24,6 +24,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_to_navigation", config_options.Type(bool, default=True)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
+        ("add_full_urls", config_options.Type(bool, default=False)),
     )
 
     def on_config(self, config, **kwargs):
@@ -81,6 +82,7 @@ class PrintSitePlugin(BasePlugin):
         self.renderer = Renderer(
             insert_toc=self.config.get("add_table_of_contents"),
             insert_explain_block=True,
+            insert_full_urls=self.config.get("add_full_urls"),
         )
 
         return config
