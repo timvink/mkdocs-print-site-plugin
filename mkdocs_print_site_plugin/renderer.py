@@ -16,7 +16,7 @@ class Renderer(object):
 
     def write_combined(self):
 
-        html = ""
+        html = '<div id="print-site-page">'
 
         if self.insert_explain_block:
             html += self._explain_block()
@@ -26,6 +26,9 @@ class Renderer(object):
 
         page_htmls = [fix_internal_links(p.html, p.url) for p in self.pages]
         html += "".join(page_htmls)
+
+        html += "</div>"
+
         return html
 
     @staticmethod
@@ -57,13 +60,3 @@ class Renderer(object):
             % file_path
         )
         return html.replace("</head>", css + "</head>")
-
-    @staticmethod
-    def insert_js(html, file_path):
-        js = (
-            """
-        <script type="text/javascript" src="%s"></script>
-        """
-            % file_path
-        )
-        return html.replace("</body>", js + "</body>")

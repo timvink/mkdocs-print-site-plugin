@@ -13,7 +13,11 @@ https://github.com/squidfunk/mkdocs-material */
     margin-bottom: 0;
     list-style-position: inside;
 }
-#print-page-toc ul.print-site-toc-level-2,ul.print-site-toc-level-3,ul.print-site-toc-level-4,ul.print-site-toc-level-5,ul.print-site-toc-level-6 {
+#print-page-toc ul.print-site-toc-level-2,
+#print-page-toc ul.print-site-toc-level-3,
+#print-page-toc ul.print-site-toc-level-4,
+#print-page-toc ul.print-site-toc-level-5,
+#print-page-toc ul.print-site-toc-level-6 {
     margin-left: 1.6em;
 }
 #print-page-toc ul li {
@@ -35,19 +39,23 @@ ul.print-site-toc-level-2 li a {
 
 
 /* Box shadows don't do well in PDFs */
-table {
+#print-site-page table {
     border: 1px solid hsla(200, 18%, 26%, 1); /* #EFEFEF */
     box-shadow: none !important;
 }
 
 @media print {
-    td {
+    #print-site-page td {
         word-wrap: break-word;
     }
-
 }
 
 @page {
+
+    /* 
+        Note this CSS file is added to all MkDocs pages
+        So this @page logic will affect print of all pages
+    */
 
     size: a4 portrait;
     margin: 15mm 10mm 25mm 10mm;

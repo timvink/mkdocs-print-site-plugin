@@ -5,10 +5,17 @@
  }
 
 @media print {
-    .col-md-3 { display: none !important; }
+
+    /* Hide side TOC banner */
+    #print-site-page .col-md-3 { display: none !important; }
 }
 
 @page {
+
+    /* 
+        Note this CSS file is added to all MkDocs pages
+        So this @page logic will affect print of all pages
+    */
 
     size: a4 portrait;
     margin: 15mm 10mm 15mm 10mm;

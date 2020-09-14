@@ -5,3 +5,4 @@ pytest
 pytest-cov
 click
 mkdocs-git-revision-date-localized-plugin
+mkdocs-windmill

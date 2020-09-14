@@ -6,8 +6,7 @@ import logging
 
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.utils import write_file
-from mkdocs.exceptions import ConfigurationError
+from mkdocs.utils import write_file, copy_file
 
 from mkdocs_print_site_plugin.renderer import Renderer
 
@@ -35,13 +34,6 @@ class PrintSitePlugin(BasePlugin):
                 "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml"
             )
 
-        # Raise error when using instant loading
-        if "features" in config.get("theme"):
-            if "instant" in config.get("theme")["features"]:
-                raise ConfigurationError(
-                    "[mkdocs-print-site] plugin is not compatible with instant loading. Remove the theme feature 'instant' in your mkdocs.yml file, or disable this plugin."
-                )
-
         # Create the (empty) print page file in temp directory
         tmp_dir = tempfile.gettempdir()
         tmp_path = os.path.join(tmp_dir, "print_page.md")
@@ -49,6 +41,23 @@ class PrintSitePlugin(BasePlugin):
         f.write("")
         f.close()
         assert os.path.exists(tmp_path)
+
+        # Add pointer to print-site javascript
+        config["extra_javascript"].append("js/print-site.js")
+        config["extra_javascript"].append("js/print-site-instant-loading.js")
+
+        # Add pointer to print-site css files
+        config["extra_css"].append("css/print-site.css")
+
+        # Add pointer to theme specific css files
+        file = "print-site-%s.css" % config.get("theme").name
+        if file in os.listdir(os.path.join(HERE, "css")):
+            config["extra_css"].append("css/%s" % file)
+        else:
+            logging.warning(
+                "[mkdocs-print-site] Theme '%s' not yet supported, which means print margins and page breaks might be off. Feel free to open an issue!"
+                % config.get("theme").name
+            )
 
         # Create MkDocs Page and File instances
         self.print_file = File(
@@ -71,71 +80,6 @@ class PrintSitePlugin(BasePlugin):
         )
 
         return config
-
-    def on_files(self, files, config, **kwargs):
-
-        # Add all plugin JS and CSS files to files directory
-        # Note we only include the relevant css and js files per theme into the print page file
-        # in renderer.py
-
-        # Include necessary CSS files
-        CSS_DIR = os.path.join(HERE, "css")
-        css_dest_dir = os.path.join(config["site_dir"], "css")
-        self.css_files = {}
-
-        # Add base print page CSS that applies to all themes
-        file = "print_site.css"
-        self.css_files[file] = File(
-            path=file, src_dir=CSS_DIR, dest_dir=css_dest_dir, use_directory_urls=False,
-        )
-
-        # Add CSS file corresponding to mkdocs theme
-        file = "print-css-%s.css" % config.get("theme").name
-        if file in os.listdir(CSS_DIR):
-            self.css_files[file] = File(
-                path=file,
-                src_dir=CSS_DIR,
-                dest_dir=css_dest_dir,
-                use_directory_urls=False,
-            )
-        else:
-            logging.warning(
-                "[mkdocs-print-site] Theme %s not yet supported, which means print margins and page breaks might be off."
-                % config.get("theme").name
-            )
-
-        # Include necessary JS files
-        js_dest_dir = os.path.join(config["site_dir"], "js")
-        JS_DIR = os.path.join(HERE, "js")
-        self.js_files = {}
-
-        # Add the table of contents file
-        if self.config.get("add_table_of_contents"):
-            file = "print-site-toc.js"
-            self.js_files[file] = File(
-                path=file,
-                src_dir=JS_DIR,
-                dest_dir=js_dest_dir,
-                use_directory_urls=False,
-            )
-
-        # Add JS for dealing with mkdocs-material theme
-        file = "print-site-material.js"
-        if file in os.listdir(JS_DIR):
-            self.js_files[file] = File(
-                path=file,
-                src_dir=JS_DIR,
-                dest_dir=js_dest_dir,
-                use_directory_urls=False,
-            )
-
-        # Add the css and js files to MkDocs files collection
-        for file in self.css_files:
-            files.append(self.css_files[file])
-        for file in self.js_files:
-            files.append(self.js_files[file])
-
-        return files
 
     def on_nav(self, nav, config, files, **kwargs):
 
@@ -166,29 +110,78 @@ class PrintSitePlugin(BasePlugin):
 
     def on_post_build(self, config):
 
+        # Add javascript file
+        js_output_base_path = os.path.join(config["site_dir"], "js")
+        js_file_path = os.path.join(js_output_base_path, "print-site.js")
+        copy_file(os.path.join(os.path.join(HERE, "js"), "print-site.js"), js_file_path)
+
+        # Add CSS file
+        css_output_base_path = os.path.join(config["site_dir"], "css")
+        css_file_path = os.path.join(css_output_base_path, "print-site.css")
+        copy_file(
+            os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path
+        )
+        # Add theme CSS file
+        css_file = "print-site-%s.css" % config.get("theme").name
+        if css_file in os.listdir(os.path.join(HERE, "css")):
+            css_file_path = os.path.join(css_output_base_path, css_file)
+            copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
+
+        # Determine calls to required javascript functions
+        js_calls = ""
+        if config.get("theme").name == "material":
+            js_calls += "change_material_theme('default');"
+        if self.config.get("add_table_of_contents"):
+            js_calls += "generate_toc();"
+
+        # Add JS file for compatibility for mkdocs-material instant loading
+        # note this is inserted to all mkdocs pages,
+        # because each page can be the start of instant loading session
+        js_instant_loading = (
+            """
+         // Subscribe functions for compatibility 
+         // with mkdocs-material's instant loading feature
+         
+         body = document.getElementsByTagName('body')[0];
+         mkdocs_material_site_color_theme = body.getAttribute('data-md-color-scheme');
+                    
+         if (
+            typeof app !== "undefined" && 
+            typeof app.document$ !== "undefined"
+            ) {
+            app.document$.subscribe(function() {
+                if ( document.querySelector("#print-site-page") !== null ) {
+                    %s
+                } else {
+                    // Make sure to change the color theme back!
+                    if ( mkdocs_material_site_color_theme !== null ) {
+                        change_material_theme(mkdocs_material_site_color_theme);   
+                    }
+                }
+            })
+         }
+        """
+            % js_calls
+        )
+        write_file(
+            js_instant_loading.encode("utf-8", errors="xmlcharrefreplace"),
+            os.path.join(js_output_base_path, "print-site-instant-loading.js"),
+        )
+
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
-
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
         template = env.get_template("main.html")
         self.context["page"] = self.print_page
-
-        # Render the theme template and insert additional JS / CSS
+        # Render the theme template for the print page
         html = template.render(self.context)
 
-        # Insert CSS and JS files
-        for file in self.css_files:
-            self.css_files[file].url = "css/" + self.css_files[file].url
-            file_path = self.css_files[file].url_relative_to(self.print_file)
-            html = self.renderer.insert_css(html, file_path)
+        # Inject JS into print page
+        print_site_js = '<script type="text/javascript">%s</script>' % js_calls
+        html = html.replace("</body>", print_site_js + "</body>")
 
-        for file in self.js_files:
-            self.js_files[file].url = "js/" + self.js_files[file].url
-            file_path = self.js_files[file].url_relative_to(self.print_file)
-            html = self.renderer.insert_js(html, file_path)
-
-        # Write the file to the output folder
+        # Write the print_page file to the output folder
         write_file(
             html.encode("utf-8", errors="xmlcharrefreplace"),
             self.print_page.file.abs_dest_path,

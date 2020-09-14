@@ -11,7 +11,12 @@
 }
 
 /* Print site table of contents styling */
-h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
+#print-site-page h1:target, 
+#print-site-page h2:target, 
+#print-site-page h3:target, 
+#print-site-page h4:target, 
+#print-site-page h5:target, 
+#print-site-page h6:target {
     animation: highlight 1s ease;
 }
 @keyframes highlight {
@@ -24,55 +29,63 @@ h1:target, h2:target, h3:target, h4:target, h5:target, h6:target {
     /* included bookmarks on h1 and h2
     Doesn't work, but included In case Chrome gets support 
     for these experimental CSS features that define PDF bookmarks */
-    h1 {
+    #print-site-page h1 {
         bookmark-level: 1;
         bookmark-label: content(); 
         -ah-bookmark-level: 1;
         -ro-pdf-bookmark-level: 1;
     }
-    h2 {
+    #print-site-page h2 {
         bookmark-level: 2;
         bookmark-label: content(); 
         -ah-bookmark-level: 2;
         -ro-pdf-bookmark-level: 2;
     }
 
+    /* Remove print site banner */
     #print-site-banner { display: none; }
 
     /* Ensure all tabbed content is displayed and printed
     https://squidfunk.github.io/mkdocs-material/reference/content-tabs/ */
-    div.tabbed-content { display: block !important; }
-
+    #print-site-page div.tabbed-content { display: block !important; }
 
     /* PDF page breaks on each MkDocs page, except the first one */
-    section.print-page {
+    #print-site-page section.print-page {
         page-break-before: always;
     }
-    section.print-page:first-of-type {
+    #print-site-page section.print-page:first-of-type {
         page-break-before: avoid;
     }
 
-    p, pre, blockquote, .tabbed-set {
+    #print-site-page p, 
+    #print-site-page pre, 
+    #print-site-page blockquote, 
+    #print-site-page .tabbed-set {
         page-break-inside: avoid;
     }
 
     /* Avoid a page break immediately after a heading */
     /* Credits https://stackoverflow.com/a/9238898/5525118 */
-    h1 {
+    #print-site-page h1 {
         page-break-inside: avoid;
     }
-    h1::after {
+    #print-site-page h1::after {
         content: "";
         display: block;
         height: 100px;
         margin-bottom: -100px;
     }
 
-    footer { display : none; }
+    #print-site-page footer { display : none; }
 
 }
 
 @page {
+
+    /* 
+        Note this CSS file is added to all MkDocs pages
+        So this @page logic will affect print of all pages
+    */
 
     /* Prevent image page overflow */
     img { max-width: 500px !important; }

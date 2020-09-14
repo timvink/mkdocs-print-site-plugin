@@ -1,17 +1,29 @@
 /* 
-Generates a table of contents for the print site page.
-
-Only included when print-site-plugin option 'add_table_of_contents' is set to true
+Javascript functions to help make the print page more PDF friendly
 */
+
 
 /* 
-TODO: Look at https://www.cssscript.com/easy-table-of-contents/ and just change the list style.
-*/
+mkdocs-material compatibility
+Change theme to default mode, when printing
 
+Only called when theme 'material' is specified in the mkdocs.yml file
+*/
+function change_material_theme(to="default") {
+
+  body = document.getElementsByTagName('body')[0];
+  body.setAttribute("data-md-color-scheme", to)
+}
+
+
+/*
+Generates a table of contents for the print site page.
+Only called when print-site-plugin option 'add_table_of_contents' is set to true
+*/
 function generate_toc() {
 
   var ToC = "<nav role='navigation' class='print-page-toc-nav'>" +
-      "<h1>Table of Contents</h1>"
+      "<h1 class='print-page-toc-title'>Table of Contents</h1>"
 
   var newLine, el, title, link;
 
@@ -22,6 +34,12 @@ function generate_toc() {
   for (var i = 0; i < toc_elements.length; i++) {
     
     el = toc_elements[i]
+
+    // Don't put the toc h1 in the toc
+    if ( el.classList.contains('print-page-toc-title') ) {
+      continue;
+    }
+
     title = el.innerHTML;
     link = "#" + el.id;
     tag = el.tagName
@@ -54,5 +72,3 @@ function generate_toc() {
     document.querySelectorAll("#print-page-toc")[0].innerHTML = ToC;
 
 }
-
-generate_toc();
