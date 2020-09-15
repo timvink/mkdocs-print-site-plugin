@@ -10,8 +10,10 @@ use_directory_urls: false
 plugins:
     - search
     - print-site:
-        add_full_urls: true
- 
+        add_full_urls: false
+        add_table_of_contents: true
+        enumerate_headings: true
+
 nav:
     - Home: index.md
     - Options: options.md

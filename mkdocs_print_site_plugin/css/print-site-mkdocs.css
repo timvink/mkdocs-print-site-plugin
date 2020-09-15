@@ -6,8 +6,11 @@
 
 @media print {
 
-    /* Hide side TOC banner */
-    #print-site-page .col-md-3 { display: none !important; }
+    /* Hide side TOC banner 
+    Note the side will also disappear when printing other pages,
+    but it doesn't print well so I see this as acceptable behaviour
+    */
+    .col-md-3 { display: none !important; }
 }
 
 @page {

@@ -1,10 +1,7 @@
 
-
-/* Change a link to link (target) */
-div.print-site-add-full-url section.print-page a[href^="http"]::after{
-    content: " (" attr(href) ") ";
-}
-
+/* 
+The print-site banner
+*/
 #print-site-banner {
     border:2px; 
     border-style:solid; 
@@ -16,7 +13,105 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
     margin-top: 1rem;
 }
 
-/* Print site table of contents styling */
+/* 
+Enumerate headings
+
+Only displayed when set in mkdocs.yml
+
+print-site:
+    - print-site-enumerate_headings: true
+*/
+
+/* Ensure inline adding of heading number */
+.print-site-enumerate-headings h1:before,
+.print-site-enumerate-headings h2:before,
+.print-site-enumerate-headings h3:before,
+.print-site-enumerate-headings h4:before,
+.print-site-enumerate-headings h5:before,
+.print-site-enumerate-headings h6:before {
+    display: inline !important;
+}
+/* Count headings */
+body {counter-reset: chapter toc-chapter;}
+.print-site-enumerate-headings h1 {counter-reset: section sub-section composite detail last; }
+.print-site-enumerate-headings h2 {counter-reset: sub-section composite detail last; }
+.print-site-enumerate-headings h3 {counter-reset: composite detail last; }
+.print-site-enumerate-headings h4 {counter-reset: detail last; }
+.print-site-enumerate-headings h5 {counter-reset: last; }
+.print-site-enumerate-headings h1:before {
+    counter-increment: chapter;
+    content: counter(chapter) " " !important;
+}
+.print-site-enumerate-headings h1.print-page-toc-title:before {
+    content: none !important;
+    counter-increment: none;
+}
+.print-site-enumerate-headings h2:before {
+  counter-increment: section;
+  content: counter(chapter) "." counter(section) " " !important;
+}
+.print-site-enumerate-headings h3:before {
+  counter-increment: sub-section;
+  content: counter(chapter) "." counter(section) "." counter(sub-section) " " !important;
+}
+.print-site-enumerate-headings h4:before {
+  counter-increment: composite;
+  content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) " " !important;
+}
+.print-site-enumerate-headings h5:before {
+  counter-increment: detail;
+  content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) " " !important;
+}
+.print-site-enumerate-headings h6:before {
+    counter-increment: last;
+    content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) "." counter(last) !important;
+}
+/* Count links in table of contents also */
+.print-site-enumerate-headings .print-site-toc-level-1 > ul { counter-reset: toc-section; }
+.print-site-enumerate-headings .print-site-toc-level-2 > ul { counter-reset: toc-sub-section; }
+.print-site-enumerate-headings .print-site-toc-level-3 > ul { counter-reset: toc-composite; }
+.print-site-enumerate-headings .print-site-toc-level-4 > ul { counter-reset: toc-detail; }
+.print-site-enumerate-headings .print-site-toc-level-5 > ul { counter-reset: toc-last; }
+.print-site-enumerate-headings .print-site-toc-level-1 > li a:before {
+    counter-increment: toc-chapter;
+    content: counter(toc-chapter) " "; 
+}
+.print-site-enumerate-headings .print-site-toc-level-2 > li a:before {
+    counter-increment: toc-section; 
+    content: counter(toc-chapter) "." counter(toc-section) " ";
+}
+.print-site-enumerate-headings .print-site-toc-level-3 > li a:before {
+    counter-increment: toc-sub-section;
+    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) " ";
+}
+.print-site-enumerate-headings .print-site-toc-level-4 > li a:before {
+    counter-increment: toc-composite;
+    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) "." counter(toc-composite) " ";
+}
+.print-site-enumerate-headings .print-site-toc-level-5 > li a:before {
+    counter-increment: toc-detail;
+    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) "." counter(toc-composite) "." counter(toc-detail) " ";
+}
+.print-site-enumerate-headings .print-site-toc-level-6 > li a:before {
+    counter-increment: toc-last;
+    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) "." counter(toc-composite) "." counter(toc-detail) "." counter(toc-last);
+}
+#print-page-toc li a.headerlink:before {
+    content: none !important;
+    counter-increment: none;
+}
+
+
+
+/* Change a link to link (target) */
+div.print-site-add-full-url section.print-page a[href^="http"]::after{
+    content: " (" attr(href) ") ";
+}
+
+
+/* 
+Print site table of contents styling
+ */
 #print-site-page h1:target, 
 #print-site-page h2:target, 
 #print-site-page h3:target, 
@@ -29,6 +124,8 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
     from { background: yellow; }
     to { background: white; }
 }
+
+
 
 @media print {    
 

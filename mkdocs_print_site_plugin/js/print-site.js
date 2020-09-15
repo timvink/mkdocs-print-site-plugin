@@ -39,6 +39,10 @@ function generate_toc() {
     if ( el.classList.contains('print-page-toc-title') ) {
       continue;
     }
+    // Ignore the MkDocs keyboard Model
+    if ( el.id.indexOf("keyboardModalLabel") > -1 ) {
+      continue;
+    }
 
     title = el.innerHTML;
     link = "#" + el.id;

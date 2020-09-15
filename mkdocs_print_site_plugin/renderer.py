@@ -3,7 +3,11 @@ from mkdocs_print_site_plugin.urls import fix_internal_links
 
 class Renderer(object):
     def __init__(
-        self, insert_toc=True, insert_explain_block=True, insert_full_urls=False
+        self,
+        insert_toc=True,
+        insert_explain_block=True,
+        insert_full_urls=False,
+        insert_enumeration=False,
     ):
         """
         Args:
@@ -14,6 +18,7 @@ class Renderer(object):
         self.insert_toc = insert_toc
         self.insert_explain_block = insert_explain_block
         self.insert_full_urls = insert_full_urls
+        self.insert_enumeration = insert_enumeration
 
         self.pages = []
 
@@ -22,6 +27,8 @@ class Renderer(object):
         enabled_classes = []
         if self.insert_full_urls:
             enabled_classes.append("print-site-add-full-url")
+        if self.insert_enumeration:
+            enabled_classes.append("print-site-enumerate-headings")
 
         html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 
@@ -57,13 +64,3 @@ class Renderer(object):
             <div id="print-page-toc"></div>
         </section>
         """
-
-    @staticmethod
-    def insert_css(html, file_path):
-        css = (
-            """
-        <link href="%s" rel="stylesheet"> 
-        """
-            % file_path
-        )
-        return html.replace("</head>", css + "</head>")

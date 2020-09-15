@@ -25,6 +25,7 @@ class PrintSitePlugin(BasePlugin):
         ("print_page_title", config_options.Type(str, default="Print Site")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
         ("add_full_urls", config_options.Type(bool, default=False)),
+        ("enumerate_headings", config_options.Type(bool, default=False)),
     )
 
     def on_config(self, config, **kwargs):
@@ -83,6 +84,7 @@ class PrintSitePlugin(BasePlugin):
             insert_toc=self.config.get("add_table_of_contents"),
             insert_explain_block=True,
             insert_full_urls=self.config.get("add_full_urls"),
+            insert_enumeration=self.config.get("enumerate_headings"),
         )
 
         return config
@@ -184,13 +186,16 @@ class PrintSitePlugin(BasePlugin):
         html = template.render(self.context)
 
         # Inject JS into print page
-        print_site_js = """
+        print_site_js = (
+            """
         <script type="text/javascript">
         window.addEventListener('load', function () {
             %s
         })
         </script>
-        """ % js_calls
+        """
+            % js_calls
+        )
         html = html.replace("</body>", print_site_js + "</body>")
 
         # Write the print_page file to the output folder
