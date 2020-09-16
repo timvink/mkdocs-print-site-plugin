@@ -116,6 +116,10 @@ class PrintSitePlugin(BasePlugin):
         # And apply it to the print page as well (in on_post_build event)
         self.context = context
 
+        # Save relative link to print page
+        # This can be used to customize a theme and add a print button to each page
+        page.url_to_print_page = self.print_file.url_relative_to(page.file)
+
     def on_post_build(self, config):
 
         # Add javascript file

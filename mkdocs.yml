@@ -17,11 +17,13 @@ plugins:
 nav:
     - Home: index.md
     - Options: options.md
+    - Customization: customization.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 
 theme:
     name: material
+    custom_dir: docs/overrides
     palette:
         primary: indigo
         accent: blue
