@@ -26,6 +26,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_table_of_contents", config_options.Type(bool, default=True)),
         ("add_full_urls", config_options.Type(bool, default=False)),
         ("enumerate_headings", config_options.Type(bool, default=False)),
+        ("enumerate_figures", config_options.Type(bool, default=False)),
     )
 
     def on_config(self, config, **kwargs):
@@ -85,6 +86,7 @@ class PrintSitePlugin(BasePlugin):
             insert_explain_block=True,
             insert_full_urls=self.config.get("add_full_urls"),
             insert_enumeration=self.config.get("enumerate_headings"),
+            insert_enumeration_figures=self.config.get("enumerate_figures"),
         )
 
         return config

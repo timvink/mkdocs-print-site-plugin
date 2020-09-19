@@ -32,7 +32,7 @@ print-site:
     display: inline !important;
 }
 /* Count headings */
-body {counter-reset: chapter toc-chapter;}
+body {counter-reset: chapter toc-chapter figurecounter;}
 .print-site-enumerate-headings h1 {counter-reset: section sub-section composite detail last; }
 .print-site-enumerate-headings h2 {counter-reset: sub-section composite detail last; }
 .print-site-enumerate-headings h3 {counter-reset: composite detail last; }
@@ -102,8 +102,15 @@ body {counter-reset: chapter toc-chapter;}
 }
 
 
+/* Enumerate figures */
+.print-site-enumerate-figures figcaption:before {
+    counter-increment: figurecounter;
+    content: "Figure " counter(figurecounter) ": ";
+}
 
-/* Change a link to link (target) */
+
+/* Print URLS: 
+Change a 'link' to 'link (target)' */
 div.print-site-add-full-url section.print-page a[href^="http"]::after{
     content: " (" attr(href) ") ";
 }

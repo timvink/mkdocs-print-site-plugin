@@ -13,6 +13,7 @@ plugins:
         add_full_urls: false
         add_table_of_contents: true
         enumerate_headings: true
+        enumerate_figures: true
 
 nav:
     - Home: index.md

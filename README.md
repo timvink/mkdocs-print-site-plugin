@@ -12,11 +12,12 @@
 
 ## Features :star2:
 
-- Allow visitors to create PDFs from MkDocs sites
-- Support for pagination in PDFs
-- Works on all MkDocs themes
+- Allow visitors to create PDFs from MkDocs sites.
+- Support for pagination in PDFs.
+- Works on all MkDocs themes.
 - Support for [mkdocs-material](https://github.com/squidfunk/mkdocs-material) features like instant loading and dark color themes.
-- Lightweight, no dependencies
+- Options to add table of contents and enumeration to headings and figures.
+- Lightweight, no dependencies.
 
 If you need to create PDFs programmatically, have a look at alternatives like [mkdocs-pdf-export-plugin](https://github.com/zhaoterryy/mkdocs-pdf-export-plugin) and [mkdocs-pdf-with-js-plugin](https://github.com/smaxtec/mkdocs-pdf-with-js-plugin).
 

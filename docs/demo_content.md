@@ -178,12 +178,36 @@ Lorem ipsum[^1] dolor sit amet, consectetur adipiscing elit.[^2]
 
 :smile: 
 
-### an image
+### Images
+
+`mkdocs-print-site-plugin` supports enumerating figure captions (which can be added easily using the [img2fig](https://github.com/stuebersystems/mkdocs-img2fig-plugin) plugin):
 
 <figure>
   <img src="https://dummyimage.com/600x400/eee/aaa" width="300" />
   <figcaption>Image caption</figcaption>
 </figure>
+
+<figure>
+  <img src="https://play-lh.googleusercontent.com/JHDqEqU0QNC8vsa5_UsPAws5X1OvTVPcfDVLnV1WXhoYrEX81sE6fL7cmamStPrK_A=w1440-h620-rw" />
+  <figcaption>A cat playing 1</figcaption>
+</figure>
+
+<figure>
+  <img src="https://play-lh.googleusercontent.com/tKuOgQBwDTjhZg3DjCdZVTSVa9X9iMrtrM_1JDH6Ky_YyQeKw_bnFDy0tj1aZ39TDnI=w1440-h620-r" />
+  <figcaption>Another cat playing</figcaption>
+</figure>
+
+<figure>
+  <img src="https://play-lh.googleusercontent.com/4CPahw1_E0b61tZKq4QI1bw_dqR6bYy0aDiNWrn-MCoz9Wq5bNyhKywfVlK01nNKR-A=w1440-h620-r" />
+  <figcaption>More cats</figcaption>
+</figure>
+
+<figure>
+  <img src="https://play-lh.googleusercontent.com/5DeXBFITrh81XB68XxvJGvat5bwVj2ELVdSXNb6mGdvohZtnUoUl5kkPLPSrgtN9XHk=w1440-h620-r" />
+  <figcaption>Cats love the internet</figcaption>
+</figure>
+
+### Lists
 
 1. Vivamus id mi enim. Integer id turpis sapien. Ut condimentum lobortis
   sagittis. Aliquam purus tellus, faucibus eget urna at, iaculis venenatis

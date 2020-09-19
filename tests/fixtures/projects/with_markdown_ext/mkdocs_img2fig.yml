@@ -4,12 +4,17 @@ theme:
   name: material
   custom_dir: docs/overrides
 
+use_directory_urls: false
+
 plugins:
-  - print-site
+  - img2fig
+  - print-site:
+        enumerate_figures: true
 
 nav:
   - Home: index.md
   - Two: two.md
+  - Images: images.md
   - Extensions:
     - Admonition: extensions/admonition.md
     - CodeHilite: extensions/codehilite.md

@@ -8,6 +8,7 @@ class Renderer(object):
         insert_explain_block=True,
         insert_full_urls=False,
         insert_enumeration=False,
+        insert_enumeration_figures=False,
     ):
         """
         Args:
@@ -19,6 +20,7 @@ class Renderer(object):
         self.insert_explain_block = insert_explain_block
         self.insert_full_urls = insert_full_urls
         self.insert_enumeration = insert_enumeration
+        self.insert_enumeration_figures = insert_enumeration_figures
 
         self.pages = []
 
@@ -29,6 +31,8 @@ class Renderer(object):
             enabled_classes.append("print-site-add-full-url")
         if self.insert_enumeration:
             enabled_classes.append("print-site-enumerate-headings")
+        if self.insert_enumeration_figures:
+            enabled_classes.append("print-site-enumerate-figures")
 
         html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 

@@ -10,6 +10,7 @@ plugins:
       add_table_of_contents: true
       add_full_urls: false
       enumerate_headings: true
+      enumerate_figures: true
 ```
 
 ## `add_to_navigation`
@@ -30,4 +31,8 @@ Default is `false`. When printing a page, you cannot see the target of a link. T
 
 ## `enumerate_headings`
 
-Default `false`. This will add numbering to all headings, which is useful for larger sites.
+Default `false`. This will add numbering (enumeration) to all headings as well as the table of contents. Example "1.2 A chapter subsection".
+
+## `enumerate_figures`
+
+Default `false`. This will add numbering to all figure captions (for example "Figure 1: <caption>"). Works especially well with [mkdocs-img2fig-plugin](https://github.com/stuebersystems/mkdocs-img2fig-plugin).
