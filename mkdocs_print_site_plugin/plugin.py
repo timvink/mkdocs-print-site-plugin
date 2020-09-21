@@ -26,7 +26,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_full_urls", config_options.Type(bool, default=False)),
         ("enumerate_headings", config_options.Type(bool, default=False)),
         ("enumerate_figures", config_options.Type(bool, default=False)),
-        ("add_cover_page", config_options.Type(bool, default=True)),
+        ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
     )
 

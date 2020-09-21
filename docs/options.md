@@ -41,7 +41,7 @@ Default `false`. This will add numbering to all figure captions (for example "Fi
 
 ## `add_cover_page`
 
-Default `true`. When enabled, a cover page is added to the print page, displaying the `site_title` and other information from the `mkdocs.yml` file. See also [Customizing the cover page](cover_page.md)
+Default `false`. When enabled, a cover page is added to the print page, displaying the `site_title` and other information from the `mkdocs.yml` file. See also [Customizing the cover page](cover_page.md)
 
 ## `cover_page_template`
 
