@@ -42,7 +42,13 @@ body {counter-reset: chapter toc-chapter figurecounter;}
     counter-increment: chapter;
     content: counter(chapter) " " !important;
 }
-.print-site-enumerate-headings h1.print-page-toc-title:before {
+.print-site-enumerate-headings h1.print-page-toc-title:before,
+#print-site-cover-page h1:before,
+#print-site-cover-page h2:before,
+#print-site-cover-page h3:before,
+#print-site-cover-page h4:before,
+#print-site-cover-page h5:before,
+#print-site-cover-page h6:before {
     content: none !important;
     counter-increment: none;
 }
@@ -132,7 +138,8 @@ Print site table of contents styling
     to { background: white; }
 }
 
-
+/* Don't display cover page when not in print mode */
+#print-site-cover-page { display: none; }
 
 @media print {    
 
@@ -188,7 +195,19 @@ Print site table of contents styling
 
     #print-site-page footer { display : none; }
 
+
+    
+    #print-site-cover-page {
+        display: block;
+        width:100%; 
+        text-align: center;
+    }
+    #print-site-cover-page h1 {
+        font-size: 300%;
+    }
+
 }
+
 
 @page {
 

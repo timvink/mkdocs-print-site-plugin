@@ -188,24 +188,18 @@ Lorem ipsum[^1] dolor sit amet, consectetur adipiscing elit.[^2]
 </figure>
 
 <figure>
-  <img src="https://play-lh.googleusercontent.com/JHDqEqU0QNC8vsa5_UsPAws5X1OvTVPcfDVLnV1WXhoYrEX81sE6fL7cmamStPrK_A=w1440-h620-rw" />
-  <figcaption>A cat playing 1</figcaption>
+  <img src="https://dummyimage.com/600x400/eee/aaa" width="300" />
+  <figcaption>Another image caption</figcaption>
 </figure>
 
-<figure>
-  <img src="https://play-lh.googleusercontent.com/tKuOgQBwDTjhZg3DjCdZVTSVa9X9iMrtrM_1JDH6Ky_YyQeKw_bnFDy0tj1aZ39TDnI=w1440-h620-r" />
-  <figcaption>Another cat playing</figcaption>
-</figure>
+![](https://play-lh.googleusercontent.com/JHDqEqU0QNC8vsa5_UsPAws5X1OvTVPcfDVLnV1WXhoYrEX81sE6fL7cmamStPrK_A=w1440-h620-rw "A cat playing")
 
-<figure>
-  <img src="https://play-lh.googleusercontent.com/4CPahw1_E0b61tZKq4QI1bw_dqR6bYy0aDiNWrn-MCoz9Wq5bNyhKywfVlK01nNKR-A=w1440-h620-r" />
-  <figcaption>More cats</figcaption>
-</figure>
+![](https://play-lh.googleusercontent.com/tKuOgQBwDTjhZg3DjCdZVTSVa9X9iMrtrM_1JDH6Ky_YyQeKw_bnFDy0tj1aZ39TDnI=w1440-h620-r "Another cat playing")
 
-<figure>
-  <img src="https://play-lh.googleusercontent.com/5DeXBFITrh81XB68XxvJGvat5bwVj2ELVdSXNb6mGdvohZtnUoUl5kkPLPSrgtN9XHk=w1440-h620-r" />
-  <figcaption>Cats love the internet</figcaption>
-</figure>
+![](https://play-lh.googleusercontent.com/4CPahw1_E0b61tZKq4QI1bw_dqR6bYy0aDiNWrn-MCoz9Wq5bNyhKywfVlK01nNKR-A=w1440-h620-r "More cats that play")
+
+![](https://play-lh.googleusercontent.com/5DeXBFITrh81XB68XxvJGvat5bwVj2ELVdSXNb6mGdvohZtnUoUl5kkPLPSrgtN9XHk=w1440-h620-r "The internet loves cats")
+
 
 ### Lists
 

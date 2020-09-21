@@ -1,0 +1,4 @@
+# Meant for developers of this package
+yafg
+mkdocs>=1.1.2
+Markdown>=3.2.2

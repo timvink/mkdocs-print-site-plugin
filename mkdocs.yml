@@ -14,11 +14,14 @@ plugins:
         add_table_of_contents: true
         enumerate_headings: true
         enumerate_figures: true
+        add_cover_page: true
 
 nav:
     - Home: index.md
     - Options: options.md
-    - Customization: customization.md
+    - Customization: 
+        - print_button.md
+        - cover_page.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 
@@ -26,7 +29,8 @@ theme:
     name: material
     custom_dir: docs/overrides
     palette:
-        primary: indigo
+        scheme: preference
+        primary: blue
         accent: blue
 
 markdown_extensions:

@@ -1,16 +1,15 @@
-from mkdocs.plugins import BasePlugin
-from mkdocs.config import config_options
 import os
 import tempfile
 import logging
 
+from mkdocs.plugins import BasePlugin
+from mkdocs.config import config_options
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file
+from mkdocs import utils
 
 from mkdocs_print_site_plugin.renderer import Renderer
-
-from mkdocs import utils
 
 logger = logging.getLogger("mkdocs.plugins")
 logger.addFilter(utils.warning_filter)
@@ -27,6 +26,8 @@ class PrintSitePlugin(BasePlugin):
         ("add_full_urls", config_options.Type(bool, default=False)),
         ("enumerate_headings", config_options.Type(bool, default=False)),
         ("enumerate_figures", config_options.Type(bool, default=False)),
+        ("add_cover_page", config_options.Type(bool, default=True)),
+        ("cover_page_template", config_options.Type(str, default="")),
     )
 
     def on_config(self, config, **kwargs):
@@ -41,6 +42,26 @@ class PrintSitePlugin(BasePlugin):
                 "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, to ensure the print page has any changes other plugins make. Please update the 'plugins:' section in your mkdocs.yml"
             )
 
+        # Get abs path to cover_page_template
+        self.cover_page_template_path = ""
+        if self.config.get("add_cover_page"):
+            if self.config.get("cover_page_template") == "":
+                self.cover_page_template_path = os.path.join(
+                    HERE, "templates", "cover_page.tpl"
+                )
+            else:
+                self.cover_page_template_path = os.path.join(
+                    os.path.dirname(config.get("config_file_path")),
+                    self.config.get("cover_page_template"),
+                )
+            if not os.path.exists(self.cover_page_template_path):
+                logger.warning(
+                    "[print-site-plugin]: Path specified in 'cover_page_template' not found. Make sure to use the URL relative to your mkdocs.yml file."
+                )
+                raise FileNotFoundError(
+                    "File not found: %s" % self.cover_page_template_path
+                )
+
         # Create the (empty) print page file in temp directory
         tmp_dir = tempfile.gettempdir()
         tmp_path = os.path.join(tmp_dir, "print_page.md")
@@ -50,16 +71,18 @@ class PrintSitePlugin(BasePlugin):
         assert os.path.exists(tmp_path)
 
         # Add pointer to print-site javascript
-        config["extra_javascript"].append("js/print-site.js")
-        config["extra_javascript"].append("js/print-site-instant-loading.js")
+        config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
+        config["extra_javascript"] = ["js/print-site-instant-loading.js"] + config[
+            "extra_javascript"
+        ]
 
         # Add pointer to print-site css files
-        config["extra_css"].append("css/print-site.css")
+        config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
 
         # Add pointer to theme specific css files
         file = "print-site-%s.css" % config.get("theme").name
         if file in os.listdir(os.path.join(HERE, "css")):
-            config["extra_css"].append("css/%s" % file)
+            config["extra_css"] = ["css/%s" % file] + config["extra_css"]
         else:
             logger.warning(
                 "[mkdocs-print-site] Theme '%s' not yet supported, which means print margins and page breaks might be off. Feel free to open an issue!"
@@ -82,11 +105,10 @@ class PrintSitePlugin(BasePlugin):
 
         # Save instance of the print page renderer
         self.renderer = Renderer(
-            insert_toc=self.config.get("add_table_of_contents"),
-            insert_explain_block=True,
-            insert_full_urls=self.config.get("add_full_urls"),
-            insert_enumeration=self.config.get("enumerate_headings"),
-            insert_enumeration_figures=self.config.get("enumerate_figures"),
+            plugin_config=self.config,
+            mkdocs_config=config,
+            cover_page_template_path=self.cover_page_template_path,
+            print_page=self.print_page,
         )
 
         return config
@@ -124,12 +146,12 @@ class PrintSitePlugin(BasePlugin):
 
     def on_post_build(self, config):
 
-        # Add javascript file
+        # Add print-site.js
         js_output_base_path = os.path.join(config["site_dir"], "js")
         js_file_path = os.path.join(js_output_base_path, "print-site.js")
         copy_file(os.path.join(os.path.join(HERE, "js"), "print-site.js"), js_file_path)
 
-        # Add CSS file
+        # Add print-site.css
         css_output_base_path = os.path.join(config["site_dir"], "css")
         css_file_path = os.path.join(css_output_base_path, "print-site.css")
         copy_file(
@@ -184,6 +206,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
+
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
         template = env.get_template("main.html")

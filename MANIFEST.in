@@ -1,2 +1,3 @@
 include mkdocs_print_site_plugin/css/*.css
 include mkdocs_print_site_plugin/js/*.js
+include mkdocs_print_site_plugin/templates/*.tpl

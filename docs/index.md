@@ -20,7 +20,7 @@ pip3 install mkdocs-print-site-plugin
 
 Next, add the following lines to your `mkdocs.yml`:
 
-```yml
+```yaml
 plugins:
   - search
   - print-site

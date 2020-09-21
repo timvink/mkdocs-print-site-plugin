@@ -1,0 +1,65 @@
+site_name: Test
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+
+plugins:
+  - print-site:
+        add_cover_page: true
+        cover_page_template: other_cover_page.tpl
+        enumerate_headings: true
+        
+extra:
+    added_key: "added content via extra: in mkdocs"
+
+nav:
+  - Home: index.md
+  - Two: two.md
+  - Extensions:
+    - Admonition: extensions/admonition.md
+    - CodeHilite: extensions/codehilite.md
+    - Footnotes: extensions/footnotes.md
+    - Metadata: extensions/metadata.md
+    - Permalinks: extensions/permalinks.md
+    - Folder: folder/subfolder/nested_file.md
+    - PyMdown: extensions/pymdown.md
+
+
+# Extensions
+markdown_extensions:
+  - markdown.extensions.admonition
+  - markdown.extensions.attr_list
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  # - pymdownx.highlight:
+  #     linenums_style: pymdownx-inline
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde

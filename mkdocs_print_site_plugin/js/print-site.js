@@ -27,7 +27,7 @@ function generate_toc() {
 
   var newLine, el, title, link;
 
-  const toc_elements = document.querySelectorAll("h1,h2,h3,h4,h5,h6")
+  const toc_elements = document.querySelectorAll("section.print-page h1,section.print-page h2,section.print-page h3,section.print-page h4,section.print-page h5,section.print-page h6")
   
   var current_heading_depth = 0
 

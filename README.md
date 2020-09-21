@@ -17,6 +17,7 @@
 - Works on all MkDocs themes.
 - Support for [mkdocs-material](https://github.com/squidfunk/mkdocs-material) features like instant loading and dark color themes.
 - Options to add table of contents and enumeration to headings and figures.
+- Option to add a cover page.
 - Lightweight, no dependencies.
 
 If you need to create PDFs programmatically, have a look at alternatives like [mkdocs-pdf-export-plugin](https://github.com/zhaoterryy/mkdocs-pdf-export-plugin) and [mkdocs-pdf-with-js-plugin](https://github.com/smaxtec/mkdocs-pdf-with-js-plugin).

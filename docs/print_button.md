@@ -1,4 +1,4 @@
-# Customization
+# Adding a print button
 
 You might want to customize your site to include a 'print' button on every page (like the one in the right corner of this page 👆)
 
@@ -9,7 +9,7 @@ You can use `page.url_to_print_page` to get the link to the site print page.
 
 In `mkdocs-material` theme (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)), first create a directory for overrides and update your `mkdocs.yml`:
 
-```yml
+```yaml
 theme:
   name: material
   custom_dir: docs/overrides
@@ -17,7 +17,7 @@ theme:
  
 You can create the file `docs/overrides/main.html` as follows:
 
-```
+```jinja
 {% extends "base.html" %}
 
 {% block content %}
@@ -35,7 +35,7 @@ You can create the file `docs/overrides/main.html` as follows:
 
 You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by first creating an `overrides` directory:
 
-```yml
+```yaml
 theme:
     name: mkdocs
     custom_dir: docs/overrides
@@ -43,7 +43,7 @@ theme:
 
 And then adding a file `docs/overrides/main.html` with the following content:
 
-```html
+```jinja
 {% extends "base.html" %}
 
 {% block repo %}
