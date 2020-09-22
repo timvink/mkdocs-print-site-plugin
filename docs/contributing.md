@@ -11,7 +11,7 @@ Thanks for considering to contribute to this project! Some guidelines:
 
 Make sure to install an editable version before running tests:
 
-```python
+```bash
 pip install -r tests/test_requirements.txt
 pip install -e .
 pytest --cov=mkdocs_print_site_plugin --cov-report term-missing tests/
@@ -21,7 +21,7 @@ If it makes sense, writing tests for your PRs is always appreciated and will hel
 
 In addition, this project uses [pyflakes](https://pypi.org/project/pyflakes/) for static code checking:
 
-```python
+```bash
 pip install pyflakes
 pyflakes tests/ mkdocs_print_site_plugin/
 ```
@@ -30,7 +30,7 @@ pyflakes tests/ mkdocs_print_site_plugin/
 
 To quickly serve a website with your latest changes to the plugin use the sites in our tests suite. For example:
 
-```python
+```bash
 pip install -r tests/test_requirements.txt
 pip install -e .
 mkdocs serve -f tests/fixutures/basic/mkdocs.yml

@@ -2,7 +2,7 @@
 
 This content is here to demonstrate what it looks like while printing.
 
-:point_right: Go ahead and visit the [print page](print_page.md) and check it out!
+:point_right: Go ahead and visit the [print page](print_page.html) and check it out!
 
 ## Links to other pages
 
