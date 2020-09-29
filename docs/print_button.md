@@ -7,54 +7,63 @@ You can use `page.url_to_print_page` to get the link to the site print page.
 
 ## Adding a print button to mkdocs-material theme
 
-In `mkdocs-material` theme (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)), first create a directory for overrides and update your `mkdocs.yml`:
+In `mkdocs-material` theme (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)), you can create a file for overrides and point to it your `mkdocs.yml`:
 
-```yaml
-theme:
-  name: material
-  custom_dir: docs/overrides
-```
- 
-You can create the file `docs/overrides/main.html` as follows:
+_Example_:
 
-```jinja
-{% extends "base.html" %}
+=== "mkdocs.yml"
 
-{% block content %}
-{% if page.url_to_print_page %}
-    <a href="{{ page.url_to_print_page }}" title="Print Site" class="md-content__button md-icon">
-        {% include ".icons/material/printer.svg" %}
-    </a>
-{% endif %}
+    ```yaml
+    theme:
+    name: material
+    custom_dir: docs/overrides
+    ```
 
-{{ super() }}
-{% endblock content %}
-```
+=== "docs/overrides/main.html"
+
+    ```jinja
+    {% extends "base.html" %}
+
+    {% block content %}
+    {% if page.url_to_print_page %}
+        <a href="{{ page.url_to_print_page }}" title="Print Site" class="md-content__button md-icon">
+            {% include ".icons/material/printer.svg" %}
+        </a>
+    {% endif %}
+
+    {{ super() }}
+    {% endblock content %}
+    ```
+
 
 ## Adding a print button to mkdocs theme
 
-You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by first creating an `overrides` directory:
+You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by creating a file for overrides and pointing to it your `mkdocs.yml`:
 
-```yaml
-theme:
-    name: mkdocs
-    custom_dir: docs/overrides
-```
+_Example_:
 
-And then adding a file `docs/overrides/main.html` with the following content:
+=== "mkdocs.yml"
 
-```jinja
-{% extends "base.html" %}
+    ```yaml
+    theme:
+        name: mkdocs
+        custom_dir: docs/overrides
+    ```
 
-{% block repo %}
-    {% if page.url_to_print_page %}
-        <li class="nav-item">
-            <a href="{{ page.url_to_print_page }}" title="Print Site" class="nav-link">
-                <i class="fa fa-print"></i> Print
-            </a>
-        </li>
-    {% endif %}
+=== "docs/overrides/main.html"
 
-{{ super() }}
-{% endblock repo %}
-```
+    ```jinja
+    {% extends "base.html" %}
+
+    {% block repo %}
+        {% if page.url_to_print_page %}
+            <li class="nav-item">
+                <a href="{{ page.url_to_print_page }}" title="Print Site" class="nav-link">
+                    <i class="fa fa-print"></i> Print
+                </a>
+            </li>
+        {% endif %}
+
+    {{ super() }}
+    {% endblock repo %}
+    ```

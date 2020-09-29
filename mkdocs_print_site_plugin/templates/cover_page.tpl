@@ -1,7 +1,7 @@
 
 <div style="padding-bottom: 3em">
 
-    {% if config.site_description %}
+    {% if config.site_name %}
         <h1>{{ config.site_name }}</h1>
     {% endif %}
 
