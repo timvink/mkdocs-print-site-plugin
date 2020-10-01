@@ -15,13 +15,15 @@ plugins:
         enumerate_headings: true
         enumerate_figures: true
         add_cover_page: true
+        path_to_pdf: "assets/site.pdf"
 
 nav:
     - Home: index.md
     - Options: options.md
     - Customization: 
-        - print_button.md
-        - cover_page.md
+        - customization/print_button.md
+        - customization/pdf_button.md
+        - customization/cover_page.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 

@@ -6,13 +6,12 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.utils import write_file, copy_file
-from mkdocs import utils
+from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
 
 from mkdocs_print_site_plugin.renderer import Renderer
 
 logger = logging.getLogger("mkdocs.plugins")
-logger.addFilter(utils.warning_filter)
+logger.addFilter(warning_filter)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -28,6 +27,7 @@ class PrintSitePlugin(BasePlugin):
         ("enumerate_figures", config_options.Type(bool, default=False)),
         ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
+        ("path_to_pdf", config_options.Type(str, default="")),
     )
 
     def on_config(self, config, **kwargs):
@@ -130,6 +130,9 @@ class PrintSitePlugin(BasePlugin):
         # Save each page HTML *before* a template is applied inside the page class
         if page != self.print_page:
             page.html = html
+
+        if self.config.get("path_to_pdf") != "":
+            page.url_to_pdf = get_relative_url(self.config.get("path_to_pdf"), page.file.url)
 
         return html
 

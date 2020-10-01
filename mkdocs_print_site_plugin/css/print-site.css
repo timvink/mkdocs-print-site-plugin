@@ -164,7 +164,7 @@ Print site table of contents styling
 
     /* Ensure all tabbed content is displayed and printed
     https://squidfunk.github.io/mkdocs-material/reference/content-tabs/ */
-    #print-site-page div.tabbed-content { display: block !important; }
+    /* #print-site-page div.tabbed-content { display: block !important; } */
 
     /* PDF page breaks on each MkDocs page, except the first one */
     #print-site-page section.print-page {
