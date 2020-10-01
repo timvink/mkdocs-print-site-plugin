@@ -38,7 +38,7 @@ plugins:
 :   Default `false`. This will add numbering to all figure captions (for example "Figure 1: <caption>"). Works especially well with [mkdocs-img2fig-plugin](https://github.com/stuebersystems/mkdocs-img2fig-plugin).
 
 `add_cover_page`
-:   Default `false`. When enabled, a cover page is added to the print page, displaying the `site_title` and other information from the `mkdocs.yml` file. See also [Customizing the cover page](cover_page.md)
+:   Default `false`. When enabled, a cover page is added to the print page, displaying the `site_title` and other information from the `mkdocs.yml` file. See also [Customizing the cover page](customization/cover_page.md)
 
 `cover_page_template`
-:   Default `""`. The path to a custom cover page template to use. See [Customizing the cover page](cover_page.md) for more info.
+:   Default `""`. The path to a custom cover page template to use. See [Customizing the cover page](customization/cover_page.md) for more info.
