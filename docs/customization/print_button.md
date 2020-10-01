@@ -29,6 +29,7 @@ _Example_:
     {% extends "base.html" %}
 
     {% block content %}
+    
     {% if page.url_to_print_page %}
         <a href="{{ page.url_to_print_page }}" title="Print Site" class="md-content__button md-icon">
             {% include ".icons/material/printer.svg" %}

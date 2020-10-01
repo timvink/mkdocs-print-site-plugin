@@ -3,7 +3,7 @@
 You might want to make downloading a PDF even easier for your users. You could include a 'PDF' button on every page (like the one in the right corner of this page 👆)
 
 MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your-docs/#using-the-theme-custom_dir), an easy way to override parts of a theme.
-You can use `page.url_to_print_page` to get the link to the site print page.
+You can use `page.url_to_pdf` to get the link to site PDF from a page.
 
 !!! info
     While it might be easier for your users, using this option means you need to manually create the PDF everytime you make a change to your website.
@@ -33,6 +33,8 @@ _Example_:
 
     ```jinja
     {% extends "base.html" %}
+
+    {% block content %}
 
     {% if page.url_to_pdf %}
         <a href="{{ page.url_to_pdf }}" title="Site PDF" class="md-content__button md-icon">
