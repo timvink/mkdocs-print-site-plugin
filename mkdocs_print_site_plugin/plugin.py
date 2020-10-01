@@ -126,7 +126,7 @@ class PrintSitePlugin(BasePlugin):
         return nav
 
     def on_page_content(self, html, page, config, files, **kwargs):
-
+        
         # Save each page HTML *before* a template is applied inside the page class
         if page != self.print_page:
             page.html = html

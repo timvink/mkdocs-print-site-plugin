@@ -44,7 +44,11 @@ function generate_toc() {
       continue;
     }
 
-    title = el.innerHTML;
+    title = el.innerText;
+    if ( title.length == 0 ) {
+      continue;
+    }
+
     link = "#" + el.id;
     tag = el.tagName
     tag_level = tag.substring(1)
