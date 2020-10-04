@@ -189,7 +189,7 @@ def test_basic_build4(tmp_path):
     assert text_in_page(
         prj_path,
         "index.html",
-        'href="print_page\/" title="Print Site" class="md-nav__link"',
+        'href="print_page\/" class="md-nav__link"',
     )
 
     # Make sure all 3 pages are combined and present
@@ -207,7 +207,7 @@ def test_basic_build5(tmp_path):
     assert text_in_page(
         prj_path,
         "index.html",
-        'href="print_page/" title="Print Site" class="md-nav__link"',
+        'href="print_page/" class="md-nav__link"',
     )
 
     # Sample some of the pages and make sure they are present in print page
@@ -224,7 +224,7 @@ def test_basic_build6(tmp_path):
     assert text_in_page(
         prj_path,
         "index.html",
-        'href="print_page/" title="Print Site" class="md-nav__link"',
+        'href="print_page/" class="md-nav__link"',
     )
 
     # Make sure the subsection pages are also in the page.
