@@ -115,7 +115,7 @@ class PrintSitePlugin(BasePlugin):
 
     def on_nav(self, nav, config, files, **kwargs):
 
-        # Save the (order of) pages in the navigation
+        # Save the (order of) pages in the navigation before adding the print page
         self.renderer.pages = nav.pages.copy()  # nav_pages
 
         # Optionally add the print page to the site navigation

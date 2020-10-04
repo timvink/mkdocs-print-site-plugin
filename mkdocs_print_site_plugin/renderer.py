@@ -55,7 +55,9 @@ class Renderer(object):
             html += self._toc()
 
         # Update internal anchor links
-        page_htmls = [fix_internal_links(p.html, p.url) for p in self.pages]
+        # If you specify the same page in your navigation, it is only rendered once
+        # Hence the hasattr(p, 'html)
+        page_htmls = [fix_internal_links(p.html, p.url) for p in self.pages if hasattr(p, 'html')]
         html += "".join(page_htmls)
 
         html += "</div>"
