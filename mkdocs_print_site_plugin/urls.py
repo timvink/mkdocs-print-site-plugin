@@ -24,7 +24,7 @@ So within a page:
 """
 
 import re
-
+import os
 
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
@@ -160,7 +160,6 @@ def fix_internal_links(html, page_url):
 
     for m in matches:
         heading_id = m.group(1)
-
         match_text = m.group()
         new_text = match_text.replace(heading_id, page_key + "-" + heading_id)
 
@@ -168,5 +167,25 @@ def fix_internal_links(html, page_url):
 
     # Finally, insert new anchor for each page
     html = ('<section class="print-page" id="%s">' % page_key) + html + "</section>"
+
+    ### Loop over all images src attributes
+    # This fixes images in the print page.
+    # Example regex https://regex101.com/r/TTRsVW/1
+    img_regex = re.compile(
+        r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE
+    )
+    matches = re.finditer(img_regex, html)
+
+    for m in matches:
+        img_src = m.group(1)
+        if is_external(img_src):
+            continue
+        img_text = m.group()
+        
+        new_url = os.path.normpath(os.path.join(os.path.dirname(page_url), img_src))
+        new_text = img_text.replace(img_src, new_url)
+
+        html = html.replace(img_text, new_text)
+
 
     return html

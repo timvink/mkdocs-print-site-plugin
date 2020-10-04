@@ -1,6 +1,6 @@
 # Page two
 
-![github logo](img/github-octocat.png)
+![github logo](folder/img/github-octocat.png)
 
 onec tortor ligula, pretium non iaculis quis, tempus non lacus. Pellentesque at purus vel magna dapibus tristique nec eu nunc. Ut commodo consectetur massa pellentesque molestie. Maecenas feugiat purus mi, eget aliquet arcu aliquet sit amet. Donec id arcu enim. Morbi eu enim in velit dapibus auctor. In scelerisque lorem vitae diam bibendum, id rhoncus ex pellentesque. Duis vitae felis id erat gravida placerat. Nunc sit amet ipsum semper, rhoncus erat eu, ornare odio. Duis lobortis quis mi ut egestas. Pellentesque lorem lacus, consequat nec tortor in, sodales vulputate felis. Nullam auctor accumsan enim ac imperdiet. Curabitur id tellus risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam tempus molestie dolor et hendrerit. Integer interdum ante vel dui rutrum, vel iaculis ipsum fermentum.
 

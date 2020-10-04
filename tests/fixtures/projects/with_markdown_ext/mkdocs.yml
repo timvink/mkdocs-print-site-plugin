@@ -10,6 +10,9 @@ plugins:
 nav:
   - Home: index.md
   - Two: two.md
+  - Folder:
+    - Subpage: folder/subpage.md
+    - Duplicate_entry: folder/subfolder/nested_file.md
   - Extensions:
     - Admonition: extensions/admonition.md
     - CodeHilite: extensions/codehilite.md
