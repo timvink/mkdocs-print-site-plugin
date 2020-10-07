@@ -57,7 +57,7 @@ class Renderer(object):
         # Update internal anchor links
         # If you specify the same page in your navigation, it is only rendered once
         # Hence the hasattr(p, 'html)
-        page_htmls = [fix_internal_links(p.html, p.url) for p in self.pages if hasattr(p, 'html')]
+        page_htmls = [fix_internal_links(p.html, p.url, directory_urls=self.mkdocs_config.get('use_directory_urls')) for p in self.pages if hasattr(p, 'html')]
         html += "".join(page_htmls)
 
         html += "</div>"

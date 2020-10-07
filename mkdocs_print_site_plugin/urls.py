@@ -114,7 +114,7 @@ def get_page_key(page_url):
     return page_key
 
 
-def fix_internal_links(html, page_url):
+def fix_internal_links(html, page_url, directory_urls):
     """
     Updates links to internal pages to anchor links.
     This ensures internal links all point to locations inside the print page. 
@@ -122,6 +122,7 @@ def fix_internal_links(html, page_url):
     Args:
         html (str): HTML of page
         page_url (str): URL of the page 
+        directory_urls (bool): Whether the mkdocs sites is using directory urls, see https://www.mkdocs.org/user-guide/configuration/?#use_directory_urls
 
     Returns:
         html (str): HTML of part of the print page with working internal links
@@ -183,6 +184,10 @@ def fix_internal_links(html, page_url):
         img_text = m.group()
         
         new_url = os.path.normpath(os.path.join(os.path.dirname(page_url), img_src))
+        
+        if directory_urls:
+            new_url = '../' + new_url
+            
         new_text = img_text.replace(img_src, new_url)
 
         html = html.replace(img_text, new_text)

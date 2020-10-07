@@ -1,0 +1,44 @@
+site_name: Test for print-site
+
+use_directory_urls: false
+
+nav:
+    - Table of contents: index.md
+    - Forewords: About.md
+    - Chapter1:
+        - Section1: Chapter1/Section1.md
+        - Section2: Chapter1/Section2.md
+    - Chapter2:
+        - Section1: Chapter2/Section1.md
+        - Section2: Chapter2/Section2.md
+    
+theme:
+    name: 'material'
+        
+extra:
+    history_buttons: true
+    
+markdown_extensions:
+    - pymdownx.emoji:
+        emoji_index: !!python/name:materialx.emoji.twemoji
+        emoji_generator: !!python/name:materialx.emoji.to_svg
+    - admonition
+    - codehilite
+    - toc:
+        permalink: true
+    - pymdownx.smartsymbols
+#    - pymdownx.critic
+#    - fontawesome_markdown
+    - pymdownx.keys
+    - pymdownx.mark
+    - pymdownx.tabbed
+    - pymdownx.superfences
+    - attr_list
+
+plugins:
+#    - enumerate-headings:
+#        toc_depth: 1
+#        strict: true
+# If plugins: added, - search needs to be specified
+    - search
+    - print-site
