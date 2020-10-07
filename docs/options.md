@@ -30,7 +30,7 @@ plugins:
     For example "[google.com](https://www.google.com)" will be replaced by "[google.com](https://www.google.com) (https://www.google.com)"
 
 `enumerate_headings`
-:   Default `false`. This will add numbering (enumeration) to all headings as well as the table of contents. 
+:   Default `false`. This will add numbering (enumeration) to all headings as well as the table of contents. Note this will only enumerate the print site page; if you want to enumerate the entire site, you can use [mkdocs-enumerate-headings-plugin](https://github.com/timvink/mkdocs-enumerate-headings-plugin).
 
     Example "1.2 A chapter subsection".
 
