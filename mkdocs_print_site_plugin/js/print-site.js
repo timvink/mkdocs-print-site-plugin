@@ -27,13 +27,24 @@ function generate_toc() {
 
   var newLine, el, title, link;
 
-  const toc_elements = document.querySelectorAll("section.print-page h1,section.print-page h2,section.print-page h3,section.print-page h4,section.print-page h5,section.print-page h6")
+  const toc_elements = document.querySelectorAll("#print-site-page h1.nav-section-title, #print-site-page h1.nav-section-title-end, section.print-page h1,section.print-page h2,section.print-page h3,section.print-page h4,section.print-page h5,section.print-page h6")
   
   var current_heading_depth = 0
+
+    // We want to style navigation sections differently. 
+    // This flag keeps track of headings that are part of a section.
+  var is_section_child = false;
 
   for (var i = 0; i < toc_elements.length; i++) {
     
     el = toc_elements[i]
+
+    // If the section pages end, change the flag
+    if ( el.classList.contains('nav-section-title-end') ) {
+      is_section_child = false;
+      ToC += "<li style='list-style-type: none; padding-bottom: 1em;'></li>"
+      continue;
+    }
 
     // Don't put the toc h1 in the toc
     if ( el.classList.contains('print-page-toc-title') ) {
@@ -62,12 +73,20 @@ function generate_toc() {
       ToC += "</ul>"; 
     }
 
-    newLine =
-      "<li>" +
-        "<a href='" + link + "'>" +
-          title +
-        "</a>" +
-      "</li>";
+    if ( el.classList.contains('nav-section-title') ) {
+      newLine = "<li class='toc-nav-section-title'>" + title + "</li>"; 
+      is_section_child = true;
+    } else {
+
+      a_class = is_section_child ? " class='toc-nav-section-child'" : "";
+      newLine =
+        "<li" + a_class + ">" +
+          "<a href='" + link + "'>" +
+            title +
+          "</a>" +
+        "</li>";
+    }
+
 
     ToC += newLine;
 

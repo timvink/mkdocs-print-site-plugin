@@ -176,9 +176,6 @@ def fix_internal_links(html, page_url, directory_urls):
 
         html = html.replace(match_text, new_text)
 
-    # Finally, insert new anchor for each page
-    html = ('<section class="print-page" id="%s">' % page_key) + html + "</section>"
-
     ### Loop over all images src attributes
     # This fixes images in the print page.
     # Example regex https://regex101.com/r/TTRsVW/1
@@ -202,5 +199,8 @@ def fix_internal_links(html, page_url, directory_urls):
 
         html = html.replace(img_text, new_text)
 
+
+    # Finally, insert new anchor for each page
+    html = ('<section class="print-page" id="%s">' % page_key) + html + "</section>"
 
     return html

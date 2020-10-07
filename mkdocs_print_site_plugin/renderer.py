@@ -24,7 +24,7 @@ class Renderer(object):
         self.insert_explain_block = insert_explain_block
         self.print_page = print_page
 
-        self.pages = []
+        self.items = []
 
     def write_combined(self):
 
@@ -54,11 +54,26 @@ class Renderer(object):
         if self.plugin_config.get("add_table_of_contents"):
             html += self._toc()
 
-        # Update internal anchor links
-        # If you specify the same page in your navigation, it is only rendered once
-        # Hence the hasattr(p, 'html)
-        page_htmls = [fix_internal_links(p.html, p.url, directory_urls=self.mkdocs_config.get('use_directory_urls')) for p in self.pages if hasattr(p, 'html')]
-        html += "".join(page_htmls)
+        
+        def get_html_from_items(items: list, dir_urls: bool):
+            item_html = ""
+            for item in items:
+                if item.is_page:
+                    # If you specify the same page twice in your navigation, it is only rendered once
+                    # so we need to check if the html attribute exists
+                    if hasattr(item, 'html'):
+                        # Update internal anchor links, image urls, etc
+                        item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
+                if item.is_section:
+                    item_html += "<h1 class='nav-section-title'>%s</h1>" % item.title
+                    item_html += get_html_from_items(item.children, dir_urls)
+                    # We also need to indicate the end of section page
+                    # We do that using a h1 with a specific class
+                    # In CSS we display:none, in JS we can use it for formatting the table of contents.
+                    item_html += "<h1 class='nav-section-title-end'>%s</h1>" % item.title
+            return item_html
+
+        html += get_html_from_items(self.items, dir_urls = self.mkdocs_config.get('use_directory_urls'))
 
         html += "</div>"
 

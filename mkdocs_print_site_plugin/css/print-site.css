@@ -22,7 +22,7 @@ print-site:
     - print-site-enumerate_headings: true
 */
 
-/* Ensure inline adding of heading number */
+/* Ensure that when adding enumeration to headings, this happens inline */
 .print-site-enumerate-headings h1:before,
 .print-site-enumerate-headings h2:before,
 .print-site-enumerate-headings h3:before,
@@ -72,6 +72,7 @@ body {counter-reset: chapter toc-chapter figurecounter;}
     counter-increment: last;
     content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) "." counter(last) !important;
 }
+
 /* Count links in table of contents also */
 .print-site-enumerate-headings .print-site-toc-level-1 > ul { counter-reset: toc-section; }
 .print-site-enumerate-headings .print-site-toc-level-2 > ul { counter-reset: toc-sub-section; }
@@ -137,9 +138,23 @@ Print site table of contents styling
     from { background: yellow; }
     to { background: white; }
 }
+ul li.toc-nav-section-title {
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+    font-size: 110%;
+    letter-spacing: 1px;
+}
+
 
 /* Don't display cover page when not in print mode */
 #print-site-cover-page { display: none; }
+
+/* Don't display the h1 section headings that we added (these are for adding it to the table of contents */
+#print-site-page h1.nav-section-title,
+#print-site-page h1.nav-section-title-end { display: none; }
+
+/* In the TOC, we want lines that are children of a section to be displayed with a left margin */
+#print-site-page ul li.toc-nav-section-child { padding-left: 1em; }
 
 @media print {    
 

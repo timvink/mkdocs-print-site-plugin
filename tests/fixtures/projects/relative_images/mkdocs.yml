@@ -39,4 +39,5 @@ plugins:
 #        strict: true
 # If plugins: added, - search needs to be specified
     - search
-    - print-site
+    - print-site:
+        enumerate_headings: false
