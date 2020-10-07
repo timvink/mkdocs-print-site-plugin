@@ -139,16 +139,26 @@ def fix_internal_links(html, page_url, directory_urls):
         if is_external(url):
             continue
         elif is_anchor(url):
+            # This is an anchor link within a mkdocs page
             url = "#" + page_key + "-" + url[1:]
         else:
-            url = url_to_anchor(url)
+            # This is a link to another mkdocs page
+            # url 'a/#anchor-link' should become '#a-anchor-link'
+            url_from_root = os.path.normpath(os.path.join('/',url))
+            url_paths = url_from_root[1:].split("#")
+            assert len(url_paths) <= 2
+            page_url = url_paths[0]
+            url = '#' + get_page_key(page_url)
+            if len(url_paths) == 2:
+                url += "-" + url_paths[1]
+            
 
         # Insert back any HTML between '<a' and 'href=', like "class='id'"
         other_html = m.group(1)
         if other_html is None:
             other_html = ""
-
         new_string = '<a %s href="%s"' % (other_html, url)
+        
         html = html.replace(m.group(), new_string)
 
     # All instances of id="#anchor" to id="#pagename-anchor"
