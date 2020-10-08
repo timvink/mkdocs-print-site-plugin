@@ -12,7 +12,31 @@ Only called when theme 'material' is specified in the mkdocs.yml file
 function change_material_theme(to="default") {
 
   body = document.getElementsByTagName('body')[0];
-  body.setAttribute("data-md-color-scheme", to)
+  var current_color_theme = body.getAttribute('data-md-color-scheme')
+  
+  var beforePrint = function() {
+      console.log('Functionality to run before printing.');
+      body.setAttribute("data-md-color-scheme", to);
+  };
+  var afterPrint = function() {
+      console.log('Functionality to run after printing');
+      body.setAttribute("data-md-color-scheme", current_color_theme); 
+  };
+
+  if (window.matchMedia) {
+      var mediaQueryList = window.matchMedia('print');
+      mediaQueryList.addListener(function(mql) {
+          if (mql.matches) {
+              beforePrint();
+          } else {
+              afterPrint();
+          }
+      });
+  }
+
+  window.onbeforeprint = beforePrint;
+  window.onafterprint = afterPrint;
+
 }
 
 
