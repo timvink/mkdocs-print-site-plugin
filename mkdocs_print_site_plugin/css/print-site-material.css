@@ -48,6 +48,13 @@ ul.print-site-toc-level-2 li a {
     #print-site-page td {
         word-wrap: break-word;
     }
+
+    /* Ensure tabs display properly */
+    #print-site-page .tabbed-content {
+        display: block !important;
+        padding-bottom: 1em;
+    }
+
 }
 
 @page {
