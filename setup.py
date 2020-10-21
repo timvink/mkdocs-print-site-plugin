@@ -30,7 +30,10 @@ setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
     ],
-    install_requires=["mkdocs>=1.0"],
+    install_requires=[
+        "mkdocs>=1.0",
+        "mkdocs-material>=6.1.0"
+    ],
     packages=find_packages(),
     entry_points={
         "mkdocs.plugins": [
