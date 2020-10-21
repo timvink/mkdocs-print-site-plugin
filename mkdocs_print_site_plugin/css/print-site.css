@@ -161,7 +161,7 @@ ul li.toc-nav-section-title {
     /* included bookmarks on h1 and h2
     Doesn't work, but included In case Chrome gets support 
     for these experimental CSS features that define PDF bookmarks */
-    #print-site-page h1 {
+    /* #print-site-page h1 {
         bookmark-level: 1;
         bookmark-label: content(); 
         -ah-bookmark-level: 1;
@@ -172,7 +172,7 @@ ul li.toc-nav-section-title {
         bookmark-label: content(); 
         -ah-bookmark-level: 2;
         -ro-pdf-bookmark-level: 2;
-    }
+    } */
 
     /* Remove print site banner */
     #print-site-banner { display: none; }
@@ -224,7 +224,7 @@ ul li.toc-nav-section-title {
 }
 
 
-@page {
+/* @page { */
 
     /* 
         Note this CSS file is added to all MkDocs pages
@@ -232,6 +232,6 @@ ul li.toc-nav-section-title {
     */
 
     /* Prevent image page overflow */
-    img { max-width: 500px !important; }
+    /* img { max-width:500px !important; } */
 
-}
+/* } */
