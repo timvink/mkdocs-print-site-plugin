@@ -1,5 +1,4 @@
 import os
-import tempfile
 import logging
 
 from mkdocs.plugins import BasePlugin
