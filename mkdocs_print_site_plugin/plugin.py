@@ -160,8 +160,6 @@ class PrintSitePlugin(BasePlugin):
 
         # Determine calls to required javascript functions
         js_calls = ""
-        if config.get("theme").name == "material":
-            js_calls += "change_material_theme('default');"
         if self.config.get("add_table_of_contents"):
             js_calls += "generate_toc();"
 
