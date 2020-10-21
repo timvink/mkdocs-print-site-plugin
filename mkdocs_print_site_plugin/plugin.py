@@ -62,14 +62,6 @@ class PrintSitePlugin(BasePlugin):
                     "File not found: %s" % self.cover_page_template_path
                 )
 
-        # Create the (empty) print page file in temp directory
-        tmp_dir = tempfile.gettempdir()
-        tmp_path = os.path.join(tmp_dir, "print_page.md")
-        f = open(tmp_path, "w")
-        f.write("")
-        f.close()
-        assert os.path.exists(tmp_path)
-
         # Add pointer to print-site javascript
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
         config["extra_javascript"] = ["js/print-site-instant-loading.js"] + config[
@@ -92,7 +84,7 @@ class PrintSitePlugin(BasePlugin):
         # Create MkDocs Page and File instances
         self.print_file = File(
             path="print_page.md",
-            src_dir=tmp_dir,
+            src_dir="",
             dest_dir=config["site_dir"],
             use_directory_urls=config.get("use_directory_urls"),
         )
