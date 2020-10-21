@@ -2,44 +2,6 @@
 Javascript functions to help make the print page more PDF friendly
 */
 
-
-/* 
-mkdocs-material compatibility
-Change theme to default mode, when printing
-
-Only called when theme 'material' is specified in the mkdocs.yml file
-*/
-function change_material_theme(to="default") {
-
-  body = document.getElementsByTagName('body')[0];
-  var current_color_theme = body.getAttribute('data-md-color-scheme')
-  
-  var beforePrint = function() {
-      console.log('Functionality to run before printing.');
-      body.setAttribute("data-md-color-scheme", to);
-  };
-  var afterPrint = function() {
-      console.log('Functionality to run after printing');
-      body.setAttribute("data-md-color-scheme", current_color_theme); 
-  };
-
-  if (window.matchMedia) {
-      var mediaQueryList = window.matchMedia('print');
-      mediaQueryList.addListener(function(mql) {
-          if (mql.matches) {
-              beforePrint();
-          } else {
-              afterPrint();
-          }
-      });
-  }
-
-  window.onbeforeprint = beforePrint;
-  window.onafterprint = afterPrint;
-
-}
-
-
 /*
 Generates a table of contents for the print site page.
 Only called when print-site-plugin option 'add_table_of_contents' is set to true
