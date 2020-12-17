@@ -26,6 +26,23 @@ _Example_:
 
 As an example, have a look at the default [cover_page.tpl](https://github.com/timvink/mkdocs-print-site-plugin/tree/master/mkdocs_print_site_plugin/templates/cover_page.tpl).
 
+## Adding images
+
+When adding images to your custom cover page template, make sure to define the image source as the hosted image path. The url for the image stored in `docs/assets/img/example.png` would be `/assets/img/example.png`.
+
+_Example_:
+
+=== "docs/assets/templates/custom_cover_page.tpl"
+
+    ```jinja
+    {% if config.site_name %}
+        <h1>{{ config.site_name }}</h1>
+    {% endif %}
+    <img src="/assets/img/example.png" />
+    ```
+
+For a full example have a look at this [custom cover page with an image](https://github.com/timvink/mkdocs-print-site-plugin/blob/master/tests/fixtures/projects/with_markdown_ext/other_cover_page.tpl).
+
 ## Adding extra content
 
 You might want to add some content to your cover page that's not yet specified in your `mkdocs.yml` file. Of course you could just hard-code it in your custom template file, but you could also make use of MkDocs's [extra context](https://www.mkdocs.org/user-guide/custom-themes/#extra-context) feature, allowing you to use `{{ config.extra.<your variable> }}`
@@ -55,7 +72,7 @@ _Example_:
 
 ## Change the styling
 
-You'll likely also need to change the styling to your liking. You can add your own CSS file using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option from MkDocs. `mkdocs-print-site-plugin` wraps the cover page in a `<section>` with id `print-site-cover-page`. You should use this in your CSS to ensure not affecting other pages.
+You'll likely also want to change the styling to your liking. You can add your own CSS file using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option from MkDocs. `mkdocs-print-site-plugin` wraps the cover page in a `<section>` with id `print-site-cover-page`. You should use this in your CSS to ensure not affecting other pages.
 
 _Example_:
 
