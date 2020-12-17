@@ -8,6 +8,7 @@ from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
 
 from mkdocs_print_site_plugin.renderer import Renderer
+from mkdocs_print_site_plugin.utils import get_theme_name
 
 logger = logging.getLogger("mkdocs.plugins")
 logger.addFilter(warning_filter)
@@ -71,13 +72,13 @@ class PrintSitePlugin(BasePlugin):
         config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
 
         # Add pointer to theme specific css files
-        file = "print-site-%s.css" % config.get("theme").name
+        file = "print-site-%s.css" % get_theme_name(config)
         if file in os.listdir(os.path.join(HERE, "css")):
             config["extra_css"] = ["css/%s" % file] + config["extra_css"]
         else:
             logger.warning(
                 "[mkdocs-print-site] Theme '%s' not yet supported, which means print margins and page breaks might be off. Feel free to open an issue!"
-                % config.get("theme").name
+                % get_theme_name(config)
             )
 
         # Create MkDocs Page and File instances
@@ -152,7 +153,7 @@ class PrintSitePlugin(BasePlugin):
             os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path
         )
         # Add theme CSS file
-        css_file = "print-site-%s.css" % config.get("theme").name
+        css_file = "print-site-%s.css" % get_theme_name(config)
         if css_file in os.listdir(os.path.join(HERE, "css")):
             css_file_path = os.path.join(css_output_base_path, css_file)
             copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)

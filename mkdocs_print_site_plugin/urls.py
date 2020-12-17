@@ -31,10 +31,6 @@ def is_external(url):
     return url.startswith("http") or url.startswith("www")
 
 
-def is_anchor(url):
-    return url.startswith("#")
-
-
 def url_to_anchor(url):
     """
     Translates an internal URL to an anchor URL
@@ -52,35 +48,8 @@ def url_to_anchor(url):
     Args:
         url (str): value of page.url
     """
-    url = url.rstrip("/")
-    url = url.replace(".html", "")
-    url = url.replace("/", "-")
-    url = url.replace("#", "-")
-    url = url.replace("--", "-")
+    pass
 
-    if len(url) > 0:
-        url = "#" + url
-    else:
-        url = "index"
-
-    return url
-
-
-def anchor_add_page(url, page_url):
-    """
-    Adds the page ID to anchor IDs.
-    (name attributes on a tag, id attributes on h1-h6 tags)
-    http://www.tagindex.net/html/link/a_name.html#:~:text=The%20A%20element%20defines%20an,element%20is%20set%20as%20follows.&text=Anchor%20names%20must%20be%20unique%20within%20a%20document.
-    
-    Examples for page.html
-    
-    #anchor -> #page-anchor
-    #anchor-link -> #page-anchor-link
-
-    Args:
-        url ([type]): [description]
-    """
-    return "#" + page_url + url[1:]
 
 
 def get_page_key(page_url):
@@ -102,9 +71,6 @@ def get_page_key(page_url):
     Args:
         page_url (str): The MkDocs url of the page
     """
-    # Get the page key. For example
-    # 'index.html' or '/' will be 'homepage'
-    # 'abc.html' or 'abc/' will be 'abc'
     if len(page_url) > 0:
         page_key = (
             page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-")
@@ -115,22 +81,11 @@ def get_page_key(page_url):
     return page_key
 
 
-def fix_internal_links(page_html, page_url, directory_urls):
+
+def fix_href_links(page_html, page_key):
     """
-    Updates links to internal pages to anchor links.
-    This ensures internal links all point to locations inside the print page. 
-
-    Args:
-        page_html (str): HTML of page
-        page_url (str): URL of the page 
-        directory_urls (bool): Whether the mkdocs sites is using directory urls, see https://www.mkdocs.org/user-guide/configuration/?#use_directory_urls
-
-    Returns:
-        html (str): HTML of part of the print page with working internal links
+    Changes internal href HTML links to (anchor) links within the print page
     """
-
-    page_key = get_page_key(page_url)
-    page_html = html.unescape(page_html)
 
     # Loop over href links (example in https://regex101.com/r/rMAHrE/520)
     href_regex = re.compile(r"<a\s+([^>]*?\s+)?href=\"(.*?)\"", flags=re.IGNORECASE)
@@ -138,9 +93,10 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
     for m in matches:
         url = m.group(2)
+        url = html.unescape(url)
         if is_external(url):
             continue
-        elif is_anchor(url):
+        elif url.startswith("#"):
             # This is an anchor link within a mkdocs page
             url = "#" + page_key + "-" + url[1:]
         else:
@@ -153,18 +109,28 @@ def fix_internal_links(page_html, page_url, directory_urls):
             url = '#' + get_page_key(page_url)
             if len(url_paths) == 2:
                 url += "-" + url_paths[1]
-            
 
         # Insert back any HTML between '<a' and 'href=', like "class='id'"
         other_html = m.group(1)
         if other_html is None:
-            other_html = ""
-        new_string = '<a %s href="%s"' % (other_html, url)
+            new_string = '<a href="%s"' % (url)
+        else:
+            new_string = '<a %s href="%s"' % (other_html.rstrip(), url)
         
         page_html = page_html.replace(m.group(), new_string)
+    
+    return page_html
 
-    # All instances of id="#anchor" to id="#pagename-anchor"
-    # Loop over h1-h6 id definitions
+
+def update_anchor_ids(page_html, page_key):
+    """
+    Changes internal anchors to make sure they are unique within the print page.
+
+    For example, changes all instances in pagename.html of id="#anchor" to id="#pagename-anchor"
+
+    It does this only for the h1-h6 tags.
+    """
+
     # Regex demo / tests: https://regex101.com/r/pE66Kg/1
     href_regex = re.compile(
         r"\<h[1-6].+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"", flags=re.IGNORECASE
@@ -178,8 +144,17 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
         page_html = page_html.replace(match_text, new_text)
 
-    ### Loop over all images src attributes
-    # This fixes images in the print page.
+    return page_html
+
+
+def fix_image_src(page_html, page_url, directory_urls):
+    """
+    Update img src path for images displayed in print page.
+
+    This is because flattening all pages into 1 print page will break any relative links.
+    """
+
+    # Loop over all images src attributes
     # Example regex https://regex101.com/r/TTRsVW/1
     img_regex = re.compile(
         r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE
@@ -201,8 +176,31 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
         page_html = page_html.replace(img_text, new_text)
 
+    return page_html
 
-    # Finally, insert new anchor for each page
+
+
+def fix_internal_links(page_html, page_url, directory_urls):
+    """
+    Updates links to internal pages to anchor links.
+    This ensures internal links all point to locations inside the print page. 
+
+    Args:
+        page_html (str): HTML of page
+        page_url (str): URL of the page 
+        directory_urls (bool): Whether the mkdocs sites is using directory urls, see https://www.mkdocs.org/user-guide/configuration/?#use_directory_urls
+
+    Returns:
+        html (str): HTML of part of the print page with working internal links
+    """
+
+    page_key = get_page_key(page_url)
+
+    page_html = fix_href_links(page_html, page_key)
+    page_html = update_anchor_ids(page_html, page_key)
+    page_html = fix_image_src(page_html, page_url, directory_urls)
+
+    # Finally, wrap the entire page in a section with an anchor ID
     page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
 
     return page_html
