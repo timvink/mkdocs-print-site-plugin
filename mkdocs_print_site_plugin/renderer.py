@@ -1,4 +1,7 @@
 import jinja2
+import logging
+
+logger = logging.getLogger("mkdocs.plugins")
 
 from mkdocs_print_site_plugin.urls import fix_internal_links
 
@@ -57,13 +60,20 @@ class Renderer(object):
         
         def get_html_from_items(items: list, dir_urls: bool):
             item_html = ""
+            
             for item in items:
                 if item.is_page:
                     # If you specify the same page twice in your navigation, it is only rendered once
                     # so we need to check if the html attribute exists
                     if hasattr(item, 'html'):
+                        if item.html == "":
+                            logger.warning(
+                                "[mkdocs-print-site] %s is empty and will be ignored" % item.file.src_path
+                            )
+                            continue
                         # Update internal anchor links, image urls, etc
                         item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
+
                 if item.is_section:
                     item_html += "<h1 class='nav-section-title'>%s</h1>" % item.title
                     item_html += get_html_from_items(item.children, dir_urls)
