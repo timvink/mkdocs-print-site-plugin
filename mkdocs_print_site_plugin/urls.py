@@ -25,6 +25,7 @@ So within a page:
 
 import re
 import os
+import html
 
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
@@ -114,13 +115,13 @@ def get_page_key(page_url):
     return page_key
 
 
-def fix_internal_links(html, page_url, directory_urls):
+def fix_internal_links(page_html, page_url, directory_urls):
     """
     Updates links to internal pages to anchor links.
     This ensures internal links all point to locations inside the print page. 
 
     Args:
-        html (str): HTML of page
+        page_html (str): HTML of page
         page_url (str): URL of the page 
         directory_urls (bool): Whether the mkdocs sites is using directory urls, see https://www.mkdocs.org/user-guide/configuration/?#use_directory_urls
 
@@ -129,10 +130,11 @@ def fix_internal_links(html, page_url, directory_urls):
     """
 
     page_key = get_page_key(page_url)
+    page_html = html.unescape(page_html)
 
     # Loop over href links (example in https://regex101.com/r/rMAHrE/520)
     href_regex = re.compile(r"<a\s+([^>]*?\s+)?href=\"(.*?)\"", flags=re.IGNORECASE)
-    matches = re.finditer(href_regex, html)
+    matches = re.finditer(href_regex, page_html)
 
     for m in matches:
         url = m.group(2)
@@ -159,7 +161,7 @@ def fix_internal_links(html, page_url, directory_urls):
             other_html = ""
         new_string = '<a %s href="%s"' % (other_html, url)
         
-        html = html.replace(m.group(), new_string)
+        page_html = page_html.replace(m.group(), new_string)
 
     # All instances of id="#anchor" to id="#pagename-anchor"
     # Loop over h1-h6 id definitions
@@ -167,14 +169,14 @@ def fix_internal_links(html, page_url, directory_urls):
     href_regex = re.compile(
         r"\<h[1-6].+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"", flags=re.IGNORECASE
     )
-    matches = re.finditer(href_regex, html)
+    matches = re.finditer(href_regex, page_html)
 
     for m in matches:
         heading_id = m.group(1)
         match_text = m.group()
         new_text = match_text.replace(heading_id, page_key + "-" + heading_id)
 
-        html = html.replace(match_text, new_text)
+        page_html = page_html.replace(match_text, new_text)
 
     ### Loop over all images src attributes
     # This fixes images in the print page.
@@ -182,7 +184,7 @@ def fix_internal_links(html, page_url, directory_urls):
     img_regex = re.compile(
         r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE
     )
-    matches = re.finditer(img_regex, html)
+    matches = re.finditer(img_regex, page_html)
 
     for m in matches:
         img_src = m.group(1)
@@ -197,10 +199,10 @@ def fix_internal_links(html, page_url, directory_urls):
             
         new_text = img_text.replace(img_src, new_url)
 
-        html = html.replace(img_text, new_text)
+        page_html = page_html.replace(img_text, new_text)
 
 
     # Finally, insert new anchor for each page
-    html = ('<section class="print-page" id="%s">' % page_key) + html + "</section>"
+    page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
 
-    return html
+    return page_html
