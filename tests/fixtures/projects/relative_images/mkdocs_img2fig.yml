@@ -1,0 +1,59 @@
+site_name: Test
+
+theme:
+    name: 'material'
+
+use_directory_urls: true
+
+plugins:
+  - img2fig
+  - print-site:
+        enumerate_figures: true
+
+nav:
+    - Table of contents: index.md
+    - Forewords: About.md
+    - Chapter1:
+        - Section1: Chapter1/Section1.md
+        - Section2: Chapter1/Section2.md
+    - Chapter2:
+        - Section1: Chapter2/Section1.md
+        - Section2: Chapter2/Section2.md
+
+# Extensions
+markdown_extensions:
+  - markdown.extensions.admonition
+  - markdown.extensions.attr_list
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  # - pymdownx.highlight:
+  #     linenums_style: pymdownx-inline
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde

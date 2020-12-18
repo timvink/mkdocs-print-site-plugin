@@ -12,3 +12,7 @@ Id | Name
 ### Index 1-2
 
 Internal link to [Chapter 1 - Section 1](../../Chapter1/Section1)
+
+### Octocat image
+
+![The github logo](../github-octocat.png)
