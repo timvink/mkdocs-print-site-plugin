@@ -27,6 +27,8 @@ import re
 import os
 import html
 
+from mkdocs.utils import get_relative_url
+
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
 
@@ -62,27 +64,30 @@ def get_page_key(page_url):
     Works the same when use_directory_urls is set to true or false in mkdocs.yml
     
     Examples
-        get_page_key('index.html') --> 'homepage'
-        get_page_key('/') --> 'homepage'
+        get_page_key('index.html') --> 'index'
+        get_page_key('/') --> 'index'
         get_page_key('abc/') --> 'abc'
         get_page_key('abc.html') --> 'abc'
     
-
     Args:
         page_url (str): The MkDocs url of the page
     """
-    if len(page_url) > 0:
-        page_key = (
-            page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-")
-        )
+    page_key = (page_url
+        .lower()
+        .strip()
+        .rstrip("/")
+        .replace(".html", "")
+        .replace("/", "-")
+        .lstrip("-")
+    )
+    if len(page_key) > 0:
+        return page_key
     else:
-        page_key = "index"
-
-    return page_key
+        return "index"
 
 
 
-def fix_href_links(page_html, page_key):
+def fix_href_links(page_html, page_key, page_url):
     """
     Changes internal href HTML links to (anchor) links within the print page
     """
@@ -101,12 +106,15 @@ def fix_href_links(page_html, page_key):
             url = "#" + page_key + "-" + url[1:]
         else:
             # This is a link to another mkdocs page
-            # url 'a/#anchor-link' should become '#a-anchor-link'
-            url_from_root = os.path.normpath(os.path.join('/',url))
-            url_paths = url_from_root[1:].split("#")
+            # url 'a/#anchor-link' becomes '#a-anchor-link'
+            # url '../Section2' with page_url 'Chapter1/Section1 becomes 'Chapter1/Section2'
+            url_from_root = os.path.normpath(os.path.join(page_url,url))
+            
+            # If there is an anchor appended, fix that also
+            url_paths = url_from_root.split("#")
             assert len(url_paths) <= 2
-            page_url = url_paths[0]
-            url = '#' + get_page_key(page_url)
+            page_url_1 = url_paths[0]
+            url = '#' + get_page_key(page_url_1)
             if len(url_paths) == 2:
                 url += "-" + url_paths[1]
 
@@ -196,7 +204,7 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
     page_key = get_page_key(page_url)
 
-    page_html = fix_href_links(page_html, page_key)
+    page_html = fix_href_links(page_html, page_key, page_url)
     page_html = update_anchor_ids(page_html, page_key)
     page_html = fix_image_src(page_html, page_url, directory_urls)
 

@@ -1,26 +1,56 @@
 import os
-from mkdocs_print_site_plugin.urls import fix_href_links, update_anchor_ids, fix_image_src
+from mkdocs_print_site_plugin.urls import fix_href_links, update_anchor_ids, fix_image_src, get_page_key
+
+
+def test_get_page_key():
+
+    assert get_page_key('index.html') == 'index'
+    assert get_page_key('/') =='index'
+    assert get_page_key('abc/') == 'abc'
+    assert get_page_key('abc.html') == 'abc'
+    assert get_page_key('/folder/subfolder/index.html') == "folder-subfolder-index"
+
 
 def test_fix_href_links():
 
     html = '<h1><a href="page.html#anchor-link">the link</a></h1>'
     result = '<h1><a href="#page-anchor-link">the link</a></h1>'
-    assert fix_href_links(html, "this_page") == result
+    assert fix_href_links(html, "this_page", "/") == result
 
     html = '<a href="test"'
     result = '<a href="#test"'
-    assert fix_href_links(html, "this_page") == result
+    assert fix_href_links(html, "this_page", "/") == result
 
     html = '<li><a href="a/">page a</a></li><li><a href="z/">page z</a></li>'
     result = '<li><a href="#a">page a</a></li><li><a href="#z">page z</a></li>'
-    assert fix_href_links(html, "this_page") == result
+    assert fix_href_links(html, "this_page", "/") == result
 
     html = '<li><a class = "bla" href="z/">page z</a></li>'
     result = '<li><a class = "bla" href="#z">page z</a></li>'
-    assert fix_href_links(html, "this_page") == result
+    assert fix_href_links(html, "this_page", "/") == result
+
+    html = '<li><a class = "bla" href="#section">page z</a></li>'
+    result = '<li><a class = "bla" href="#this_page-section">page z</a></li>'
+    assert fix_href_links(html, "this_page", "/") == result
+
+    html = '<li><a class = "bla" href="../z.html#anchor">page z</a></li>'
+    result = '<li><a class = "bla" href="#z-anchor">page z</a></li>'
+    assert fix_href_links(html, "this_page", "/") == result
+
+    html = '<li><a class = "bla" href="z/#section">page z</a></li>'
+    result = '<li><a class = "bla" href="#z-section">page z</a></li>'
+    assert fix_href_links(html, "this_page", "/") == result
+
+    html = '<li><a class = "bla" href="../../../z.html">page z</a></li>'
+    result = '<li><a class = "bla" href="#z">page z</a></li>'
+    assert fix_href_links(html, "this_page", "/") == result
+
+    html = '<li><a class = "bla" href="../Section1/#reference">page z</a></li>'
+    result = '<li><a class = "bla" href="#chapter1-section1-reference">page z</a></li>'
+    assert fix_href_links(html, "this_page", "/Chapter1/Section2") == result
 
     html = "<td>Wraps the hero teaser (if available)</td>\n</tr>\n<tr>\n<td><code>htmltitle</code></td>\n<td>Wraps the <code><title></code> tag</td>\n</tr>\n<tr>\n<td><code>libs</code></td>\n<td>Wraps"
-    result = fix_href_links(html, "this_page")
+    result = fix_href_links(html, "this_page", "/")
     assert result == html
 
 
