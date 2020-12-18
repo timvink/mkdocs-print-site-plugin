@@ -27,8 +27,6 @@ import re
 import os
 import html
 
-from mkdocs.utils import get_relative_url
-
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
 
