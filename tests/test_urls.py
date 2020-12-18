@@ -69,6 +69,10 @@ def test_fix_image_src():
     html = "<td>Wraps the hero teaser (if available)</td>\n</tr>\n<tr>\n<td><code>htmltitle</code></td>\n<td>Wraps the <code><title></code> tag</td>\n</tr>\n<tr>\n<td><code>libs</code></td>\n<td>Wraps"
     assert fix_image_src(html, "this_page", True) == html
 
+    # Make sure absolute urls stay intct
+    html = '<img src="/img.png">'
+    assert fix_image_src(html, "this_page", False) == html
+
     # Make sure changes are made
     html = '<img src="../appendix/table.png">'
     result = '<img src="..%sappendix%stable.png">' % (os.sep, os.sep)

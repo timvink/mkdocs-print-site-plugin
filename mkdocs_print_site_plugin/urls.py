@@ -170,7 +170,7 @@ def fix_image_src(page_html, page_url, directory_urls):
         new_url = os.path.normpath(os.path.join(os.path.dirname(page_url), img_src))
         
         if directory_urls:
-            new_url = '..' + os.sep + new_url
+            new_url = os.path.join('..',new_url)
             
         new_text = img_text.replace(img_src, new_url)
 
