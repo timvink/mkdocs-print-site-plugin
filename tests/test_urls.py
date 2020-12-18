@@ -1,5 +1,5 @@
+import os
 from mkdocs_print_site_plugin.urls import fix_href_links, update_anchor_ids, fix_image_src
-
 
 def test_fix_href_links():
 
@@ -71,10 +71,10 @@ def test_fix_image_src():
 
     # Make sure changes are made
     html = '<img src="../appendix/table.png">'
-    result = '<img src="../appendix/table.png">'
+    result = '<img src="..%sappendix%stable.png">' % (os.sep, os.sep)
     assert fix_image_src(html, "this_page", False) == result
 
-    result = '<img src="../../appendix/table.png">'
+    result = '<img src="..%s..%sappendix%stable.png">' % (os.sep, os.sep, os.sep)
     assert fix_image_src(html, "this_page", True) == result
 
 # def test_url_to_anchor():
