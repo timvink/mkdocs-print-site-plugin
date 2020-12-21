@@ -107,7 +107,10 @@ def fix_href_links(page_html, page_key, page_url):
             # url 'a/#anchor-link' becomes '#a-anchor-link'
             # url '../Section2' with page_url 'Chapter1/Section1 becomes 'Chapter1/Section2'
             url_from_root = os.path.normpath(os.path.join(page_url,url))
-            
+            # For windows compat
+            if os.sep != "/":
+                url_from_root = url_from_root.replace(os.sep, "/")
+ 
             # If there is an anchor appended, fix that also
             url_paths = url_from_root.split("#")
             assert len(url_paths) <= 2
@@ -177,7 +180,11 @@ def fix_image_src(page_html, page_url, directory_urls):
         
         if directory_urls:
             new_url = os.path.join('..',new_url)
-            
+
+        # For windows compat
+        if os.sep != "/":
+            new_url = new_url.replace(os.sep, "/")
+
         new_text = img_text.replace(img_src, new_url)
 
         page_html = page_html.replace(img_text, new_text)

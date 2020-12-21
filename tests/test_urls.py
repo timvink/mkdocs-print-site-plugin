@@ -102,13 +102,13 @@ def test_fix_image_src():
     # Make sure absolute urls stay intct
     html = '<img src="/img.png">'
     assert fix_image_src(html, "this_page", False) == html
-
+ 
     # Make sure changes are made
     html = '<img src="../appendix/table.png">'
-    result = '<img src="..%sappendix%stable.png">' % (os.sep, os.sep)
+    result = '<img src="../appendix/table.png">'
     assert fix_image_src(html, "this_page", False) == result
 
-    result = '<img src="..%s..%sappendix%stable.png">' % (os.sep, os.sep, os.sep)
+    result = '<img src="../../appendix/table.png">'
     assert fix_image_src(html, "this_page", True) == result
 
 # def test_url_to_anchor():
