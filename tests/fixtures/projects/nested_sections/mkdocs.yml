@@ -1,0 +1,20 @@
+site_name: Test
+
+theme:
+    name: material
+
+plugins:
+    - print-site:
+
+nav:
+  - index.md
+  - Section:
+    - page1.md
+    - page5.md
+    - Subsection:
+      - page2.md
+      - Another subsection:
+        - page3.md
+    - page4.md
+  - info.md
+
