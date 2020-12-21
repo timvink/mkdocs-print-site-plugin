@@ -58,7 +58,7 @@ class Renderer(object):
             html += self._toc()
 
         
-        def get_html_from_items(items: list, dir_urls: bool, excluded_pages: list) -> str:
+        def get_html_from_items(items: list, dir_urls: bool, excluded_pages: list, section_depth: int = 0) -> str:
             item_html = ""
             
             for item in items:
@@ -80,12 +80,12 @@ class Renderer(object):
                         item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
 
                 if item.is_section:
-                    item_html += "<h1 class='nav-section-title'>%s</h1>" % item.title
-                    item_html += get_html_from_items(item.children, dir_urls, excluded_pages)
+                    item_html += "<h%s class='nav-section-title'>%s</h1>" % (min(6, section_depth+1), item.title)
+                    item_html += get_html_from_items(item.children, dir_urls, excluded_pages, section_depth+1)
                     # We also need to indicate the end of section page
                     # We do that using a h1 with a specific class
                     # In CSS we display:none, in JS we can use it for formatting the table of contents.
-                    item_html += "<h1 class='nav-section-title-end'>%s</h1>" % item.title
+                    item_html += "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
             return item_html
 
         html += get_html_from_items(

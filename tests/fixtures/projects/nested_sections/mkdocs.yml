@@ -5,6 +5,7 @@ theme:
 
 plugins:
     - print-site:
+        enumerate_headings: true
 
 nav:
   - index.md

@@ -13,7 +13,15 @@ function generate_toc() {
 
   var newLine, el, title, link;
 
-  const toc_elements = document.querySelectorAll("#print-site-page h1.nav-section-title, #print-site-page h1.nav-section-title-end, section.print-page h1,section.print-page h2,section.print-page h3,section.print-page h4,section.print-page h5,section.print-page h6")
+  const toc_elements = document.querySelectorAll(
+    "#print-site-page h1.nav-section-title, #print-site-page h1.nav-section-title-end," +
+    "#print-site-page h2.nav-section-title, #print-site-page h2.nav-section-title-end," +
+    "#print-site-page h3.nav-section-title, #print-site-page h3.nav-section-title-end," +
+    "#print-site-page h4.nav-section-title, #print-site-page h4.nav-section-title-end," +
+    "#print-site-page h5.nav-section-title, #print-site-page h5.nav-section-title-end," +
+    "#print-site-page h6.nav-section-title, #print-site-page h6.nav-section-title-end," +
+    "section.print-page h1,section.print-page h2,section.print-page h3," +
+    "section.print-page h4,section.print-page h5,section.print-page h6")
   
   var current_heading_depth = 0;
   var current_section_depth = 0;
@@ -67,7 +75,7 @@ function generate_toc() {
     if ( el.classList.contains('nav-section-title') ) {
       // newLine = "<li class='toc-nav-section-title'>" + title + "</li>"; 
       current_section_depth++;
-      newLine = "<li class='toc-nav-section-title' style='margin-left: " + (current_section_depth-1) + "em'>" + title + "</li>"; 
+      newLine = "<li class='toc-nav-section-title toc-nav-section-title-level-" + current_section_depth + "' style='margin-left: " + (current_section_depth-1) + "em'>" + title + "</li>"; 
     } else {
 
       if ( current_section_depth >= 1) {
