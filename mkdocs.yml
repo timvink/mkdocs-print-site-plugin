@@ -24,6 +24,7 @@ nav:
         - customization/print_button.md
         - customization/pdf_button.md
         - customization/cover_page.md
+        - customization/do_not_print.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 

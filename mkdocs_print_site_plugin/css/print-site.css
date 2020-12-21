@@ -156,6 +156,9 @@ ul li.toc-nav-section-title {
 /* In the TOC, we want lines that are children of a section to be displayed with a left margin */
 #print-site-page ul li.toc-nav-section-child { padding-left: 1em; }
 
+/* Be able to not print certain elements */
+#print-site-page .print-site-plugin-ignore { display: none;}
+
 @media print {    
 
     /* included bookmarks on h1 and h2
@@ -173,6 +176,9 @@ ul li.toc-nav-section-title {
         -ah-bookmark-level: 2;
         -ro-pdf-bookmark-level: 2;
     } */
+
+    /* Be able to not print certain elements */
+    .print-site-plugin-ignore { display: none; }
 
     /* Remove print site banner */
     #print-site-banner { display: none; }
