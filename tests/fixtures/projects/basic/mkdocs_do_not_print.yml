@@ -1,0 +1,11 @@
+site_name: Test
+
+plugins:
+    - print-site:
+        exclude:
+            - z.md
+            - subsection1.md
+
+markdown_extensions:
+    - attr_list
+  

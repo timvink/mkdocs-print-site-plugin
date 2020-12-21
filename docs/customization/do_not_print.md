@@ -58,4 +58,15 @@ Which renders as:
 
 ## Ignoring an entire page
 
-Not yet implemented. Upvote [mkdocs-print-site-plugin#34](https://github.com/timvink/mkdocs-print-site-plugin/issues/34) if you're interested.
+In the plugin configuration in `mkdocs.yml` you can specify a list of page source paths (one per line) that should not be included in the print page (excluded from processing by this plugin). This can be useful for example to exlude large appendixes that you only want to display on the web version. The source path of a page is relative to your `docs/` folder. You can also use [globs](https://docs.python.org/3/library/glob.html) instead of full source paths. To exclude `docs/subfolder/page.md` specify in your `mkdocs.yml` a line under `exclude`: with `- subfolder/page.md`. Some examples:
+
+```yml
+# mkdocs.yml
+plugins:
+  - print-site:
+      exclude:
+        - index.md
+        - subfolder/page.md
+        - another_page.md
+        - folder/*
+```

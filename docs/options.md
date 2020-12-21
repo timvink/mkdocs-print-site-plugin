@@ -13,6 +13,7 @@ plugins:
       enumerate_figures: true
       add_cover_page: true
       cover_page_template: ""
+      exclude:
 ```
 
 `add_to_navigation`
@@ -41,4 +42,7 @@ plugins:
 :   Default `false`. When enabled, a cover page is added to the print page, displaying the `site_title` and other information from the `mkdocs.yml` file. See also [Customizing the cover page](customization/cover_page.md)
 
 `cover_page_template`
-:   Default `""`. The path to a custom cover page template to use. See [Customizing the cover page](customization/cover_page.md) for more info.
+:   Default `""`. The path to a custom cover page template to use. See [Customizing the Cover Page](customization/cover_page.md) for more info.
+
+`exclude`
+: Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](customization/do_not_print.md#ignoring-an-entire-page) for more info.

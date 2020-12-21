@@ -33,3 +33,8 @@ four
 ## Anchor links
 
 The toc extension is used by MkDocs to generate an ID for every header in your Markdown documents. You can use that ID to link to a section within a target document by using an anchor link. The generated HTML will correctly transform the path portion of the link, and leave the anchor portion intact.
+
+## Ignore paragraph
+
+This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9
+{: .print-site-plugin-ignore }

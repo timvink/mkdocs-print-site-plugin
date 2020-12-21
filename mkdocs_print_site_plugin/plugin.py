@@ -28,6 +28,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
         ("path_to_pdf", config_options.Type(str, default="")),
+        ("exclude", config_options.Type(list, default=[])),
     )
 
     def on_config(self, config, **kwargs):

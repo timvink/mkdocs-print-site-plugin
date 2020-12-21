@@ -4,7 +4,7 @@ import logging
 logger = logging.getLogger("mkdocs.plugins")
 
 from mkdocs_print_site_plugin.urls import fix_internal_links
-
+from mkdocs_print_site_plugin.exclude import exclude
 
 class Renderer(object):
     def __init__(
@@ -58,11 +58,16 @@ class Renderer(object):
             html += self._toc()
 
         
-        def get_html_from_items(items: list, dir_urls: bool):
+        def get_html_from_items(items: list, dir_urls: bool, excluded_pages: list) -> str:
             item_html = ""
             
             for item in items:
                 if item.is_page:
+                    # Do not include page in print page if excluded
+                    if exclude(item.file.src_path, excluded_pages):
+                        logging.debug("Excluding page " + item.file.src_path)
+                        continue
+                
                     # If you specify the same page twice in your navigation, it is only rendered once
                     # so we need to check if the html attribute exists
                     if hasattr(item, 'html'):
@@ -76,14 +81,18 @@ class Renderer(object):
 
                 if item.is_section:
                     item_html += "<h1 class='nav-section-title'>%s</h1>" % item.title
-                    item_html += get_html_from_items(item.children, dir_urls)
+                    item_html += get_html_from_items(item.children, dir_urls, excluded_pages)
                     # We also need to indicate the end of section page
                     # We do that using a h1 with a specific class
                     # In CSS we display:none, in JS we can use it for formatting the table of contents.
                     item_html += "<h1 class='nav-section-title-end'>%s</h1>" % item.title
             return item_html
 
-        html += get_html_from_items(self.items, dir_urls = self.mkdocs_config.get('use_directory_urls'))
+        html += get_html_from_items(
+            self.items, 
+            dir_urls = self.mkdocs_config.get('use_directory_urls'),
+            excluded_pages = self.plugin_config.get("exclude", [])
+        )
 
         html += "</div>"
 

@@ -232,6 +232,18 @@ def test_basic_build6(tmp_path):
     assert text_in_page(prj_path, "print_page/index.html", "Subsec 2")
 
 
+def test_exclude_page(tmp_path):
+    # this test makes sure excluding a page works
+    prj_path = check_build(tmp_path, "basic/mkdocs_do_not_print.yml")
+
+    # Entire page is excluded, code from 'subsection1.md' should not be present
+    assert not text_in_page(prj_path, "print_page/index.html", "rrI1f2gYE8V4")
+
+    # Element in page is ignore (basically 'display: none'), should be present with the right class.
+    assert text_in_page(prj_path, "print_page/index.html", '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>')
+
+
+
 def test_basic_build99(tmp_path):
     # This is a weird test, as the markdown extension toc permalink setting seems to persist across subsequent test runs..
     prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")

@@ -1,5 +1,6 @@
 site_name: Test
 
 plugins:
-    - print-site
+    - print-site:
+        exclude:
   
