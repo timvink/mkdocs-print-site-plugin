@@ -156,7 +156,7 @@ def update_anchor_ids(page_html, page_key):
     It does this only for the h1-h6 tags.
     """
 
-    # Regex demo / tests: https://regex101.com/r/pE66Kg/1
+    # Regex demo / tests: https://regex101.com/r/mlAPNH/1
     href_regex = re.compile(
         r"\<([h1|h2|h3|h4|h5|h6|sup|li]+).+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"", flags=re.IGNORECASE
     )

@@ -132,10 +132,13 @@ class Renderer(object):
         </div>
         """
 
-    @staticmethod
-    def _toc():
-        return """
+    def _toc(self):
+        return f"""
         <section class="print-page">
-            <div id="print-page-toc"></div>
+            <div id="print-page-toc">
+                <nav role='navigation' class='print-page-toc-nav'>
+                <h1 class='print-page-toc-title'>{self.plugin_config.get("toc_title")}</h1>
+                </nav>
+            </div>
         </section>
         """

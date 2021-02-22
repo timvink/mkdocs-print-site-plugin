@@ -8,8 +8,7 @@ Only called when print-site-plugin option 'add_table_of_contents' is set to true
 */
 function generate_toc() {
 
-  var ToC = "<nav role='navigation' class='print-page-toc-nav'>" +
-      "<h1 class='print-page-toc-title'>Table of Contents</h1>"
+  var ToC = ""
 
   var newLine, el, title, link;
 
@@ -99,8 +98,7 @@ function generate_toc() {
 
   ToC +=
     "</ul>" +
-    "</nav>";
 
-    document.querySelectorAll("#print-page-toc")[0].innerHTML = ToC;
+    document.querySelectorAll("#print-page-toc nav")[0].insertAdjacentHTML("beforeend", ToC);
 
 }

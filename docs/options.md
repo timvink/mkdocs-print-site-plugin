@@ -1,6 +1,6 @@
 # Options
 
-You can customize the plugin by setting options in `mkdocs.yml`. This site uses the following settings:
+You can customize `mkdocs-print-site-plugin` in your `mkdocs.yml` with the following settings:
 
 ```yaml
 plugins:
@@ -8,6 +8,7 @@ plugins:
       add_to_navigation: true
       print_page_title: 'Print Site'
       add_table_of_contents: true
+      toc_title: 'Table of Contents'
       add_full_urls: false
       enumerate_headings: true
       enumerate_figures: true
@@ -24,6 +25,9 @@ plugins:
 
 `add_table_of_contents`
 :   Default is `true`. Adds a table of contents section at the beginning of the print page.
+
+`toc_title`
+:   Default is `'Table of Contents'`. When `add_table_of_contents` is set to `true` this setting controls the name of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
 
 `add_full_urls`
 :   Default is `false`. When printing a page, you cannot see the target of a link. This option adds the target url in parenthesis behind a link.

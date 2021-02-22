@@ -12,6 +12,7 @@ plugins:
     - print-site:
         add_full_urls: false
         add_table_of_contents: true
+        toc_title: "Table of Contents"
         enumerate_headings: true
         enumerate_figures: true
         add_cover_page: true
