@@ -161,7 +161,7 @@ Embedding content:
 | `PUT`       | :material-check-all: Update resource |
 | `DELETE`    | :material-close:     Delete resource |
 
-Lorem ipsum[^1] dolor sit amet, consectetur adipiscing elit.[^2]
+Footnotes in a text: Lorem ipsum[^1] dolor sit amet, consectetur adipiscing elit.[^2]
 
 [^1]: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 [^2]:

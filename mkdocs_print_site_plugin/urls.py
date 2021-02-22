@@ -158,14 +158,14 @@ def update_anchor_ids(page_html, page_key):
 
     # Regex demo / tests: https://regex101.com/r/pE66Kg/1
     href_regex = re.compile(
-        r"\<h[1-6].+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"", flags=re.IGNORECASE
+        r"\<([h1|h2|h3|h4|h5|h6|sup|li]+).+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"", flags=re.IGNORECASE
     )
     matches = re.finditer(href_regex, page_html)
 
     for m in matches:
-        heading_id = m.group(1)
+        id_text = m.group(2)
         match_text = m.group()
-        new_text = match_text.replace(heading_id, page_key + "-" + heading_id)
+        new_text = match_text.replace(id_text, page_key + "-" + id_text)
 
         page_html = page_html.replace(match_text, new_text)
 
