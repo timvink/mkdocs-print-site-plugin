@@ -1,5 +1,6 @@
 import os
 
+
 def get_theme_name(config) -> str:
     """
     Determine theme name from the config.

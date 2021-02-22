@@ -125,13 +125,15 @@ class PrintSitePlugin(BasePlugin):
         return nav
 
     def on_page_content(self, html, page, config, files, **kwargs):
-        
+
         # Save each page HTML *before* a template is applied inside the page class
         if page != self.print_page:
             page.html = html
 
         if self.config.get("path_to_pdf") != "":
-            page.url_to_pdf = get_relative_url(self.config.get("path_to_pdf"), page.file.url)
+            page.url_to_pdf = get_relative_url(
+                self.config.get("path_to_pdf"), page.file.url
+            )
 
         return html
 
