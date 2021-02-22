@@ -2,7 +2,7 @@
 
 When the `add_cover_page` option is set to true, `mkdocs-print-site-plugin` will generate a cover page when printing. This cover page is quite basic, and you might want to customize it.
 
-You can do that by specifying a custom cover page template in the `mkdocs.yml` file. This is a standard [jinja2 template](https://jinja.palletsprojects.com/en/2.11.x/templates/) file where you can combine HTML and use the information specified in `mkdocs.yml` as jinja2 variables (see [mkdocs project information](https://www.mkdocs.org/user-guide/configuration/#project-information)).
+You can do that by specifying the path to a custom cover page template in the `mkdocs.yml` file. This file should be a standard [jinja2 template](https://jinja.palletsprojects.com/en/2.11.x/templates/) where you can combine HTML and jinja2 variables such as the information specified in `mkdocs.yml` (see [mkdocs project information](https://www.mkdocs.org/user-guide/configuration/#project-information)).
 
 _Example_:
 

@@ -7,14 +7,17 @@ plugins:
   - print-site:
       add_to_navigation: true
       print_page_title: 'Print Site'
+      # Table of contents
       add_table_of_contents: true
       toc_title: 'Table of Contents'
       toc_depth: 6
+      # Content-related
       add_full_urls: false
       enumerate_headings: true
       enumerate_figures: true
       add_cover_page: true
       cover_page_template: ""
+      path_to_pdf: ""
       exclude:
 ```
 
@@ -51,6 +54,15 @@ plugins:
 
 `cover_page_template`
 :   Default `""`. The path to a custom cover page template to use. See [Customizing the Cover Page](customization/cover_page.md) for more info.
+
+`add_print_site_banner`
+:   Default `true`. When enabled, a banner is added to the top of the print page, explaining to users the current page contains all site pages.
+
+`print_site_banner_template`
+:   Default `""`. The path to a custom print site banner template to use. See [Customizing the print site banner](customization/banner.md) for more info.
+
+`path_to_pdf`
+: Default is empty. Option to make it easier to add a link to the PDF version of the site on each page. See [Adding a PDF button](customization/pdf_button.md) for more info.
 
 `exclude`
 : Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](customization/do_not_print.md#ignoring-an-entire-page) for more info.
