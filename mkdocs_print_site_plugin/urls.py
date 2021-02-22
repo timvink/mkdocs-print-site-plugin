@@ -97,6 +97,7 @@ def fix_href_links(page_html, page_key, page_url):
     for m in matches:
         url = m.group(2)
         url = html.unescape(url)
+
         if is_external(url):
             continue
         elif url.startswith("#"):
@@ -105,12 +106,10 @@ def fix_href_links(page_html, page_key, page_url):
         else:
             # This is a link to another mkdocs page
             # url 'a/#anchor-link' becomes '#a-anchor-link'
-            # url '../Section2' with page_url 'Chapter1/Section1 becomes 'Chapter1/Section2'
-            url_from_root = os.path.normpath(os.path.join(page_url,url))
-            # For windows compat
-            if os.sep != "/":
-                url_from_root = url_from_root.replace(os.sep, "/")
- 
+            # url '../Section2' with page_url '/Chapter1/Section1/ becomes '/Chapter1/Section2/'
+
+            url_from_root = get_url_from_root(url, page_url)
+            
             # If there is an anchor appended, fix that also
             url_paths = url_from_root.split("#")
             assert len(url_paths) <= 2
@@ -176,14 +175,10 @@ def fix_image_src(page_html, page_url, directory_urls):
             continue
         img_text = m.group()
         
-        new_url = os.path.normpath(os.path.join(os.path.dirname(page_url), img_src))
-        
+        new_url = get_url_from_root(img_src, page_url, directory_urls)
+
         if directory_urls:
             new_url = os.path.join('..',new_url)
-
-        # For windows compat
-        if os.sep != "/":
-            new_url = new_url.replace(os.sep, "/")
 
         new_text = img_text.replace(img_src, new_url)
 
@@ -191,6 +186,21 @@ def fix_image_src(page_html, page_url, directory_urls):
 
     return page_html
 
+
+def get_url_from_root(target_link, current_page_url):
+    """
+    Updates a relative URL to be relative to the print-site page instead.
+
+    The print-site page is located at the root of the site.
+    """
+    current_page_rootdir = os.path.dirname(current_page_url)
+    new_url = os.path.normpath(os.path.join(current_page_rootdir, target_link))
+
+    # For windows compat
+    if os.sep != "/":
+        new_url = new_url.replace(os.sep, "/")
+
+    return new_url
 
 
 def fix_internal_links(page_html, page_url, directory_urls):

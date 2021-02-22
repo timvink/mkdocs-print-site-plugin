@@ -47,7 +47,7 @@ def test_fix_href_links():
 
     html = '<li><a class = "bla" href="../Section1/#reference">page z</a></li>'
     result = '<li><a class = "bla" href="#chapter1-section1-reference">page z</a></li>'
-    assert fix_href_links(html, "this_page", "/Chapter1/Section2") == result
+    assert fix_href_links(html, "this_page", "/Chapter1/Section2/") == result
 
     html = "<td>Wraps the hero teaser (if available)</td>\n</tr>\n<tr>\n<td><code>htmltitle</code></td>\n<td>Wraps the <code><title></code> tag</td>\n</tr>\n<tr>\n<td><code>libs</code></td>\n<td>Wraps"
     result = fix_href_links(html, "this_page", "/")
