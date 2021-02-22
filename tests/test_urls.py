@@ -1,5 +1,5 @@
 import os
-from mkdocs_print_site_plugin.urls import fix_href_links, update_anchor_ids, fix_image_src, get_page_key
+from mkdocs_print_site_plugin.urls import fix_href_links, update_anchor_ids, fix_image_src, get_page_key, is_external, is_attachment
 
 
 def test_get_page_key():
@@ -9,6 +9,19 @@ def test_get_page_key():
     assert get_page_key('abc/') == 'abc'
     assert get_page_key('abc.html') == 'abc'
     assert get_page_key('/folder/subfolder/index.html') == "folder-subfolder-index"
+
+
+def test_is_external():
+    assert is_external("https://www.google.com")
+    assert not is_external("/index.html")
+    assert not is_external("index.html")
+
+def test_is_attachment():
+    assert is_attachment("/file.py")
+    assert is_attachment("../files/file.xlsx")
+    assert not is_attachment("https://www.google.com")
+    assert not is_attachment("../")
+    assert not is_attachment("../page/subpage.html#md")
 
 
 def test_fix_href_links():

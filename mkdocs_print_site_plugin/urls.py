@@ -26,9 +26,19 @@ So within a page:
 import re
 import os
 import html
+from os.path import splitext
+from urllib.parse import urlparse
 
 def is_external(url):
     return url.startswith("http") or url.startswith("www")
+
+def is_attachment(url):
+    """
+    If URL points to an attachment.
+    """
+    path = urlparse(url).path
+    ext = splitext(path)[1]
+    return ext not in ["",".html",".md"]
 
 
 def url_to_anchor(url):
@@ -85,7 +95,7 @@ def get_page_key(page_url):
 
 
 
-def fix_href_links(page_html, page_key, page_url):
+def fix_href_links(page_html, page_key, page_url, directory_urls = False):
     """
     Changes internal href HTML links to (anchor) links within the print page
     """
@@ -100,6 +110,13 @@ def fix_href_links(page_html, page_key, page_url):
 
         if is_external(url):
             continue
+        elif is_attachment(url):
+            print()
+            print(f"AAHHH {url}")
+            print()
+            url = get_url_from_root(url, page_url)
+            if directory_urls:
+                url = os.path.join('..',url)
         elif url.startswith("#"):
             # This is an anchor link within a mkdocs page
             url = "#" + page_key + "-" + url[1:]
@@ -175,7 +192,7 @@ def fix_image_src(page_html, page_url, directory_urls):
             continue
         img_text = m.group()
         
-        new_url = get_url_from_root(img_src, page_url, directory_urls)
+        new_url = get_url_from_root(img_src, page_url)
 
         if directory_urls:
             new_url = os.path.join('..',new_url)
@@ -219,7 +236,7 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
     page_key = get_page_key(page_url)
 
-    page_html = fix_href_links(page_html, page_key, page_url)
+    page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
     page_html = update_anchor_ids(page_html, page_key)
     page_html = fix_image_src(page_html, page_url, directory_urls)
 
