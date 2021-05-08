@@ -56,7 +56,13 @@ function generate_toc() {
       continue;
     }
 
-    title = el.innerText;
+    // Get the text of a heading
+    // We use .firstChild.nodeValue instead of .innerText
+    // because of elements like:
+    // <h1 id="index-mkdocs-print-site-plugin">
+    //     mkdocs-print-site-plugin<a class="headerlink" href="#index-mkdocs-print-site-plugin" title="Permanent link">↵</a>
+    //  </h1>
+    title = el.firstChild.nodeValue;
     if ( title.length == 0 ) {
       continue;
     }
