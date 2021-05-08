@@ -208,11 +208,20 @@ Print site table of contents styling
     from { background: yellow; }
     to { background: white; }
 }
-ul li.toc-nav-section-title {
+#print-site-page ul {
+    margin-left: 0em;
+}
+#print-site-page ul li.toc-nav-section-title {
     padding-top: 1em;
-    padding-bottom: 0.5em;
+    padding-bottom: 0em;
     font-size: 110%;
     letter-spacing: 1px;
+}
+#print-site-page ul.toc-section-line-border { 
+    border-left: 5px solid rgb(179, 179, 179);
+    padding-left: 1.5em;
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 
@@ -236,7 +245,6 @@ For now, we added them for use only in the table of contents */
     color: var(--md-default-fg-color--light);
 }
 
-
 #print-site-page h1.nav-section-title-end,
 #print-site-page h2.nav-section-title-end,
 #print-site-page h3.nav-section-title-end,
@@ -249,6 +257,8 @@ For now, we added them for use only in the table of contents */
 
 /* Be able to not print certain elements */
 #print-site-page .print-site-plugin-ignore { display: none;}
+
+
 
 @media print {    
 
