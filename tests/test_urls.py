@@ -116,7 +116,7 @@ def test_update_anchor_ids(html_element):
     result = '<%s id="this_page-a-section-on-something">A Section on something</%s>' % (html_element, html_element)
     assert update_anchor_ids(html, "this_page") == result
 
-    # Make sure changes are made, h6 with a class in front
+    # Make sure changes are made
     html = '<%s class="something" id="a-section-on-something">A Section on something</%s>' % (
         html_element,
         html_element,

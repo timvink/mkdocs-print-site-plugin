@@ -135,9 +135,9 @@ def update_anchor_ids(page_html, page_key):
 
     It does this only for the h1-h6 tags.
     """
-    # Regex demo / tests: https://regex101.com/r/mlAPNH/1
+    # Regex demo / tests: https://regex101.com/r/mlAPNH/3
     href_regex = re.compile(
-        r"<([^\s]+).*?id=\"([^\"]*?)\".*?>(.*?)<\/\1>",
+        r"<([^\s]+).*?id=\"([^\"]*?)\".*?>",
         flags=re.IGNORECASE,
     )
     matches = re.finditer(href_regex, page_html)
@@ -169,7 +169,7 @@ def fix_tabbed_content(page_html, page_key):
 
     we should change <input> id, and <label> for attribute, to contain the pagekey.
     """
-    # Replace <input>
+    # Replace <input> name and id
     href_regex = re.compile(
         r"<input.*?id=\"([^\"]*?)\".*?name=\"([^\"]*?)\".*?>",
         flags=re.IGNORECASE,
@@ -186,17 +186,14 @@ def fix_tabbed_content(page_html, page_key):
         new_text = match_text.replace(name_text, page_key + "_" + name_text)
         page_html = page_html.replace(match_text, new_text)
 
-    # Replace <label>
+    # Replace <label> for
     href_regex = re.compile(
-        r"<([^\s]+).*?for=\"([^\"]*?)\".*?>(.*?)<\/\1>",
+        r"<label.*?for=\"([^\"]*?)\".*?>",
         flags=re.IGNORECASE,
     )
     matches = re.finditer(href_regex, page_html)
     for m in matches:
-        tag_text = m.group(1)
-        if tag_text != "label":
-            continue
-        id_text = m.group(2)
+        id_text = m.group(1)
         match_text = m.group()
         new_text = match_text.replace(id_text, page_key + "_" + id_text)
         page_html = page_html.replace(match_text, new_text)
