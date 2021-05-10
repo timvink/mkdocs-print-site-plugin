@@ -26,6 +26,7 @@ def test_is_external():
     Test.
     """
     assert is_external("https://www.google.com")
+    assert is_external("mailto:me@abc.com")
     assert not is_external("/index.html")
     assert not is_external("index.html")
 

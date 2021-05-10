@@ -19,6 +19,17 @@ When combining all pages into one, `mkdocs-print-site-plugin` will also ensure a
 - [Dummy section](#dummy-section) lower down this demo page
 - The [Manual Testing](contributing.md#manual-testing) in the contributing guide
 
+## Magic links
+
+**Magic links and emails:** turned to links as recognized
+
+|        Output         |          Code           |
+| --------------------- | ----------------------- |
+| http://www.google.com | `http://www.google.com` |
+| johndoe@gmail.com     | `johndoe@gmail.com`  |
+| www.google.com        | `www.google.com`        |
+
+
 ## Markdown extensions
 
 MkDocs has support for many markdown extensions (see [mkdocs-material reference](https://squidfunk.github.io/mkdocs-material/reference/admonitions/)). Below is a quick showcase so you can see how they print.

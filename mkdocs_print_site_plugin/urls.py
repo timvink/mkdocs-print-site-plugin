@@ -38,7 +38,8 @@ def is_external(url):
     """
     Test if a url is external.
     """
-    return url.startswith("http") or url.startswith("www")
+    prefixes = ("http", "www", "mailto:", "tel:", "skype:", "ftp:")
+    return url.startswith(prefixes)
 
 
 def is_attachment(url):
