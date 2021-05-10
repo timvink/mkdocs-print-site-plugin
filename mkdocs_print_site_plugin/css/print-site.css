@@ -243,13 +243,6 @@ ul.print-site-toc-level-2 li a {
     font-size: 100%;
     margin-bottom: 0em;
 }
-
-
-
-
-#print-site-page ul {
-    margin-left: 0em;
-}
 #print-site-page ul li.toc-nav-section-title {
     padding-top: 1em;
     padding-bottom: 0em;
@@ -259,9 +252,15 @@ ul.print-site-toc-level-2 li a {
 #print-site-page ul.toc-section-line-border { 
     border-left: 5px solid grey;
     padding-left: 1.5em;
-    padding-top: 0.5em;
+    margin-top: 0.5em;
     margin-bottom: 1em;
 }
+
+
+#print-site-page ul {
+    margin-left: 0em;
+}
+
 
 
 /* Don't display cover page when not in print mode */

@@ -9,7 +9,7 @@ https://github.com/squidfunk/mkdocs-material */
 }
 
 #print-site-page ul.toc-section-line-border { 
-    border-left: 5px solid var(--md-default-fg-color--lighter);
+    border-left: 5px solid var(--md-default-fg-color--lightest);
 }
 
 
