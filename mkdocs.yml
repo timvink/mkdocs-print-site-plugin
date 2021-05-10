@@ -47,10 +47,9 @@ markdown_extensions:
     - def_list
     - admonition
     - footnotes
-    - pymdownx.details
+    # - pymdownx.details # broken
     - pymdownx.tabbed
     - pymdownx.superfences
-    - pymdownx.details
     - pymdownx.keys
     - pymdownx.snippets
     - pymdownx.emoji:
