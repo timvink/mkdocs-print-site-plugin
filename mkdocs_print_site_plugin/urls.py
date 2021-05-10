@@ -136,16 +136,68 @@ def update_anchor_ids(page_html, page_key):
     """
     # Regex demo / tests: https://regex101.com/r/mlAPNH/1
     href_regex = re.compile(
-        r"\<([h1|h2|h3|h4|h5|h6|sup|li]+).+id=\"([aA-zZ|0-9|\-|\_|\.|\:]+)\"",
+        r"<([^\s]+).*?id=\"([^\"]*?)\".*?>(.*?)<\/\1>",
         flags=re.IGNORECASE,
     )
     matches = re.finditer(href_regex, page_html)
 
+    change_tags = ["h1", "h2", "h3", "h4", "h5", "h6", "sup", "li"]
     for m in matches:
+        tag_text = m.group(1)
+        if tag_text not in change_tags:
+            continue
         id_text = m.group(2)
         match_text = m.group()
         new_text = match_text.replace(id_text, page_key + "-" + id_text)
 
+        page_html = page_html.replace(match_text, new_text)
+
+    return page_html
+
+
+def fix_tabbed_content(page_html, page_key):
+    """
+    Tabbed content have <input> and <label> that are linked.
+
+    When combining multiple pages into one, name duplicates occur.
+
+    So in the example:
+
+    <input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio">
+    <label for="__tabbed_1_1">C</label>
+
+    we should change <input> id, and <label> for attribute, to contain the pagekey.
+    """
+    # Replace <input>
+    href_regex = re.compile(
+        r"<input.*?id=\"([^\"]*?)\".*?name=\"([^\"]*?)\".*?>",
+        flags=re.IGNORECASE,
+    )
+    matches = re.finditer(href_regex, page_html)
+    for m in matches:
+        id_text = m.group(1)
+        match_text = m.group()
+        new_text = match_text.replace(id_text, page_key + "_" + id_text)
+        page_html = page_html.replace(match_text, new_text)
+
+        name_text = m.group(2)
+        match_text = m.group()
+        new_text = match_text.replace(name_text, page_key + "_" + name_text)
+        page_html = page_html.replace(match_text, new_text)
+
+    # Replace <label>
+    href_regex = re.compile(
+        r"<([^\s]+).*?for=\"([^\"]*?)\".*?>(.*?)<\/\1>",
+        flags=re.IGNORECASE,
+    )
+    matches = re.finditer(href_regex, page_html)
+    for m in matches:
+        tag_text = m.group(1)
+        if tag_text != "label":
+            continue
+        id_text = m.group(2)
+        match_text = m.group()
+        new_text = match_text.replace(id_text, page_key + "_" + id_text)
         page_html = page_html.replace(match_text, new_text)
 
     return page_html
@@ -219,6 +271,7 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
     page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
     page_html = update_anchor_ids(page_html, page_key)
+    page_html = fix_tabbed_content(page_html, page_key)
     page_html = fix_image_src(page_html, page_url, directory_urls)
 
     # Finally, wrap the entire page in a section with an anchor ID
