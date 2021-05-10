@@ -3,38 +3,13 @@ https://github.com/squidfunk/mkdocs-material */
 
 
 /* Table of Contents styling */
-
-.print-page-toc-nav {
-    margin-bottom: 1.6em;
-}
-#print-page-toc ul {
-    /* margin-left: 1.6em; */
-    margin-top: 0;
+.print-page-toc-title {
+    padding-bottom: 0em;
     margin-bottom: 0;
-    list-style-position: inside;
 }
-#print-page-toc ul.print-site-toc-level-2,
-#print-page-toc ul.print-site-toc-level-3,
-#print-page-toc ul.print-site-toc-level-4,
-#print-page-toc ul.print-site-toc-level-5,
-#print-page-toc ul.print-site-toc-level-6 {
-    margin-left: 1.6em;
-}
-#print-page-toc ul li {
-    margin-left: 0;
-    margin-bottom: 0.2em;
-}
-ul.print-site-toc-level-1 {
-    list-style-type: none;
-}
-ul.print-site-toc-level-1 li a {
-    font-weight: bold;
-    font-size: 120%;
-}
-ul.print-site-toc-level-2 li a {
-    font-weight: normal;
-    font-size: 100%;
-    margin-bottom: 0em;
+
+#print-site-page ul.toc-section-line-border { 
+    border-left: 5px solid var(--md-default-fg-color--lighter);
 }
 
 

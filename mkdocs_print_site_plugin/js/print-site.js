@@ -83,8 +83,8 @@ function generate_toc() {
       if ( current_section_depth == 0 ) {
           // Close normal ul to start a section ul
           ToC += "</ul>"
-          current_section_depth++;
-      } 
+        } 
+      current_section_depth++;
       ToC += "<ul class='print-site-toc-level-" + current_heading_depth + " toc-section-line-border'>";
       continue;
     }

@@ -95,9 +95,6 @@ class PrintSitePlugin(BasePlugin):
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
         config["extra_javascript"] = ["js/print-site-instant-loading.js"] + config["extra_javascript"]
 
-        # Add pointer to print-site css files
-        config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
-
         # Add pointer to theme specific css files
         file = "print-site-%s.css" % get_theme_name(config)
         if file in os.listdir(os.path.join(HERE, "css")):
@@ -106,6 +103,9 @@ class PrintSitePlugin(BasePlugin):
             msg = f"[mkdocs-print-site] Theme '{get_theme_name(config)}' not yet supported\n"
             msg += "which means print margins and page breaks might be off. Feel free to open an issue!"
             logger.warning(msg)
+
+        # Add pointer to print-site css files
+        config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
 
         # Create MkDocs Page and File instances
         self.print_file = File(

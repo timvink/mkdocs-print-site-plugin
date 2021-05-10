@@ -4,6 +4,17 @@
     padding-top: 1em;
  }
 
+
+ /* Table of contents, proper padding */
+.print-page-toc-title {
+    padding-bottom: 0em;
+    margin-bottom: 1em;
+}
+ /* Table of contents, compatible with dark theme */
+ #print-site-page ul.toc-section-line-border { 
+    border-left: 5px solid rgb(225, 225, 225);
+ }
+
 @media print {
 
     /* Hide side TOC banner 

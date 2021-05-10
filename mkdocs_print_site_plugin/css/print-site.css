@@ -196,6 +196,10 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
 /* 
 Print site table of contents styling
  */
+.print-page-toc-nav {
+    padding-bottom: 2em;
+}
+
 #print-site-page h1:target, 
 #print-site-page h2:target, 
 #print-site-page h3:target, 
@@ -208,6 +212,41 @@ Print site table of contents styling
     from { background: yellow; }
     to { background: white; }
 }
+
+#print-page-toc ul {
+    /* margin-left: 1.6em; */
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style-position: inside;
+}
+#print-page-toc ul.print-site-toc-level-2,
+#print-page-toc ul.print-site-toc-level-3,
+#print-page-toc ul.print-site-toc-level-4,
+#print-page-toc ul.print-site-toc-level-5,
+#print-page-toc ul.print-site-toc-level-6 {
+    margin-left: 1.6em;
+}
+#print-page-toc ul li {
+    margin-left: 0;
+    margin-bottom: 0.2em;
+}
+ul.print-site-toc-level-1 {
+    list-style-type: none;
+}
+ul.print-site-toc-level-1 li a {
+    font-weight: bold;
+    font-size: 120%;
+}
+ul.print-site-toc-level-2 li a {
+    font-weight: normal;
+    font-size: 100%;
+    margin-bottom: 0em;
+}
+
+
+
+
 #print-site-page ul {
     margin-left: 0em;
 }
@@ -218,10 +257,10 @@ Print site table of contents styling
     letter-spacing: 1px;
 }
 #print-site-page ul.toc-section-line-border { 
-    border-left: 5px solid rgb(179, 179, 179);
+    border-left: 5px solid grey;
     padding-left: 1.5em;
     padding-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 1em;
 }
 
 
