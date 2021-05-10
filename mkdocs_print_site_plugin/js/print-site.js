@@ -78,23 +78,39 @@ function generate_toc() {
     // inserted_padding_row = false;
 
     if (el.classList.contains('nav-section-title') ) {
-      ToC += "<li class='toc-nav-section-title'>" + title + "</li>";
 
-      if ( current_section_depth == 0 ) {
-          // Close normal ul to start a section ul
-          ToC += "</ul>"
-        } 
+
+      // Use the tag level of the first item in the section to close off any nested <ul>
+      el = toc_elements[i+1]
+      link = "#" + el.id;
+      tag = el.tagName
+      tag_level = tag.substring(1)
+      while (tag_level > current_heading_depth) {
+        current_heading_depth++;
+        ToC += "<ul class='print-site-toc-level-" + current_heading_depth + "'>";
+      }
+      while (tag_level < current_heading_depth) {
+        current_heading_depth--;
+        ToC += "</ul>"; 
+      }
+
+      // Insert a section heading <li> item, however deeply we are nested.
       current_section_depth++;
+      // Insert item as a section title in the current list
+      ToC += "<li class='toc-nav-section-title toc-nav-section-title-level-" + (current_section_depth) + "'>" + title + "</li>";
+      
+      // Start a new ul for the section
       ToC += "<ul class='print-site-toc-level-" + current_heading_depth + " toc-section-line-border'>";
       continue;
     }
+
+
     if (el.classList.contains('nav-section-title-end') ) {
+
       current_section_depth--;
+      // Close the special section ul
       ToC += "</ul>";
-      if ( current_section_depth == 0 ) {
-        // Start back normal ul
-        ToC += "<ul class='print-site-toc-level-" + current_heading_depth + "'>";
-      }
+
       continue;
     }
 
@@ -108,30 +124,7 @@ function generate_toc() {
     }
 
 
-
-    // if ( el.classList.contains('nav-section-title') ) {
-    //   // newLine = "<li class='toc-nav-section-title'>" + title + "</li>"; 
-    //   current_section_depth++;
-    //   newLine = "<li class='toc-nav-section-title toc-nav-section-title-level-" + current_section_depth + "' style='margin-left: " + (current_section_depth-1) + "em'>" + title + "</li>"; 
-    //   newLine += "<div class='toc-section-line-border'>";
-    // } else {
-
-    //   if ( current_section_depth >= 1) {
-    //     a_class = " class='toc-nav-section-child' style='margin-left: " + (current_section_depth-1) + "em'"
-    //   } else {
-    //     a_class = ""
-    //   }
-
-    //   newLine =
-    //     "<li" + a_class + ">" +
-    //       "<a href='" + link + "'>" +
-    //         title +
-    //       "</a>" +
-    //     "</li>";
-    // }
-    a_class = "";
-    newLine =
-    "<li" + a_class + ">" +
+    newLine = "<li>" +
       "<a href='" + link + "'>" +
         title +
       "</a>" +

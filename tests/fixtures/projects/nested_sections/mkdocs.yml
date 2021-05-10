@@ -2,6 +2,15 @@ site_name: Test
 
 theme:
     name: material
+    palette:
+      - scheme: default
+        toggle:
+          icon: material/toggle-switch-off-outline
+          name: Switch to dark mode
+      - scheme: slate
+        toggle:
+          icon: material/toggle-switch
+          name: Switch to light mode
 
 plugins:
     - print-site:
@@ -16,6 +25,10 @@ nav:
       - page2.md
       - Another subsection:
         - page3.md
+      - And another:
+        - page6.md
+        - page7.md
     - page4.md
+    - page8.md
   - info.md
 

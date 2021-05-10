@@ -13,6 +13,9 @@ nav:
       - page2.md
       - Another subsection:
         - page3.md
+      - And another:
+        - page6.md
+        - page7.md
     - page4.md
+    - page8.md
   - info.md
-
