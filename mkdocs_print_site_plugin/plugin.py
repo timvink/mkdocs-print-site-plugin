@@ -6,6 +6,7 @@ from mkdocs.config import config_options
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
+from mkdocs.exceptions import ConfigurationError
 
 from mkdocs_print_site_plugin.renderer import Renderer
 from mkdocs_print_site_plugin.utils import get_theme_name
@@ -58,6 +59,17 @@ class PrintSitePlugin(BasePlugin):
             msg += "to ensure the print page has any changes other plugins make."
             msg += "Please update the 'plugins:' section in your mkdocs.yml"
             logger.warning(msg)
+
+        # There is a bug with mkdocs-material theme and
+        # the pymdownx.details markdown extension. Detect + raise error.
+        # Details: https://github.com/squidfunk/mkdocs-material/issues/2655
+        if "pymdownx.details" in config.get("markdown_extensions", []):
+            if get_theme_name(config) == "material":
+                msg = "[mkdocs-print-site-plugin]: Using 'mkdocs-material' theme with "
+                msg += "the 'pymdownx.details' markdown extension will break printing.\n"
+                msg += "Please remove 'pymdownx.details' or use a different theme."
+                msg += "Details: https://github.com/squidfunk/mkdocs-material/issues/2655."
+                raise ConfigurationError(msg)
 
         # Get abs path to cover_page_template
         self.cover_page_template_path = ""

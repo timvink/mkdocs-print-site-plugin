@@ -30,20 +30,19 @@ from mkdocs.__main__ import build_command
 
 def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     """
-    Sets up a clean mkdocs directory
-    
+    Sets up a clean mkdocs directory.
+
     outputpath/testproject
     ├── docs/
     └── mkdocs.yml
-    
+
     Args:
         mkdocs_yml_path (Path): Path of mkdocs.yml file to use
         output_path (Path): Path of folder in which to create mkdocs project
-        
+
     Returns:
         testproject_path (Path): Path to test project
     """
-
     assert os.path.exists(mkdocs_yml_path)
 
     testproject_path = output_path / "testproject"
@@ -51,7 +50,7 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     # Create empty 'testproject' folder
     if os.path.exists(str(testproject_path)):
         logging.warning(
-            """This command does not work on windows. 
+            """This command does not work on windows.
         Refactor your test to use setup_clean_mkdocs_folder() only once"""
         )
         shutil.rmtree(str(testproject_path))
@@ -67,15 +66,14 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
 
 def build_docs_setup(testproject_path):
     """
-    Runs the `mkdocs build` command
-    
+    Runs the `mkdocs build` command.
+
     Args:
         testproject_path (Path): Path to test project
-    
+
     Returns:
         command: Object with results of command
     """
-
     cwd = os.getcwd()
     os.chdir(str(testproject_path))
 
@@ -83,15 +81,13 @@ def build_docs_setup(testproject_path):
         run = CliRunner().invoke(build_command, catch_exceptions=True)
         os.chdir(cwd)
         return run
-    except:
+    except Exception:
         os.chdir(cwd)
         raise
 
 
 def check_build(tmp_path, project_mkdocs, exit_code=0):
-    tmp_proj = setup_clean_mkdocs_folder(
-        "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
-    )
+    tmp_proj = setup_clean_mkdocs_folder("tests/fixtures/projects/%s" % project_mkdocs, tmp_path)
     result = build_docs_setup(tmp_proj)
 
     msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (
@@ -111,7 +107,7 @@ def text_in_page(tmp_proj, page_path, text):
     return re.search(text, contents)
 
 
-#### Tests ####
+# Tests
 
 
 def test_windmill(tmp_path):
@@ -122,9 +118,11 @@ def test_no_toc(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_toc.yml")
 
     # Table of contents should NOT be there
-    assert not text_in_page(
-        prj_path, "print_page/index.html", '<div id="print-page-toc"'
-    )
+    assert not text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
+
+
+def test_pymdownx_details_enabled(tmp_path):
+    assert check_build(tmp_path, "with_markdown_ext/mkdocs_details.yml", exit_code=1)
 
 
 def test_add_to_nav_works(tmp_path):
@@ -144,9 +142,7 @@ def test_basic_build(tmp_path):
     assert text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
 
@@ -161,9 +157,7 @@ def test_basic_build2(tmp_path):
     assert text_in_page(prj_path, "print_page.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
 
@@ -175,9 +169,7 @@ def test_basic_build3(tmp_path):
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
@@ -189,13 +181,11 @@ def test_basic_build4(tmp_path):
     assert text_in_page(
         prj_path,
         "index.html",
-        'href="print_page\/" class="md-nav__link"',
+        'href="print_page/" class="md-nav__link"',
     )
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
@@ -240,8 +230,11 @@ def test_exclude_page(tmp_path):
     assert not text_in_page(prj_path, "print_page/index.html", "rrI1f2gYE8V4")
 
     # Element in page is ignore (basically 'display: none'), should be present with the right class.
-    assert text_in_page(prj_path, "print_page/index.html", '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>')
-
+    assert text_in_page(
+        prj_path,
+        "print_page/index.html",
+        '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>',
+    )
 
 
 def test_basic_build99(tmp_path):
@@ -252,8 +245,6 @@ def test_basic_build99(tmp_path):
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
