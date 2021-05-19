@@ -23,14 +23,12 @@ repos:
       entry: flake8
       language: system
       types: [python]
-      args: [--max-line-length=120, --docstring-convention=google, "--ignore=D100,D103,D104,D212,D200,E203,W293,D412,W503,E501"]
+      args: [--max-line-length=120, --docstring-convention=google, "--ignore=D100,D104,D212,D200,E203,W293,D412,W503"]
 # D100 requires all Python files (modules) to have a "public" docstring even if all functions within have a docstring.
 # D104 requires __init__ files to have a docstring
 # D212
 # D200 
 # D412 No blank lines allowed between a section header and its content
 # E203
-# E501 line too long (122 > 120 characters)
-# D103 Missing docstring in public function
 # W293 blank line contains whitespace
 # W503 line break before binary operator (for compatibility with black)
