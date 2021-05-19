@@ -32,7 +32,7 @@ setup(
         "Topic :: Documentation",
         "Topic :: Text Processing",
     ],
-    install_requires=["mkdocs-material>=7.1.0"],
+    install_requires=["mkdocs-material>=7.1.5"],
     packages=find_packages(),
     entry_points={"mkdocs.plugins": ["print-site = mkdocs_print_site_plugin.plugin:PrintSitePlugin"]},
 )
