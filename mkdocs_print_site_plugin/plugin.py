@@ -197,6 +197,7 @@ class PrintSitePlugin(BasePlugin):
         css_output_base_path = os.path.join(config["site_dir"], "css")
         css_file_path = os.path.join(css_output_base_path, "print-site.css")
         copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
+
         # Add theme CSS file
         css_file = "print-site-%s.css" % get_theme_name(config)
         if css_file in os.listdir(os.path.join(HERE, "css")):
@@ -216,11 +217,8 @@ class PrintSitePlugin(BasePlugin):
          // Subscribe functions for compatibility
          // with mkdocs-material's instant loading feature
                     
-         if (
-            typeof app !== "undefined" &&
-            typeof app.document$ !== "undefined"
-            ) {
-            app.document$.subscribe(function() {
+         if (typeof document$ !== "undefined") {
+            document$.subscribe(function() {
                 if ( document.querySelector("#print-site-page") !== null ) {
                     %s
             }
@@ -248,14 +246,14 @@ class PrintSitePlugin(BasePlugin):
         print_site_js = (
             """
         <script type="text/javascript">
-        window.addEventListener('load', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             %s
         })
         </script>
         """
             % js_calls
         )
-        html = html.replace("</body>", print_site_js + "</body>")
+        html = html.replace("</head>", print_site_js + "</head>")
 
         # Write the print_page file to the output folder
         write_file(
