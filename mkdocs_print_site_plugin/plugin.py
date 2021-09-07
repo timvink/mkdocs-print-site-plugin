@@ -204,34 +204,6 @@ class PrintSitePlugin(BasePlugin):
             css_file_path = os.path.join(css_output_base_path, css_file)
             copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
 
-        # Determine calls to required javascript functions
-        js_calls = ""
-        if self.config.get("add_table_of_contents"):
-            js_calls += "generate_toc();"
-
-        # Add JS file for compatibility for mkdocs-material instant loading
-        # note this is inserted to all mkdocs pages,
-        # because each page can be the start of instant loading session
-        js_instant_loading = (
-            """
-         // Subscribe functions for compatibility
-         // with mkdocs-material's instant loading feature
-                    
-         if (typeof document$ !== "undefined") {
-            document$.subscribe(function() {
-                if ( document.querySelector("#print-site-page") !== null ) {
-                    %s
-            }
-            })
-         }
-        """
-            % js_calls
-        )
-        write_file(
-            js_instant_loading.encode("utf-8", errors="xmlcharrefreplace"),
-            os.path.join(js_output_base_path, "print-site-instant-loading.js"),
-        )
-
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
 
@@ -241,6 +213,11 @@ class PrintSitePlugin(BasePlugin):
         self.context["page"] = self.print_page
         # Render the theme template for the print page
         html = template.render(self.context)
+
+        # Determine calls to required javascript functions
+        js_calls = ""
+        if self.config.get("add_table_of_contents"):
+            js_calls += "generate_toc();"
 
         # Inject JS into print page
         print_site_js = (
