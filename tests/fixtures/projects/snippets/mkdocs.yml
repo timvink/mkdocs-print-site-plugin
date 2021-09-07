@@ -1,0 +1,13 @@
+site_name: Test
+
+theme:
+    name: material
+    features:
+      - navigation.instant
+
+plugins:
+   - print-site
+
+markdown_extensions:
+    - pymdownx.snippets
+

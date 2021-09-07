@@ -197,42 +197,12 @@ class PrintSitePlugin(BasePlugin):
         css_output_base_path = os.path.join(config["site_dir"], "css")
         css_file_path = os.path.join(css_output_base_path, "print-site.css")
         copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
+
         # Add theme CSS file
         css_file = "print-site-%s.css" % get_theme_name(config)
         if css_file in os.listdir(os.path.join(HERE, "css")):
             css_file_path = os.path.join(css_output_base_path, css_file)
             copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
-
-        # Determine calls to required javascript functions
-        js_calls = ""
-        if self.config.get("add_table_of_contents"):
-            js_calls += "generate_toc();"
-
-        # Add JS file for compatibility for mkdocs-material instant loading
-        # note this is inserted to all mkdocs pages,
-        # because each page can be the start of instant loading session
-        js_instant_loading = (
-            """
-         // Subscribe functions for compatibility
-         // with mkdocs-material's instant loading feature
-                    
-         if (
-            typeof app !== "undefined" &&
-            typeof app.document$ !== "undefined"
-            ) {
-            app.document$.subscribe(function() {
-                if ( document.querySelector("#print-site-page") !== null ) {
-                    %s
-            }
-            })
-         }
-        """
-            % js_calls
-        )
-        write_file(
-            js_instant_loading.encode("utf-8", errors="xmlcharrefreplace"),
-            os.path.join(js_output_base_path, "print-site-instant-loading.js"),
-        )
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
@@ -244,18 +214,23 @@ class PrintSitePlugin(BasePlugin):
         # Render the theme template for the print page
         html = template.render(self.context)
 
+        # Determine calls to required javascript functions
+        js_calls = ""
+        if self.config.get("add_table_of_contents"):
+            js_calls += "generate_toc();"
+
         # Inject JS into print page
         print_site_js = (
             """
         <script type="text/javascript">
-        window.addEventListener('load', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             %s
         })
         </script>
         """
             % js_calls
         )
-        html = html.replace("</body>", print_site_js + "</body>")
+        html = html.replace("</head>", print_site_js + "</head>")
 
         # Write the print_page file to the output folder
         write_file(

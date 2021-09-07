@@ -43,7 +43,7 @@ function generate_toc() {
     //     mkdocs-print-site-plugin<a class="headerlink" href="#index-mkdocs-print-site-plugin" title="Permanent link">↵</a>
     //  </h1>
     title = el.firstChild.nodeValue;
-    if ( title.length == 0 ) {
+    if ( ! title ) {
       continue;
     }
 
