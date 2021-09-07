@@ -93,7 +93,6 @@ class PrintSitePlugin(BasePlugin):
 
         # Add pointer to print-site javascript
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
-        config["extra_javascript"] = ["js/print-site-instant-loading.js"] + config["extra_javascript"]
 
         # Add pointer to theme specific css files
         file = "print-site-%s.css" % get_theme_name(config)
