@@ -24,9 +24,9 @@ function generate_toc() {
   
   var current_heading_depth = 0;
   var current_section_depth = 0;
-  // var inserted_padding_row = false;
 
   // Extract table of contents depth
+  // basically plugin setting, passed via a data attribute
   var toc_depth = document.getElementById("print-page-toc").getAttribute("data-toc-depth")
 
   for (var i = 0; i < toc_elements.length; i++) {
@@ -61,25 +61,7 @@ function generate_toc() {
       continue;
     }
 
-  
-
-    // // If the section pages end
-    // if ( el.classList.contains('nav-section-title-end') ) {
-    //   current_section_depth--;
-    //   // Add some padding, but make sure not twice in a row
-    //   // That can happen with nested sections going back up 2 levels
-    //   if (inserted_padding_row == false ) {
-    //     ToC += "</div>"; // end section.
-    //     ToC += "<li style='list-style-type: none; padding-bottom: 1em;'></li>";
-    //     inserted_padding_row = true;
-    //   }
-    //   continue;
-    // }
-    // inserted_padding_row = false;
-
     if (el.classList.contains('nav-section-title') ) {
-
-
       // Use the tag level of the first item in the section to close off any nested <ul>
       el = toc_elements[i+1]
       link = "#" + el.id;

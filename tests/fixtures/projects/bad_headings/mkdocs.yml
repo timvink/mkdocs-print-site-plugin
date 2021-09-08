@@ -1,0 +1,7 @@
+site_name: Test
+
+plugins:
+    - print-site:
+        add_table_of_contents: true
+
+  

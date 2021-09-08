@@ -30,20 +30,19 @@ from mkdocs.__main__ import build_command
 
 def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     """
-    Sets up a clean mkdocs directory
-    
+    Sets up a clean mkdocs directory.
+
     outputpath/testproject
     ├── docs/
     └── mkdocs.yml
-    
+
     Args:
         mkdocs_yml_path (Path): Path of mkdocs.yml file to use
         output_path (Path): Path of folder in which to create mkdocs project
-        
+
     Returns:
         testproject_path (Path): Path to test project
     """
-
     assert os.path.exists(mkdocs_yml_path)
 
     testproject_path = output_path / "testproject"
@@ -51,7 +50,7 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
     # Create empty 'testproject' folder
     if os.path.exists(str(testproject_path)):
         logging.warning(
-            """This command does not work on windows. 
+            """This command does not work on windows.
         Refactor your test to use setup_clean_mkdocs_folder() only once"""
         )
         shutil.rmtree(str(testproject_path))
@@ -67,15 +66,14 @@ def setup_clean_mkdocs_folder(mkdocs_yml_path, output_path):
 
 def build_docs_setup(testproject_path):
     """
-    Runs the `mkdocs build` command
-    
+    Runs the `mkdocs build` command.
+
     Args:
         testproject_path (Path): Path to test project
-    
+
     Returns:
         command: Object with results of command
     """
-
     cwd = os.getcwd()
     os.chdir(str(testproject_path))
 
@@ -89,9 +87,10 @@ def build_docs_setup(testproject_path):
 
 
 def check_build(tmp_path, project_mkdocs, exit_code=0):
-    tmp_proj = setup_clean_mkdocs_folder(
-        "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
-    )
+    """
+    Test to make sure build fails or succeeds.
+    """
+    tmp_proj = setup_clean_mkdocs_folder("tests/fixtures/projects/%s" % project_mkdocs, tmp_path)
     result = build_docs_setup(tmp_proj)
 
     msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (
@@ -105,29 +104,39 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
 
 
 def text_in_page(tmp_proj, page_path, text):
+    """
+    Test if string exists in page.
+    """
     page = tmp_proj / "site" / page_path
     assert page.exists(), "%s does not exist" % page_path
     contents = page.read_text(encoding="utf-8")
     return re.search(text, contents)
 
 
-#### Tests ####
+# Tests ####
 
 
 def test_windmill(tmp_path):
+    """
+    Test.
+    """
     check_build(tmp_path, "basic/mkdocs_windmill.yml")
 
 
 def test_no_toc(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_no_toc.yml")
 
     # Table of contents should NOT be there
-    assert not text_in_page(
-        prj_path, "print_page/index.html", '<div id="print-page-toc"'
-    )
+    assert not text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
 
 
 def test_add_to_nav_works(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_addtonav_false.yml")
 
     # print page should not be in navigation
@@ -135,6 +144,9 @@ def test_add_to_nav_works(tmp_path):
 
 
 def test_basic_build(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs.yml")
 
     # Print page should be in the navigation
@@ -144,14 +156,15 @@ def test_basic_build(tmp_path):
     assert text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
 
 
 def test_basic_build2(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_no_directory_urls.yml")
 
     # Print page should be in the navigation
@@ -161,28 +174,30 @@ def test_basic_build2(tmp_path):
     assert text_in_page(prj_path, "print_page.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build3(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav.yml")
 
     # Print page should be in the navigation
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build4(tmp_path):
+    """
+    Test.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_with_nav_and_theme.yml")
 
     # Print page should be in the navigation
@@ -193,14 +208,15 @@ def test_basic_build4(tmp_path):
     )
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
 
 def test_basic_build5(tmp_path):
+    """
+    Test extensions.
+    """
     prj_path = check_build(tmp_path, "with_markdown_ext/mkdocs.yml")
 
     # Print page should be in the navigation
@@ -217,7 +233,9 @@ def test_basic_build5(tmp_path):
 
 
 def test_basic_build6(tmp_path):
-    # this test mainly checks if adding subsection to the navigation does not break plugin
+    """
+    Checks if adding subsection to the navigation does not break plugin.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_weird_nav.yml")
 
     # Print page should be in the navigation
@@ -232,28 +250,42 @@ def test_basic_build6(tmp_path):
     assert text_in_page(prj_path, "print_page/index.html", "Subsec 2")
 
 
+def test_basic_build7(tmp_path):
+    """
+    Test error when page does not start with h1 heading.
+    """
+    check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=1)
+
+
 def test_exclude_page(tmp_path):
-    # this test makes sure excluding a page works
+    """
+    Makes sure excluding a page works.
+    """
     prj_path = check_build(tmp_path, "basic/mkdocs_do_not_print.yml")
 
     # Entire page is excluded, code from 'subsection1.md' should not be present
     assert not text_in_page(prj_path, "print_page/index.html", "rrI1f2gYE8V4")
 
     # Element in page is ignore (basically 'display: none'), should be present with the right class.
-    assert text_in_page(prj_path, "print_page/index.html", '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>')
-
+    assert text_in_page(
+        prj_path,
+        "print_page/index.html",
+        '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>',  # noqa
+    )
 
 
 def test_basic_build99(tmp_path):
-    # This is a weird test, as the markdown extension toc permalink setting seems to persist across subsequent test runs..
+    """
+    Test md extension.
+    """
+    # This is a weird test, as the markdown extension toc permalink setting seems
+    # to persist across subsequent test runs..
     prj_path = check_build(tmp_path, "basic/mkdocs_toc_permalink.yml")
 
     # Print page should be in the navigation
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(
-        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
-    )
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
