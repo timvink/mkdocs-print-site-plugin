@@ -10,6 +10,7 @@ use_directory_urls: false
 plugins:
     - search
     - print-site:
+        add_to_navigation: true
         add_full_urls: false
         add_table_of_contents: true
         toc_title: "Table of Contents"

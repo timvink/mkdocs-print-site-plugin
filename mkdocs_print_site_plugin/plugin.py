@@ -240,7 +240,8 @@ class PrintSitePlugin(BasePlugin):
         html = template.render(self.context)
 
         # Determine calls to required javascript functions
-        js_calls = ""
+        js_calls = "remove_material_navigation();"
+        js_calls += "remove_mkdocs_theme_navigation();"
         if self.config.get("add_table_of_contents"):
             js_calls += "generate_toc();"
 

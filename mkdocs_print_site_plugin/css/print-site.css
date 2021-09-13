@@ -282,7 +282,6 @@ For now, we added them for use only in the table of contents */
     line-height: 1.3;
     color: var(--md-default-fg-color--light);
 }
-
 #print-site-page h1.nav-section-title-end,
 #print-site-page h2.nav-section-title-end,
 #print-site-page h3.nav-section-title-end,
