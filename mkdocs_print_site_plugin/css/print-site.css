@@ -267,8 +267,6 @@ ul.print-site-toc-level-2 li a {
 
 
 
-/* Don't display cover page when not in print mode */
-#print-site-cover-page { display: none; }
 
 /* Don't display the section headings that we added
 For now, we added them for use only in the table of contents */

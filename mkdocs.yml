@@ -1,4 +1,4 @@
-site_name: mkdocs-print-site-plugin Docs
+site_name: Documentation mkdocs-print-site-plugin
 repo_url: https://github.com/timvink/mkdocs-print-site-plugin
 site_url: https://timvink.github.io/mkdocs-print-site-plugin/
 site_description: MkDocs Plugin allowing your site visitors to *File > Print > Save as PDF* the entire site.
