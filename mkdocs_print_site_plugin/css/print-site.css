@@ -23,16 +23,6 @@ print-site:
     - print-site-enumerate_headings: true
 */
 
-/* Ensure that when adding enumeration to headings, this happens inline */
-.print-site-enumerate-headings h1:before,
-.print-site-enumerate-headings h2:before,
-.print-site-enumerate-headings h3:before,
-.print-site-enumerate-headings h4:before,
-.print-site-enumerate-headings h5:before,
-.print-site-enumerate-headings h6:before {
-    display: inline !important;
-}
-
 /* Reset all enumeration at start of page */
 body {counter-reset: chapter sec-top toc-chapter toc-sec-chapter figurecounter;}
 
@@ -75,7 +65,7 @@ that are part of an original included page */
 }
 .print-site-enumerate-headings .print-page h6:before {
     counter-increment: last;
-    content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) "." counter(last) !important;
+    content: counter(chapter) "." counter(section) "." counter(sub-section) "." counter(composite) "." counter(detail) "." counter(last) " " !important;
 }
 
 /* Enumerate headings of SECTIONS,
@@ -107,7 +97,7 @@ that are part of an original included page */
 }
 .print-site-enumerate-headings h6.nav-section-title:before {
     counter-increment: sec-last;
-    content: counter(sec-top, upper-roman) "." counter(sec-section, upper-roman) "." counter(sec-sub-section, upper-roman) "." counter(sec-composite, upper-roman) "." counter(sec-detail, upper-roman) "." counter(sec-last, upper-roman) !important;
+    content: counter(sec-top, upper-roman) "." counter(sec-section, upper-roman) "." counter(sec-sub-section, upper-roman) "." counter(sec-composite, upper-roman) "." counter(sec-detail, upper-roman) "." counter(sec-last, upper-roman) " " !important;
 }
 
 
@@ -139,7 +129,7 @@ that are part of an original included page */
 }
 .print-site-enumerate-headings .print-site-toc-level-6 > li a:before {
     counter-increment: toc-last;
-    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) "." counter(toc-composite) "." counter(toc-detail) "." counter(toc-last);
+    content: counter(toc-chapter) "." counter(toc-section) "." counter(toc-sub-section) "." counter(toc-composite) "." counter(toc-detail) "." counter(toc-last) " ";
 }
 
 /* Enumerate SECTIONS in table of contents also */
@@ -170,7 +160,7 @@ that are part of an original included page */
 }
 .print-site-enumerate-headings li.toc-nav-section-title-level-6:before {
     counter-increment: toc-sec-last;
-    content: counter(toc-sec-chapter, upper-roman) "." counter(toc-sec-section, upper-roman) "." counter(toc-sec-sub-section, upper-roman) "." counter(toc-sec-composite, upper-roman) "." counter(toc-sec-detail, upper-roman) "." counter(toc-last, upper-roman);
+    content: counter(toc-sec-chapter, upper-roman) "." counter(toc-sec-section, upper-roman) "." counter(toc-sec-sub-section, upper-roman) "." counter(toc-sec-composite, upper-roman) "." counter(toc-sec-detail, upper-roman) "." counter(toc-last, upper-roman) " ";
 }
 
 #print-page-toc li a.headerlink:before {
@@ -205,14 +195,8 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
 @keyframes highlight {
     from { color: orange; }
     to { color: none; }
-} 
-/* Make sure to offset for the header when using anchor links */
-/* #print-site-page .headerlink::before { 
-    content: '';
-    display: block;
-    height:      180px;
-    margin-top: -180px;
-} */
+}
+
 
 /* 
 Print site table of contents styling
