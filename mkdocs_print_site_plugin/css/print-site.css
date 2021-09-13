@@ -193,6 +193,27 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
 }
 
 
+/* Do some nice animations when clicking on a ToC link */
+#print-site-page h1:target, 
+#print-site-page h2:target, 
+#print-site-page h3:target, 
+#print-site-page h4:target, 
+#print-site-page h5:target, 
+#print-site-page h6:target {
+    animation: highlight 1.5s ease;
+}
+@keyframes highlight {
+    from { color: orange; }
+    to { color: none; }
+} 
+/* Make sure to offset for the header when using anchor links */
+/* #print-site-page .headerlink::before { 
+    content: '';
+    display: block;
+    height:      180px;
+    margin-top: -180px;
+} */
+
 /* 
 Print site table of contents styling
  */
@@ -202,19 +223,6 @@ Print site table of contents styling
 
 .print-page-toc-nav {
     padding-bottom: 2em;
-}
-
-#print-site-page h1:target, 
-#print-site-page h2:target, 
-#print-site-page h3:target, 
-#print-site-page h4:target, 
-#print-site-page h5:target, 
-#print-site-page h6:target {
-    animation: highlight 1s ease;
-}
-@keyframes highlight {
-    from { background: yellow; }
-    to { background: white; }
 }
 
 #print-page-toc ul {
@@ -371,7 +379,6 @@ For now, we added them for use only in the table of contents */
     }
 
     #print-site-page footer { display : none; }
-
 
     
     #print-site-cover-page {
