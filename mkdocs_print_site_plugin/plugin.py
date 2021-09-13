@@ -33,7 +33,7 @@ class PrintSitePlugin(BasePlugin):
         ("enumerate_figures", config_options.Type(bool, default=False)),
         ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
-        ("add_print_site_banner", config_options.Type(bool, default=True)),
+        ("add_print_site_banner", config_options.Type(bool, default=False)),
         ("print_site_banner_template", config_options.Type(str, default="")),
         ("path_to_pdf", config_options.Type(str, default="")),
         ("enabled", config_options.Type(bool, default=True)),
