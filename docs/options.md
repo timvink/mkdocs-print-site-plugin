@@ -36,7 +36,7 @@ plugins:
 :   Default is `'Table of Contents'`. When `add_table_of_contents` is set to `true` this setting controls the name of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
 
 `toc_depth`
-:   Default is `6`. When `add_table_of_contents` is set to `true` this setting controls the depth of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
+:   Default is `3`. When `add_table_of_contents` is set to `true` this setting controls the depth of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
 
 `add_full_urls`
 :   Default is `false`. When printing a page, you cannot see the target of a link. This option adds the target url in parenthesis behind a link.
