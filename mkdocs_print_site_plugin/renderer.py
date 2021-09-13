@@ -1,7 +1,9 @@
 import jinja2
 import logging
 
-from mkdocs_print_site_plugin.urls import fix_internal_links
+from mkdocs.structure.toc import AnchorLink, TableOfContents
+
+from mkdocs_print_site_plugin.urls import fix_internal_links, get_page_key
 from mkdocs_print_site_plugin.exclude import exclude
 
 logger = logging.getLogger("mkdocs.plugins")
@@ -159,3 +161,44 @@ class Renderer(object):
             </div>
         </section>
         """
+
+    def get_toc_sidebar(self) -> TableOfContents:
+        """
+        Generate a MkDocs a navigation sidebar.
+
+        We want to generate one for the print page also, so we can export HTML.
+        Here we go over each page with a toc. Then we fix the anchor links.
+
+        See also https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
+        """
+        toc = []
+
+        for item in self.items:
+            if hasattr(item, "toc"):
+                page_key = get_page_key(item.url)
+                item_toc = item.toc
+                if hasattr(item_toc, "items"):
+                    for toc_link in item.toc.items:
+                        toc_link = update_toc_item(page_key, toc_link)
+                        toc += [toc_link]
+
+        return TableOfContents(toc)
+
+
+def update_toc_item(page_key: str, toc_link: AnchorLink) -> AnchorLink:
+    """
+    Updates a AnchorItem to work on the print page.
+    """
+    # update the link to point to the anchor in print page instead of actual page
+    toc_link.id = f"{page_key}-{toc_link.id}"
+
+    # MkDocs-material parses the TOC and does not display level 1
+    # This is a small hack that will set all levels off by 1
+    # Will work just fine in base mkdocs theme also
+    toc_link.level = toc_link.level - 1
+
+    if len(toc_link.children) > 0:
+        for link in toc_link.children:
+            update_toc_item(page_key, link)
+
+    return toc_link

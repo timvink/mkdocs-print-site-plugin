@@ -231,6 +231,8 @@ class PrintSitePlugin(BasePlugin):
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
+        # Generate a TOC sidebar for HTML version of print page
+        self.print_page.toc = self.renderer.get_toc_sidebar()
 
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
