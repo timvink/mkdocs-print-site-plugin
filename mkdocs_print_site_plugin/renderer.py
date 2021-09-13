@@ -180,7 +180,24 @@ class Renderer(object):
                         toc_link = update_toc_item(page_key, toc_link)
                         toc += [toc_link]
 
+        # Make sure the sidebar ToC also respects
+        # the plugin's toc_depth parameter
+        toc = clear_children_up_to(self.plugin_config.get("toc_depth"), toc)
+
         return TableOfContents(toc)
+
+
+def clear_children_up_to(depth, items):
+    """
+    Filters items in sidebar table of contents to a given depth.
+    """
+    for toc_item in items:
+        # note the -1 is there because of the hack on levels in update_toc_item()
+        if toc_item.level == depth - 1:
+            toc_item.children = []
+        else:
+            toc_item.children = clear_children_up_to(depth, toc_item.children)
+    return items
 
 
 def update_toc_item(page_key: str, toc_link: AnchorLink) -> AnchorLink:
