@@ -30,7 +30,7 @@ plugins:
 :   Default is `'Print Site'`. When `add_to_navigation` is set to `true` this setting controls the name of the print page in the navigation of the site. This setting is ignored when `add_to_navigation` is set to `false`.
 
 `add_table_of_contents`
-:   Default is `true`. Adds a table of contents section at the beginning of the print page.
+:   Default is `true`. Adds a table of contents section at the beginning of the print page (in print version, not HTML version).
 
 `toc_title`
 :   Default is `'Table of Contents'`. When `add_table_of_contents` is set to `true` this setting controls the name of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
