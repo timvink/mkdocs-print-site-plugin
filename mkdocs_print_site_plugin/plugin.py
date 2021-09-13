@@ -23,7 +23,7 @@ class PrintSitePlugin(BasePlugin):
     """
 
     config_scheme = (
-        ("add_to_navigation", config_options.Type(bool, default=True)),
+        ("add_to_navigation", config_options.Type(bool, default=False)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
         ("toc_title", config_options.Type(str, default="Table of Contents")),
