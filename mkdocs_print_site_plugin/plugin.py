@@ -36,6 +36,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_print_site_banner", config_options.Type(bool, default=True)),
         ("print_site_banner_template", config_options.Type(str, default="")),
         ("path_to_pdf", config_options.Type(str, default="")),
+        ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
     )
 
@@ -45,6 +46,8 @@ class PrintSitePlugin(BasePlugin):
 
         See https://www.mkdocs.org/user-guide/plugins/#on_config.
         """
+        if not self.config.get("enabled"):
+            return config
         # Check valid table of contents depth
         assert self.config.get("toc_depth") >= 1
         assert self.config.get("toc_depth") <= 6
@@ -139,6 +142,9 @@ class PrintSitePlugin(BasePlugin):
         Can be used to alter the site navigation.
         See https://www.mkdocs.org/user-guide/plugins/#on_nav.
         """
+        if not self.config.get("enabled"):
+            return nav
+
         # Save the (order of) pages and sections in the navigation before adding the print page
         self.renderer.items = nav.items
 
@@ -156,6 +162,9 @@ class PrintSitePlugin(BasePlugin):
         (but before being passed to a template) and can be used to alter the HTML body of the page.
         See https://www.mkdocs.org/user-guide/plugins/#on_page_content.
         """
+        if not self.config.get("enabled"):
+            return html
+
         # Save each page HTML *before* a template is applied inside the page class
         if page != self.print_page:
             page.html = html
@@ -183,6 +192,9 @@ class PrintSitePlugin(BasePlugin):
         It can be used to alter the context for that specific page only.
         See https://www.mkdocs.org/user-guide/plugins/#on_page_context.
         """
+        if not self.config.get("enabled"):
+            return
+
         # Save the page context
         # We'll use the same context of the last rendered page
         # And apply it to the print page as well (in on_post_build event)
@@ -198,6 +210,9 @@ class PrintSitePlugin(BasePlugin):
 
         See https://www.mkdocs.org/user-guide/plugins/#on_post_build.
         """
+        if not self.config.get("enabled"):
+            return
+
         # Add print-site.js
         js_output_base_path = os.path.join(config["site_dir"], "js")
         js_file_path = os.path.join(js_output_base_path, "print-site.js")

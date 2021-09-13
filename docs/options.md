@@ -18,6 +18,7 @@ plugins:
       add_cover_page: true
       cover_page_template: ""
       path_to_pdf: ""
+      enabled: true
       exclude:
 ```
 
@@ -63,6 +64,23 @@ plugins:
 
 `path_to_pdf`
 : Default is empty. Option to make it easier to add a link to the PDF version of the site on each page. See [Adding a PDF button](customization/pdf_button.md) for more info.
+
+`enabled`
+: Default is `true`. Enables you to deactivate this plugin. A possible use case is local development where you might want faster build times. It's recommended to use this option with an environment variable together with a default fallback (introduced in `mkdocs` v1.2.1, see [docs](https://www.mkdocs.org/user-guide/configuration/#environment-variables)). Example:
+
+    ```yaml
+    # mkdocs.yml
+    plugins:
+        - print-site:
+            enabled: !ENV [ENABLED_PRINT_SITE, True]
+    ```
+
+    Which enables you do disable the plugin locally using:
+
+    ```bash
+    export ENABLED_PRINT_SITE=false
+    mkdocs serve
+    ```
 
 `exclude`
 : Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](customization/do_not_print.md#ignoring-an-entire-page) for more info.

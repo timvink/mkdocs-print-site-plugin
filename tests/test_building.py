@@ -257,6 +257,17 @@ def test_basic_build7(tmp_path):
     check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=1)
 
 
+def test_basic_disable_plugin(tmp_path):
+    """
+    Test disabling plugin.
+    """
+    prj_path = check_build(tmp_path, "basic/mkdocs_material_disabled.yml", exit_code=0)
+
+    # make sure print page does not exist
+    page = prj_path / "site" / "print_page/index.html"
+    assert not page.exists(), "%s exists but should not" % page
+
+
 def test_exclude_page(tmp_path):
     """
     Makes sure excluding a page works.
