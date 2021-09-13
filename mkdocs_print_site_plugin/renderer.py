@@ -20,7 +20,6 @@ class Renderer(object):
         mkdocs_config={},
         cover_page_template_path="",
         banner_template_path="",
-        insert_print_site_banner=True,
         print_page=None,
     ):
         """
@@ -30,7 +29,6 @@ class Renderer(object):
         self.mkdocs_config = mkdocs_config
         self.cover_page_template_path = cover_page_template_path
         self.banner_template_path = banner_template_path
-        self.insert_print_site_banner = insert_print_site_banner
         self.print_page = print_page
 
         self.items = []
@@ -59,7 +57,7 @@ class Renderer(object):
         if self.plugin_config.get("add_cover_page"):
             html += self._cover_page()
 
-        if self.insert_print_site_banner:
+        if self.plugin_config.get("add_print_site_banner"):
             html += self._print_site_banner()
 
         if self.plugin_config.get("add_table_of_contents"):
