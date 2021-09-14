@@ -24,17 +24,23 @@ plugins:
 nav:
     - Home: index.md
     - Options: options.md
-    - Customization:
-        - customization/print_button.md
-        - customization/pdf_button.md
-        - customization/cover_page.md
-        - customization/do_not_print.md
+    - How to guides:
+        - Export to PDF: how-to/export-PDF.md
+        - Export to HTML: how-to/export-HTML.md
+        - Add a print button: how-to/print_button.md
+        - Add a PDF button: how-to/pdf_button.md
+        - Add a cover page: how-to/cover_page.md
+        - Add a banner: how-to/banner.md
+        - Exclude content: how-to/do_not_print.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 
 theme:
     name: material
     custom_dir: docs/overrides
+    icon:
+        admonition:
+            example: fontawesome/solid/flask
     palette:
         - media: "(prefers-color-scheme: light)"
           scheme: default

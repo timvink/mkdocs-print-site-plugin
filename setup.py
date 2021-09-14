@@ -10,7 +10,7 @@ with open("README.md", "r", encoding="UTF-8") as f:
 setup(
     name="mkdocs-print-site-plugin",
     version="1.3.0",
-    description="MkDocs plugin that adds a page with all site pages, enabling printing to PDF for users.",
+    description="MkDocs plugin that combines all pages into one, allowing for easy export to PDF and standalone HTML.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="mkdocs plugin print pdf",
