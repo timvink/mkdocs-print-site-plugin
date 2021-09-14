@@ -24,7 +24,7 @@ plugins:
 nav:
     - Home: index.md
     - Options: options.md
-    - Customization: 
+    - Customization:
         - customization/print_button.md
         - customization/pdf_button.md
         - customization/cover_page.md
