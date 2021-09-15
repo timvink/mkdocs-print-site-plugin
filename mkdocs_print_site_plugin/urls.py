@@ -262,3 +262,14 @@ def fix_internal_links(page_html, page_url, directory_urls):
     page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
 
     return page_html
+
+
+def to_snake_case(text):
+    """
+    Convert string to snake_case.
+
+    Example:
+
+    'Hi there!' -> 'hi_there_'
+    """
+    return re.sub("\W+", "-", text).lower()

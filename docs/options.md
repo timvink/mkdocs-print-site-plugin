@@ -30,13 +30,13 @@ plugins:
 :   Default is `'Print Site'`. When `add_to_navigation` is set to `true` this setting controls the name of the print page in the navigation of the site. This setting is ignored when `add_to_navigation` is set to `false`.
 
 `add_table_of_contents`
-:   Default is `true`. Adds a table of contents section at the beginning of the print page (in print version, not HTML version).
+:   Default is `true`. Adds a table of contents section at the beginning of the print page (in print version, the HTML version has a different sidebar ToC).
 
 `toc_title`
-:   Default is `'Table of Contents'`. When `add_table_of_contents` is set to `true` this setting controls the name of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
+:   Default is `'Table of Contents'`. When `add_table_of_contents` is set to `true` this setting controls the name of the table of contents of the print version of the print page. This setting is ignored when `add_table_of_contents` is set to `false`.
 
 `toc_depth`
-:   Default is `3`. When `add_table_of_contents` is set to `true` this setting controls the depth of the table of contents. This setting is ignored when `add_table_of_contents` is set to `false`.
+:   Default is `3`. When `add_table_of_contents` is set to `true` this setting controls the depth of the table of contents in the print version of the print page. This setting is ignored when `add_table_of_contents` is set to `false`.
 
 `add_full_urls`
 :   Default is `false`. When printing a page, you cannot see the target of a link. This option adds the target url in parenthesis behind a link.
@@ -58,7 +58,7 @@ plugins:
 :   Default `""`. The path to a custom cover page template to use. See [Customizing the Cover Page](how-to/cover_page.md) for more info.
 
 `add_print_site_banner`
-:   Default `false`. When enabled, a banner is added to the top of the HTML print page, explaining to users the current page contains all site pages.
+:   Default `false`. When enabled, a banner is added to the top of the HTML print page, explaining to users the current page contains all site pages. See [Customizing the print site banner](how-to/banner.md) for more info.
 
 `print_site_banner_template`
 :   Default `""`. The path to a custom print site banner template to use. See [Customizing the print site banner](how-to/banner.md) for more info.

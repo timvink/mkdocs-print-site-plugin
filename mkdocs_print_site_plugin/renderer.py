@@ -3,7 +3,7 @@ import logging
 
 from mkdocs.structure.toc import AnchorLink, TableOfContents
 
-from mkdocs_print_site_plugin.urls import fix_internal_links, get_page_key
+from mkdocs_print_site_plugin.urls import fix_internal_links, get_page_key, to_snake_case
 from mkdocs_print_site_plugin.exclude import exclude
 
 logger = logging.getLogger("mkdocs.plugins")
@@ -32,6 +32,9 @@ class Renderer(object):
         self.print_page = print_page
 
         self.items = []
+
+    def _get_items(self):
+        return [i for i in self.items if not i == self.print_page]
 
     def write_combined(self):
         """
@@ -86,9 +89,9 @@ class Renderer(object):
                         item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
 
                 if item.is_section:
-                    item_html += "<h%s class='nav-section-title'>%s</h1>" % (
-                        min(6, section_depth + 1),
-                        item.title,
+                    item_html += (
+                        "<h%s class='nav-section-title' id='section-%s'>%s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a></h1>"  # noqa
+                        % (min(6, section_depth + 1), to_snake_case(item.title), item.title, to_snake_case(item.title))
                     )
                     item_html += get_html_from_items(item.children, dir_urls, excluded_pages, section_depth + 1)
                     # We also need to indicate the end of section page
@@ -98,7 +101,7 @@ class Renderer(object):
             return item_html
 
         html += get_html_from_items(
-            self.items,
+            self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
             excluded_pages=self.plugin_config.get("exclude", []),
         )
@@ -165,55 +168,32 @@ class Renderer(object):
         Generate a MkDocs a navigation sidebar.
 
         We want to generate one for the print page also, so we can export HTML.
-        Here we go over each page with a toc. Then we fix the anchor links.
 
-        See also https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
+        We'll generate a ToC with an entry for each page (the h1). A section will be level 1,
+        and we indent with the pages inside.
+
+        Reference: https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
         """
         toc = []
 
-        for item in self.items:
-            if hasattr(item, "toc"):
+        for item in self._get_items():
+            if item.is_page:
+                # Take the first item of the page's ToC
+                # Which will be the heading 1
+                p = item.toc.items[0]
                 page_key = get_page_key(item.url)
-                item_toc = item.toc
-                if hasattr(item_toc, "items"):
-                    for toc_link in item.toc.items:
-                        toc_link = update_toc_item(page_key, toc_link)
-                        toc += [toc_link]
 
-        # Make sure the sidebar ToC also respects
-        # the plugin's toc_depth parameter
-        toc = clear_children_up_to(self.plugin_config.get("toc_depth"), toc)
+                toc.append(AnchorLink(title=p.title, id=f"{page_key}-{p.id}", level=0))
+            if item.is_section:
+
+                section_link = AnchorLink(title=item.title, id=f"section-{to_snake_case(item.title)}", level=0)
+
+                subpages = [p for p in item.children if p.is_page]
+                for page in subpages:
+                    page_key = get_page_key(page.url)
+                    p = page.toc.items[0]
+                    section_link.children.append(AnchorLink(title=p.title, id=f"{page_key}-{p.id}", level=1))
+
+                toc.append(section_link)
 
         return TableOfContents(toc)
-
-
-def clear_children_up_to(depth, items):
-    """
-    Filters items in sidebar table of contents to a given depth.
-    """
-    for toc_item in items:
-        # note the -1 is there because of the hack on levels in update_toc_item()
-        if toc_item.level == depth - 1:
-            toc_item.children = []
-        else:
-            toc_item.children = clear_children_up_to(depth, toc_item.children)
-    return items
-
-
-def update_toc_item(page_key: str, toc_link: AnchorLink) -> AnchorLink:
-    """
-    Updates a AnchorItem to work on the print page.
-    """
-    # update the link to point to the anchor in print page instead of actual page
-    toc_link.id = f"{page_key}-{toc_link.id}"
-
-    # MkDocs-material parses the TOC and does not display level 1
-    # This is a small hack that will set all levels off by 1
-    # Will work just fine in base mkdocs theme also
-    toc_link.level = toc_link.level - 1
-
-    if len(toc_link.children) > 0:
-        for link in toc_link.children:
-            update_toc_item(page_key, link)
-
-    return toc_link
