@@ -9,7 +9,7 @@ from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
 
 from mkdocs_print_site_plugin.renderer import Renderer
-from mkdocs_print_site_plugin.utils import get_theme_name
+from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
 
 logger = logging.getLogger("mkdocs.plugins")
 logger.addFilter(warning_filter)
@@ -23,17 +23,17 @@ class PrintSitePlugin(BasePlugin):
     """
 
     config_scheme = (
-        ("add_to_navigation", config_options.Type(bool, default=True)),
+        ("add_to_navigation", config_options.Type(bool, default=False)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
         ("toc_title", config_options.Type(str, default="Table of Contents")),
-        ("toc_depth", config_options.Type(int, default=6)),
+        ("toc_depth", config_options.Type(int, default=3)),
         ("add_full_urls", config_options.Type(bool, default=False)),
-        ("enumerate_headings", config_options.Type(bool, default=False)),
-        ("enumerate_figures", config_options.Type(bool, default=False)),
+        ("enumerate_headings", config_options.Type(bool, default=True)),
+        ("enumerate_figures", config_options.Type(bool, default=True)),
         ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
-        ("add_print_site_banner", config_options.Type(bool, default=True)),
+        ("add_print_site_banner", config_options.Type(bool, default=False)),
         ("print_site_banner_template", config_options.Type(str, default="")),
         ("path_to_pdf", config_options.Type(str, default="")),
         ("enabled", config_options.Type(bool, default=True)),
@@ -147,6 +147,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Save the (order of) pages and sections in the navigation before adding the print page
         self.renderer.items = nav.items
+        self.all_pages_in_nav = flatten_nav(nav.items)
 
         # Optionally add the print page to the site navigation
         if self.config.get("add_to_navigation"):
@@ -172,12 +173,13 @@ class PrintSitePlugin(BasePlugin):
         # We need to validate that the first heading on each page is a h1
         # This is required for the print page table of contents and enumeration logic
         if self.config.get("add_table_of_contents") or self.config.get("enumerate_headings"):
-            match = re.search(r"\<h[0-6]", html)
-            if match:
-                if not match.group() == "<h1":
-                    msg = f"The page {page.title} ({page.file.src_path}) does not start with a level 1 heading."
-                    msg += "This is required for print page Table of Contents and/or enumeration of headings."
-                    raise AssertionError(msg)
+            if page in self.all_pages_in_nav:
+                match = re.search(r"\<h[0-6]", html)
+                if match:
+                    if not match.group() == "<h1":
+                        msg = f"The page {page.title} ({page.file.src_path}) does not start with a level 1 heading."
+                        msg += "This is required for print page Table of Contents and/or enumeration of headings."
+                        raise AssertionError(msg)
 
         # Link to the PDF version of the entire site on a page.
         if self.config.get("path_to_pdf") != "":
@@ -231,6 +233,8 @@ class PrintSitePlugin(BasePlugin):
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
+        # Generate a TOC sidebar for HTML version of print page
+        self.print_page.toc = self.renderer.get_toc_sidebar()
 
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
@@ -240,7 +244,8 @@ class PrintSitePlugin(BasePlugin):
         html = template.render(self.context)
 
         # Determine calls to required javascript functions
-        js_calls = ""
+        js_calls = "remove_material_navigation();"
+        js_calls += "remove_mkdocs_theme_navigation();"
         if self.config.get("add_table_of_contents"):
             js_calls += "generate_toc();"
 

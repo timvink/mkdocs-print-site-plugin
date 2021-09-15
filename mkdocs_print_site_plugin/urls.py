@@ -167,36 +167,22 @@ def fix_tabbed_content(page_html, page_key):
     <input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio">
     <label for="__tabbed_1_1">C</label>
 
-    we should change <input> id, and <label> for attribute, to contain the pagekey.
+    we should change:
+    - <input> id, and <label> for attribute, to contain the pagekey.
+    - <input> name, to make sure it's unique on print site
+
+    So basically:
+    <input checked="checked" id="{page_key}__tabbed_1_1" name="{page_key}__tabbed_1" type="radio">
+    <label for="{page_key}__tabbed_1_1">C</label>
     """
-    # Replace <input> name and id
-    href_regex = re.compile(
-        r"<input.*?id=\"([^\"]*?)\".*?name=\"([^\"]*?)\".*?>",
-        flags=re.IGNORECASE,
-    )
-    matches = re.finditer(href_regex, page_html)
-    for m in matches:
-        id_text = m.group(1)
-        match_text = m.group()
-        new_text = match_text.replace(id_text, page_key + "_" + id_text)
-        page_html = page_html.replace(match_text, new_text)
+    regex = re.compile(r"(\<input.*?name=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
-        name_text = m.group(2)
-        match_text = m.group()
-        new_text = match_text.replace(name_text, page_key + "_" + name_text)
-        page_html = page_html.replace(match_text, new_text)
+    regex = re.compile(r"(\<input.*?id=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
-    # Replace <label> for
-    href_regex = re.compile(
-        r"<label.*?for=\"([^\"]*?)\".*?>",
-        flags=re.IGNORECASE,
-    )
-    matches = re.finditer(href_regex, page_html)
-    for m in matches:
-        id_text = m.group(1)
-        match_text = m.group()
-        new_text = match_text.replace(id_text, page_key + "_" + id_text)
-        page_html = page_html.replace(match_text, new_text)
+    regex = re.compile(r"(\<label.*?for=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
     return page_html
 
@@ -267,12 +253,27 @@ def fix_internal_links(page_html, page_url, directory_urls):
     """
     page_key = get_page_key(page_url)
 
-    page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
-    page_html = update_anchor_ids(page_html, page_key)
-    page_html = fix_tabbed_content(page_html, page_key)
-    page_html = fix_image_src(page_html, page_url, directory_urls)
+    try:
+        page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
+        page_html = update_anchor_ids(page_html, page_key)
+        page_html = fix_tabbed_content(page_html, page_key)
+        page_html = fix_image_src(page_html, page_url, directory_urls)
+    except:
+        print(f"Could not fix page '{page_url}', please report an issue on github")
+        raise
 
     # Finally, wrap the entire page in a section with an anchor ID
     page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
 
     return page_html
+
+
+def to_snake_case(text):
+    """
+    Convert string to snake_case.
+
+    Example:
+
+    'Hi there!' -> 'hi_there_'
+    """
+    return re.sub("\W+", "-", text).lower()

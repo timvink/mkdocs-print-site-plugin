@@ -5,7 +5,8 @@ theme:
   custom_dir: docs/overrides
 
 plugins:
-  - print-site
+  - print-site:
+      add_to_navigation: true
 
 nav:
   - Home: index.md

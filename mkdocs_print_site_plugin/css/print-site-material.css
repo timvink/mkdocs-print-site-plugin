@@ -3,11 +3,6 @@ https://github.com/squidfunk/mkdocs-material */
 
 
 /* Table of Contents styling */
-.print-page-toc-title {
-    padding-bottom: 0em;
-    margin-bottom: 0;
-}
-
 #print-site-page ul.toc-section-line-border { 
     border-left: 5px solid var(--md-default-fg-color--lightest);
 }

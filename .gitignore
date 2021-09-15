@@ -1,6 +1,10 @@
 
 docs/assets/*.pdf
+*.pdf
 
+# nodejs stuff
+package-lock.json
+package.json
 
 .vscode/
 

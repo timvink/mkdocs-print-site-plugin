@@ -1,0 +1,6 @@
+site_name: Test
+
+plugins:
+    - print-site:
+        toc_depth: 1
+  

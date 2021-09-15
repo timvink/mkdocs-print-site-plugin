@@ -1,0 +1,6 @@
+site_name: Test
+
+plugins:
+    - print-site:
+        enumerate_headings: true
+  

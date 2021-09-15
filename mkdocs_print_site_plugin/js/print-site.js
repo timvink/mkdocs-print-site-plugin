@@ -121,3 +121,29 @@ function generate_toc() {
   document.querySelectorAll("#print-page-toc nav")[0].insertAdjacentHTML("beforeend", ToC);
 
 }
+
+
+function remove_material_navigation() {
+
+  // Remove left sidebar on print page
+  remove_element_by_classname('md-sidebar--primary')
+  // Remove tabs navigation on print page
+  remove_element_by_classname('md-tabs')
+  // Remove search
+  remove_element_by_classname('md-search')
+
+}
+
+function remove_mkdocs_theme_navigation() {
+
+  // Remove top navigation bar
+  remove_element_by_classname('navbar')
+}
+
+
+function remove_element_by_classname(class_name) {
+  var el = document.getElementsByClassName(class_name);
+  if( el.length > 0) {
+    el[0].style.display = "none"
+  }
+}

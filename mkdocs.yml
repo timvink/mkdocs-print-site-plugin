@@ -1,4 +1,4 @@
-site_name: mkdocs-print-site-plugin Docs
+site_name: Documentation mkdocs-print-site-plugin
 repo_url: https://github.com/timvink/mkdocs-print-site-plugin
 site_url: https://timvink.github.io/mkdocs-print-site-plugin/
 site_description: MkDocs Plugin allowing your site visitors to *File > Print > Save as PDF* the entire site.
@@ -10,6 +10,7 @@ use_directory_urls: false
 plugins:
     - search
     - print-site:
+        add_to_navigation: true
         add_full_urls: false
         add_table_of_contents: true
         toc_title: "Table of Contents"
@@ -23,17 +24,23 @@ plugins:
 nav:
     - Home: index.md
     - Options: options.md
-    - Customization: 
-        - customization/print_button.md
-        - customization/pdf_button.md
-        - customization/cover_page.md
-        - customization/do_not_print.md
+    - How to guides:
+        - Export to PDF: how-to/export-PDF.md
+        - Export to HTML: how-to/export-HTML.md
+        - Add a print button: how-to/print_button.md
+        - Add a PDF button: how-to/pdf_button.md
+        - Add a cover page: how-to/cover_page.md
+        - Add a banner: how-to/banner.md
+        - Exclude content: how-to/do_not_print.md
     - Demo Content: demo_content.md
     - Contributing: contributing.md
 
 theme:
     name: material
     custom_dir: docs/overrides
+    icon:
+        admonition:
+            example: fontawesome/solid/flask
     palette:
         - media: "(prefers-color-scheme: light)"
           scheme: default
