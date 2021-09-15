@@ -192,6 +192,9 @@ div.print-site-add-full-url section.print-page a[href^="http"]::after{
 #print-site-page h6:target {
     animation: highlight 1.5s ease;
 }
+#print-site-page .print-page:target h1 {
+    animation: highlight 1.5s ease;
+}
 @keyframes highlight {
     from { color: orange; }
     to { color: none; }

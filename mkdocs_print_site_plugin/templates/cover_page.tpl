@@ -37,7 +37,7 @@
         <td>{{ config.copyright }}</td>
     </tr>
     {% endif %}
-</dl>
+
 </table>
 
 

@@ -178,12 +178,11 @@ class Renderer(object):
 
         for item in self._get_items():
             if item.is_page:
-                # Take the first item of the page's ToC
-                # Which will be the heading 1
-                p = item.toc.items[0]
                 page_key = get_page_key(item.url)
-
-                toc.append(AnchorLink(title=p.title, id=f"{page_key}-{p.id}", level=0))
+                # navigate to top of page if page is homepage
+                if page_key == "index":
+                    page_key = ""
+                toc.append(AnchorLink(title=item.title, id=f"{page_key}", level=0))
             if item.is_section:
 
                 section_link = AnchorLink(title=item.title, id=f"section-{to_snake_case(item.title)}", level=0)
@@ -191,8 +190,7 @@ class Renderer(object):
                 subpages = [p for p in item.children if p.is_page]
                 for page in subpages:
                     page_key = get_page_key(page.url)
-                    p = page.toc.items[0]
-                    section_link.children.append(AnchorLink(title=p.title, id=f"{page_key}-{p.id}", level=1))
+                    section_link.children.append(AnchorLink(title=page.title, id=f"{page_key}", level=1))
 
                 toc.append(section_link)
 
