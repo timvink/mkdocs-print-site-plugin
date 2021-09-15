@@ -1,13 +1,14 @@
 # Adding a print button
 
-You might want to customize your site to include a 'print' button on every page (like the one in the right corner of this page 👆)
+You might want to customize your site to include a 'print' button on every page that will lead to the print page. See the example in the top right corner of this page 👆.
 
-MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your-docs/#using-the-theme-custom_dir), an easy way to override parts of a theme.
-You can use `page.url_to_print_page` to get the link to the site print page.
+MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your-docs/#using-the-theme-custom_dir), an easy way to override parts of a theme. That will allow you to add a button to the top of every page.
+
+This plugin adds to the context a `page.url_to_print_page` which contains the relative link from a page to the print page. You can use `page.url_to_print_page` when customizing a theme:
 
 ## Adding a print button to mkdocs-material theme
 
-In `mkdocs-material` theme (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)), you can create a file for overrides and point to it your `mkdocs.yml`. You might also want to disable adding the print page to the navigation when you already have a button with the link.
+In the [mkdocs-material](https://squidfunk.github.io/mkdocs-material) theme you can create an override for `main.html` (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)).
 
 _Example_:
 
@@ -18,9 +19,8 @@ _Example_:
     name: material
     custom_dir: docs/overrides
 
-    plugin:
-        - print-site:
-            - add_to_navigation: false
+    plugins:
+        - print-site
     ```
 
 === "docs/overrides/main.html"
@@ -43,7 +43,7 @@ _Example_:
 
 ## Adding a print button to mkdocs theme
 
-You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by creating a file for overrides and pointing to it your `mkdocs.yml`. You might also want to disable adding the print page to the navigation when you already have a button with the link.
+You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by overriding `main.html`.
 
 _Example_:
 
@@ -54,9 +54,8 @@ _Example_:
         name: mkdocs
         custom_dir: docs/overrides
 
-    plugin:
-        - print-site:
-            - add_to_navigation: false
+    plugins:
+        - print-site
     ```
 
 === "docs/overrides/main.html"

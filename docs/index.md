@@ -33,5 +33,5 @@ plugins:
 ## Usage
 
 - Navigate to `/print_page/` or `print_page.html`
-- Export to standalone HTML (see [export to HTML](how-to/export-HTML.html))
-- Export to PDF using your browser using *File > Print > Save as PDF*  (see [export to PDF](how-to/export-PDF.html))
+- Export to standalone HTML (see [export to HTML](how-to/export-HTML.md))
+- Export to PDF using your browser using *File > Print > Save as PDF*  (see [export to PDF](how-to/export-PDF.md))

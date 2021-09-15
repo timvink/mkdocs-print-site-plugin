@@ -15,7 +15,7 @@ We can use [nodejs](https://nodejs.org/en/) together with the [puppeteer](https:
 - In a separate terminal window, you can now run the PDF export with `url` (to your print page), `pdfPath` (name of output file) and `title` arguments:
 
 ```shell
-node exportpdf.js http://localhost:8000/print_page.html out.pdf 'your website name'
+node exportpdf.js http://localhost:8000/print_page.html out.pdf 'title'
 ```
 
 ??? example "export_to_pdf.js"

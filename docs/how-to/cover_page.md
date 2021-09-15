@@ -1,8 +1,8 @@
 # Customize the cover page
 
-When the `add_cover_page` option is set to true, `mkdocs-print-site-plugin` will generate a cover page when printing. This cover page is quite basic, and you might want to customize it.
+By default the `add_cover_page` option is set to `true`, which will add a cover page to the print page. You might want to customize it more to your liking.
 
-You can do that by specifying the path to a custom cover page template in the `mkdocs.yml` file. This file should be a standard [jinja2 template](https://jinja.palletsprojects.com/en/2.11.x/templates/) where you can combine HTML and jinja2 variables such as the information specified in `mkdocs.yml` (see [mkdocs project information](https://www.mkdocs.org/user-guide/configuration/#project-information)).
+You can do that by specifying the path to a custom cover page template in the `mkdocs.yml` file. This file should be a standard [jinja2 template](https://jinja.palletsprojects.com/en/2.11.x/templates/) where you can combine HTML and jinja2 variables. The information specified in `mkdocs.yml` will already by available as jinja2 variables (see [mkdocs project information](https://www.mkdocs.org/user-guide/configuration/#project-information)).
 
 _Example_:
 
@@ -24,7 +24,7 @@ _Example_:
     <h2>This is my custom print cover page</h2>
     ```
 
-As an example, have a look at the default [cover_page.tpl](https://github.com/timvink/mkdocs-print-site-plugin/tree/master/mkdocs_print_site_plugin/templates/cover_page.tpl).
+To get you started have a look at the default [cover_page.tpl](https://github.com/timvink/mkdocs-print-site-plugin/tree/master/mkdocs_print_site_plugin/templates/cover_page.tpl).
 
 ## Adding images
 
@@ -41,11 +41,11 @@ _Example_:
     <img src="/assets/img/example.png" />
     ```
 
-For a full example have a look at this [custom cover page with an image](https://github.com/timvink/mkdocs-print-site-plugin/blob/master/tests/fixtures/projects/with_markdown_ext/other_cover_page.tpl).
+For a full working example have a look at this [custom cover page with an image](https://github.com/timvink/mkdocs-print-site-plugin/blob/master/tests/fixtures/projects/with_markdown_ext/other_cover_page.tpl).
 
-## Adding extra content
+## Adding configurable content
 
-You might want to add some content to your cover page that's not yet specified in your `mkdocs.yml` file. Of course you could just hard-code it in your custom template file, but you could also make use of MkDocs's [extra context](https://www.mkdocs.org/user-guide/custom-themes/#extra-context) feature, allowing you to use `{{ config.extra.<your variable> }}`
+You might want to add some content to your cover page that's not yet specified in your `mkdocs.yml` file. Of course you could just hard-code it in your custom template file, but you could also make use of MkDocs's [extra context](https://www.mkdocs.org/user-guide/custom-themes/#extra-context) feature, allowing you to use custom variables from your config file with `{{ config.extra.<your variable> }}`.
 
 _Example_:
 
@@ -72,7 +72,7 @@ _Example_:
 
 ## Change the styling
 
-You'll likely also want to change the styling to your liking. You can add your own CSS file using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option from MkDocs. `mkdocs-print-site-plugin` wraps the cover page in a `<section>` with id `print-site-cover-page`. You should use this in your CSS to ensure not affecting other pages.
+You'll likely also want to change the styling of the cover page to your liking. You can add your own CSS file using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option from MkDocs. `mkdocs-print-site-plugin` wraps the cover page in a `<section id="print-site-cover-page">`. You should use this in your CSS to ensure not affecting other pages.
 
 _Example_:
 

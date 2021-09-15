@@ -2,5 +2,5 @@
     <em>This box will disappear when printing</em>
     <span style="float: right"><a href="https://timvink.github.io/mkdocs-print-site-plugin/">mkdocs-print-site-plugin</a></span>
 </p>
-<p>This page combines all site pages and applies print and PDF friendly styling. Print or export to PDF using <b>File > Print > Save as PDF</b>.</p>
-<p>For creating PDFs, make sure to use the browser's print and save-as-pdf function instead of the system dialog.</p>
+<p>This page has combined all site pages into one. You can export to PDF using <b>File > Print > Save as PDF</b>.</p>
+<p>See also [export to PDF](https://timvink.github.io/mkdocs-print-site-plugin/how-to/export-PDF.html) and [export to standalone HTML](https://timvink.github.io/mkdocs-print-site-plugin/how-to/export-HTML.html).</p>

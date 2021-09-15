@@ -1,18 +1,19 @@
 # Adding a PDF button
 
-You might want to make downloading a PDF even easier for your users. You could include a 'PDF' button on every page (like the one in the right corner of this page 👆)
+Having users create a PDF of your website requires them to navigate to the print page and *File > Print > Save as PDF* (see [export to PDF](export-PDF.md)). You can make downloading a PDF version of your website even easier for your users by including a 'PDF' button on every page (like the one in the right corner of this page 👆).
 
-MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your-docs/#using-the-theme-custom_dir), an easy way to override parts of a theme.
-You can use `page.url_to_pdf` to get the link to site PDF from a page.
+MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your-docs/#using-the-theme-custom_dir), an easy way to override parts of a theme. That will allow you to add a button to the top of every page.
+
+This plugin adds to the context a `page.url_to_print_page` which contains the relative link from a page to the print page. You can use `page.url_to_print_page` when customizing a theme:
 
 !!! info
-    While it might be easier for your users, using this option means you need to manually create the PDF everytime you make a change to your website.
+    While it might be easier for your users, using this option means you need to re-create the PDF everytime you make a change to your website.
 
     If you use this option and you are using version control like git, you might want to also [gitignore](https://git-scm.com/docs/gitignore) the PDF file.
 
 ## Adding a PDF button to mkdocs-material theme
 
-In `mkdocs-material` theme (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)), you can create a file for overrides and point to it your `mkdocs.yml`. You might also want to disable adding the print page to the navigation when you already have a button with the link.
+In the [mkdocs-material](https://squidfunk.github.io/mkdocs-material) theme you can create an override for `main.html` (see [customization](https://squidfunk.github.io/mkdocs-material/customization/#overriding-template-blocks)).
 
 _Example_:
 
@@ -23,10 +24,9 @@ _Example_:
     name: material
     custom_dir: docs/overrides
 
-    plugin:
+    plugins:
         - print-site:
             - path_to_pdf: "assets/the_name_of_your_file.pdf"
-            - add_to_navigation: false
     ```
 
 === "docs/overrides/main.html"
@@ -49,7 +49,7 @@ _Example_:
 
 ## Adding a print button to mkdocs theme
 
-You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by creating a file for overrides and pointing to it your `mkdocs.yml`. You might also want to disable adding the print page to the navigation when you already have a button with the link.
+You can also [customize](https://www.mkdocs.org/user-guide/custom-themes/#creating-a-custom-theme) the base mkdocs theme, by overriding `main.html`.
 
 _Example_:
 
@@ -60,10 +60,9 @@ _Example_:
         name: mkdocs
         custom_dir: docs/overrides
 
-    plugin:
+    plugins:
         - print-site:
             - path_to_pdf: "assets/the_name_of_your_file.pdf"
-            - add_to_navigation: false
     ```
 
 === "docs/overrides/main.html"
