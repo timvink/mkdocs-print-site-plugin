@@ -175,14 +175,14 @@ def fix_tabbed_content(page_html, page_key):
     <input checked="checked" id="{page_key}__tabbed_1_1" name="{page_key}__tabbed_1" type="radio">
     <label for="{page_key}__tabbed_1_1">C</label>
     """
-    regex = re.compile(r"(<input.*?name=\")([^\"]*?)(\".*?>)", flags=re.I)
-    page_html = re.sub(regex, fr"\1{page_key}-\2\3", page_html)
+    regex = re.compile(r"(\<input.*?name=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
-    regex = re.compile(r"(<input.*?id=\")([^\"]*?)(\".*?>)", flags=re.I)
-    page_html = re.sub(regex, fr"\1{page_key}-\2\3", page_html)
+    regex = re.compile(r"(\<input.*?id=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
-    regex = re.compile(r"(<label.*?for=\")([^\"]*?)(\".*?>)", flags=re.I)
-    page_html = re.sub(regex, fr"\1{page_key}-\2\3", page_html)
+    regex = re.compile(r"(\<label.*?for=\")([^\"]*?)(\".*?\>)", re.I)
+    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
     return page_html
 
@@ -253,10 +253,14 @@ def fix_internal_links(page_html, page_url, directory_urls):
     """
     page_key = get_page_key(page_url)
 
-    page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
-    page_html = update_anchor_ids(page_html, page_key)
-    page_html = fix_tabbed_content(page_html, page_key)
-    page_html = fix_image_src(page_html, page_url, directory_urls)
+    try:
+        page_html = fix_href_links(page_html, page_key, page_url, directory_urls)
+        page_html = update_anchor_ids(page_html, page_key)
+        page_html = fix_tabbed_content(page_html, page_key)
+        page_html = fix_image_src(page_html, page_url, directory_urls)
+    except:
+        print(f"Could not fix page '{page_url}', please report an issue on github")
+        raise
 
     # Finally, wrap the entire page in a section with an anchor ID
     page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
