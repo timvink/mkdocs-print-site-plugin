@@ -24,3 +24,17 @@ def get_theme_name(config) -> str:
         return "mkdocs"
     else:
         return name
+
+
+def flatten_nav(items):
+    """
+    Create a flat list of pages from a nested navigation.
+    """
+    pages = []
+
+    for item in items:
+        if item.is_page:
+            pages.append(item)
+        if item.is_section:
+            pages.append(flatten_nav(item.children))
+    return pages

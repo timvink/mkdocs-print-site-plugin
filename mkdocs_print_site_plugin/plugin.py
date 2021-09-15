@@ -9,7 +9,7 @@ from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
 
 from mkdocs_print_site_plugin.renderer import Renderer
-from mkdocs_print_site_plugin.utils import get_theme_name
+from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
 
 logger = logging.getLogger("mkdocs.plugins")
 logger.addFilter(warning_filter)
@@ -147,6 +147,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Save the (order of) pages and sections in the navigation before adding the print page
         self.renderer.items = nav.items
+        self.all_pages_in_nav = flatten_nav(nav.items)
 
         # Optionally add the print page to the site navigation
         if self.config.get("add_to_navigation"):
@@ -172,12 +173,13 @@ class PrintSitePlugin(BasePlugin):
         # We need to validate that the first heading on each page is a h1
         # This is required for the print page table of contents and enumeration logic
         if self.config.get("add_table_of_contents") or self.config.get("enumerate_headings"):
-            match = re.search(r"\<h[0-6]", html)
-            if match:
-                if not match.group() == "<h1":
-                    msg = f"The page {page.title} ({page.file.src_path}) does not start with a level 1 heading."
-                    msg += "This is required for print page Table of Contents and/or enumeration of headings."
-                    raise AssertionError(msg)
+            if page in self.all_pages_in_nav:
+                match = re.search(r"\<h[0-6]", html)
+                if match:
+                    if not match.group() == "<h1":
+                        msg = f"The page {page.title} ({page.file.src_path}) does not start with a level 1 heading."
+                        msg += "This is required for print page Table of Contents and/or enumeration of headings."
+                        raise AssertionError(msg)
 
         # Link to the PDF version of the entire site on a page.
         if self.config.get("path_to_pdf") != "":
