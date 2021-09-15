@@ -89,9 +89,16 @@ class Renderer(object):
                         item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
 
                 if item.is_section:
-                    item_html += (
-                        "<h%s class='nav-section-title' id='section-%s'>%s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a></h1>"  # noqa
-                        % (min(6, section_depth + 1), to_snake_case(item.title), item.title, to_snake_case(item.title))
+                    item_html += """
+                        <h%s class='nav-section-title' id='section-%s'>
+                            %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
+                        </h%s>
+                        """ % (
+                        min(6, section_depth + 1),
+                        to_snake_case(item.title),
+                        item.title,
+                        to_snake_case(item.title),
+                        min(6, section_depth + 1),
                     )
                     item_html += get_html_from_items(item.children, dir_urls, excluded_pages, section_depth + 1)
                     # We also need to indicate the end of section page
