@@ -4,6 +4,8 @@ After enabling the `print-site` plugin in your `mkdocs.yml`, exporting to PDF is
 
 If you want to automatically create PDFs of your mkdocs website, you can automate the process using a headless chrome plugin.
 
+If you need more control over the PDF layout, I recommend the [mkdocs-with-pdf](https://github.com/orzih/mkdocs-with-pdf) plugin.
+
 ## Automated export using nodejs
 
 We can use [nodejs](https://nodejs.org/en/) together with the [puppeteer](https://github.com/puppeteer/puppeteer) headless chrome node.js package:
