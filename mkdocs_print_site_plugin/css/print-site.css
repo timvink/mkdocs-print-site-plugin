@@ -379,15 +379,3 @@ For now, we added them for use only in the table of contents */
 
 }
 
-
-/* @page { */
-
-    /* 
-        Note this CSS file is added to all MkDocs pages
-        So this @page logic will affect print of all pages
-    */
-
-    /* Prevent image page overflow */
-    /* img { max-width:500px !important; } */
-
-/* } */

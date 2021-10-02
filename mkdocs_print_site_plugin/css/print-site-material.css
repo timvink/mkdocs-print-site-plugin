@@ -18,17 +18,14 @@ https://github.com/squidfunk/mkdocs-material */
     #print-site-page td {
         word-wrap: break-word;
     }
+
 }
 
 @page {
 
-    /* 
-        Note this CSS file is added to all MkDocs pages
-        So this @page logic will affect print of all pages
-    */
-
-    size: a4 portrait;
-    margin: 15mm 10mm 25mm 10mm;
+    size: A4 portrait;
+    margin: 4em 1.5em 4em 1.5em;
+    padding: 0em 0em 0em 0em;
     counter-increment: page;
 
     @bottom-center {
