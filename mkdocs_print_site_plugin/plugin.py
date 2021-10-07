@@ -187,7 +187,7 @@ class PrintSitePlugin(BasePlugin):
 
         return html
 
-    def on_page_context(self, context, page, config, nav):
+    def on_page_context(self, context, page, config, nav, **kwargs):
         """
         The page_context event is called after the context for a page is created.
 
@@ -197,16 +197,27 @@ class PrintSitePlugin(BasePlugin):
         if not self.config.get("enabled"):
             return
 
+        # Save relative link to print page
+        # This can be used to customize a theme and add a print button to each page
+        page.url_to_print_page = self.print_file.url_relative_to(page.file)
+
+
+    def on_template_context(self, context, template_name, config, **kwargs):
+        """
+        The template_context event is called immediately after the context is created 
+        for the subject template and can be used to alter the context for that specific template only.
+
+        See https://www.mkdocs.org/dev-guide/plugins/#on_template_context
+        """
+        if not self.config.get("enabled"):
+            return
         # Save the page context
         # We'll use the same context of the last rendered page
         # And apply it to the print page as well (in on_post_build event)
         self.context = context
 
-        # Save relative link to print page
-        # This can be used to customize a theme and add a print button to each page
-        page.url_to_print_page = self.print_file.url_relative_to(page.file)
 
-    def on_post_build(self, config):
+    def on_post_build(self, config, **kwargs):
         """
         The post_build event does not alter any variables. Use this event to call post-build scripts.
 
