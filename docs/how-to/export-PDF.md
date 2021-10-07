@@ -6,7 +6,11 @@ If you want to automatically create PDFs of your mkdocs website, you can automat
 
 If you need more control over the PDF layout, I recommend the [mkdocs-with-pdf](https://github.com/orzih/mkdocs-with-pdf) plugin.
 
-## Automated export using nodejs
+??? warning "Avoid creating PDFs with Firefox"
+    Firefox has some issues with print margins cutting of content, and anchors links not working properly.
+    For more details see [mkdocs-print-site-plugin#56](https://github.com/timvink/mkdocs-print-site-plugin/issues/56)
+
+## Automated export using nodejs and chrome
 
 We can use [nodejs](https://nodejs.org/en/) together with the [puppeteer](https://github.com/puppeteer/puppeteer) headless chrome node.js package:
 
@@ -76,3 +80,4 @@ node exportpdf.js http://localhost:8000/print_page.html out.pdf 'title'
         await browser.close();
     })();
     ```
+
