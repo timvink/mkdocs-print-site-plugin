@@ -1,6 +1,7 @@
 import os
 import re
 import logging
+import sys
 
 from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
@@ -61,6 +62,11 @@ class PrintSitePlugin(BasePlugin):
             msg = "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin,"
             msg += "to ensure the print page has any changes other plugins make."
             msg += "Please update the 'plugins:' section in your mkdocs.yml"
+            logger.warning(msg)
+
+        if "--dirtyreload" in sys.argv:
+            msg = "[mkdocs-print-site] Note the 'print-site' page does render all pages "
+            msg += "when using the --dirtyreload option."
             logger.warning(msg)
 
         # Get abs path to cover_page_template
