@@ -36,5 +36,5 @@ def flatten_nav(items):
         if item.is_page:
             pages.append(item)
         if item.is_section:
-            pages.append(flatten_nav(item.children))
+            pages += flatten_nav(item.children)
     return pages
