@@ -8,6 +8,7 @@ from mkdocs.config import config_options
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
 from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
+from mkdocs.exceptions import PluginError
 
 from mkdocs_print_site_plugin.renderer import Renderer
 from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
@@ -139,6 +140,11 @@ class PrintSitePlugin(BasePlugin):
             print_page=self.print_page,
         )
 
+        # Tracker
+        # to see if context has been extracted from 
+        # template context
+        self.context = {}
+
         return config
 
     def on_nav(self, nav, config, files, **kwargs):
@@ -217,10 +223,23 @@ class PrintSitePlugin(BasePlugin):
         """
         if not self.config.get("enabled"):
             return
+        
         # Save the page context
         # We'll use the same context of the last rendered page
         # And apply it to the print page as well (in on_post_build event)
-        self.context = context
+
+
+        
+        # Note a theme can have multiple templates
+        # Found a bug where in the mkdocs theme, 
+        # the "sitemap.xml" static template
+        # has incorrect 'extra_css' and 'extra_js' paths
+        # leading to breaking the print page 
+        # at random (when sitemap.xml was rendered last)
+        # we're assuming here all templates have a 404.html template
+        # print(f"\nName: {template_name}\nContext: {context.get('extra_css')}")
+        if template_name == "404.html":
+            self.context = context
 
 
     def on_post_build(self, config, **kwargs):
@@ -231,6 +250,12 @@ class PrintSitePlugin(BasePlugin):
         """
         if not self.config.get("enabled"):
             return
+
+        if len(self.context) == 0:
+            msg = "Could not find a template context.\n"
+            msg += "Report an issue at https://github.com/timvink/mkdocs-print-site-plugin\n"
+            msg += f"And mention the template you're using: {get_theme_name(config)}"
+            raise PluginError(msg)
 
         # Add print-site.js
         js_output_base_path = os.path.join(config["site_dir"], "js")
