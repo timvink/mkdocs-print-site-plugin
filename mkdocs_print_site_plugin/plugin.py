@@ -38,6 +38,7 @@ class PrintSitePlugin(BasePlugin):
         ("add_print_site_banner", config_options.Type(bool, default=False)),
         ("print_site_banner_template", config_options.Type(str, default="")),
         ("path_to_pdf", config_options.Type(str, default="")),
+        ("include_css", config_options.Type(bool, default=True)),
         ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
     )
@@ -106,16 +107,17 @@ class PrintSitePlugin(BasePlugin):
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
 
         # Add pointer to theme specific css files
-        file = "print-site-%s.css" % get_theme_name(config)
-        if file in os.listdir(os.path.join(HERE, "css")):
-            config["extra_css"] = ["css/%s" % file] + config["extra_css"]
-        else:
-            msg = f"[mkdocs-print-site] Theme '{get_theme_name(config)}' not yet supported\n"
-            msg += "which means print margins and page breaks might be off. Feel free to open an issue!"
-            logger.warning(msg)
+        if self.config.get('include_css'):
+            file = "print-site-%s.css" % get_theme_name(config)
+            if file in os.listdir(os.path.join(HERE, "css")):
+                config["extra_css"] = ["css/%s" % file] + config["extra_css"]
+            else:
+                msg = f"[mkdocs-print-site] Theme '{get_theme_name(config)}' not yet supported\n"
+                msg += "which means print margins and page breaks might be off. Feel free to open an issue!"
+                logger.warning(msg)
 
-        # Add pointer to print-site css files
-        config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
+            # Add pointer to print-site css files
+            config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
 
         # Create MkDocs Page and File instances
         self.print_file = File(
@@ -262,16 +264,17 @@ class PrintSitePlugin(BasePlugin):
         js_file_path = os.path.join(js_output_base_path, "print-site.js")
         copy_file(os.path.join(os.path.join(HERE, "js"), "print-site.js"), js_file_path)
 
-        # Add print-site.css
-        css_output_base_path = os.path.join(config["site_dir"], "css")
-        css_file_path = os.path.join(css_output_base_path, "print-site.css")
-        copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
+        if self.config.get('include_css'):        
+            # Add print-site.css
+            css_output_base_path = os.path.join(config["site_dir"], "css")
+            css_file_path = os.path.join(css_output_base_path, "print-site.css")
+            copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
 
-        # Add theme CSS file
-        css_file = "print-site-%s.css" % get_theme_name(config)
-        if css_file in os.listdir(os.path.join(HERE, "css")):
-            css_file_path = os.path.join(css_output_base_path, css_file)
-            copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
+            # Add theme CSS file        
+            css_file = "print-site-%s.css" % get_theme_name(config)
+            if css_file in os.listdir(os.path.join(HERE, "css")):
+                css_file_path = os.path.join(css_output_base_path, css_file)
+                copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
