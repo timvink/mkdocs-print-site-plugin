@@ -8,3 +8,4 @@ click
 mkdocs-git-revision-date-localized-plugin
 mkdocs-windmill
 mkdocs-img2fig-plugin
+mkdocs-charts-plugin
