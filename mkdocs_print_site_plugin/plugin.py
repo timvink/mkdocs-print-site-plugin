@@ -285,6 +285,17 @@ class PrintSitePlugin(BasePlugin):
         # Render the theme template for the print page
         html = template.render(self.context)
 
+        # Compatiblity with mkdocs-chart-plugin
+        # As this plugin adds some javascript to every page
+        # It should be included in the print site also
+        if config.get('plugins',{}).get('charts'):
+            html = (config
+                .get('plugins',{})
+                .get('charts')
+                .add_javascript_variables(html, self.print_page, config)
+            )
+
+
         # Determine calls to required javascript functions
         js_calls = "remove_material_navigation();"
         js_calls += "remove_mkdocs_theme_navigation();"
