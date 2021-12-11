@@ -4,6 +4,7 @@ pyflakes
 pytest
 pytest-cov
 click
+# docs
 mkdocs-git-revision-date-localized-plugin
 mkdocs-windmill
 mkdocs-img2fig-plugin
