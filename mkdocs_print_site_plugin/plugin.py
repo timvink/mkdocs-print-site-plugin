@@ -67,7 +67,9 @@ class PrintSitePlugin(BasePlugin):
             logger.warning(msg)
 
         if "--dirtyreload" in sys.argv:
-            msg = "[mkdocs-print-site] Note the 'print-site' page does render all pages "
+            msg = (
+                "[mkdocs-print-site] Note the 'print-site' page does render all pages "
+            )
             msg += "when using the --dirtyreload option."
             logger.warning(msg)
 
@@ -75,7 +77,9 @@ class PrintSitePlugin(BasePlugin):
         self.cover_page_template_path = ""
         if self.config.get("add_cover_page"):
             if self.config.get("cover_page_template") == "":
-                self.cover_page_template_path = os.path.join(HERE, "templates", "cover_page.tpl")
+                self.cover_page_template_path = os.path.join(
+                    HERE, "templates", "cover_page.tpl"
+                )
             else:
                 self.cover_page_template_path = os.path.join(
                     os.path.dirname(config.get("config_file_path")),
@@ -85,13 +89,17 @@ class PrintSitePlugin(BasePlugin):
                 msg = "[print-site-plugin]: Path specified in 'cover_page_template' not found."
                 msg += "\nMake sure to use the URL relative to your mkdocs.yml file."
                 logger.warning(msg)
-                raise FileNotFoundError("File not found: %s" % self.cover_page_template_path)
+                raise FileNotFoundError(
+                    "File not found: %s" % self.cover_page_template_path
+                )
 
         # Get abs path to print_site_banner_template
         self.banner_template_path = ""
         if self.config.get("add_print_site_banner"):
             if self.config.get("print_site_banner_template") == "":
-                self.banner_template_path = os.path.join(HERE, "templates", "print_site_banner.tpl")
+                self.banner_template_path = os.path.join(
+                    HERE, "templates", "print_site_banner.tpl"
+                )
             else:
                 self.banner_template_path = os.path.join(
                     os.path.dirname(config.get("config_file_path")),
@@ -101,13 +109,15 @@ class PrintSitePlugin(BasePlugin):
                 msg = "[print-site-plugin]: Path specified in 'print_site_banner_template' not found."
                 msg += "\nMake sure to use the URL relative to your mkdocs.yml file."
                 logger.warning(msg)
-                raise FileNotFoundError("File not found: %s" % self.banner_template_path)
+                raise FileNotFoundError(
+                    "File not found: %s" % self.banner_template_path
+                )
 
         # Add pointer to print-site javascript
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
 
         # Add pointer to theme specific css files
-        if self.config.get('include_css'):
+        if self.config.get("include_css"):
             file = "print-site-%s.css" % get_theme_name(config)
             if file in os.listdir(os.path.join(HERE, "css")):
                 config["extra_css"] = ["css/%s" % file] + config["extra_css"]
@@ -143,7 +153,7 @@ class PrintSitePlugin(BasePlugin):
         )
 
         # Tracker
-        # to see if context has been extracted from 
+        # to see if context has been extracted from
         # template context
         self.context = {}
 
@@ -186,7 +196,9 @@ class PrintSitePlugin(BasePlugin):
 
         # We need to validate that the first heading on each page is a h1
         # This is required for the print page table of contents and enumeration logic
-        if self.config.get("add_table_of_contents") or self.config.get("enumerate_headings"):
+        if self.config.get("add_table_of_contents") or self.config.get(
+            "enumerate_headings"
+        ):
             if page in self.all_pages_in_nav:
                 match = re.search(r"\<h[0-6]", html)
                 if match:
@@ -197,7 +209,9 @@ class PrintSitePlugin(BasePlugin):
 
         # Link to the PDF version of the entire site on a page.
         if self.config.get("path_to_pdf") != "":
-            page.url_to_pdf = get_relative_url(self.config.get("path_to_pdf"), page.file.url)
+            page.url_to_pdf = get_relative_url(
+                self.config.get("path_to_pdf"), page.file.url
+            )
 
         return html
 
@@ -215,34 +229,30 @@ class PrintSitePlugin(BasePlugin):
         # This can be used to customize a theme and add a print button to each page
         page.url_to_print_page = self.print_file.url_relative_to(page.file)
 
-
     def on_template_context(self, context, template_name, config, **kwargs):
         """
-        The template_context event is called immediately after the context is created 
+        The template_context event is called immediately after the context is created
         for the subject template and can be used to alter the context for that specific template only.
 
         See https://www.mkdocs.org/dev-guide/plugins/#on_template_context
         """
         if not self.config.get("enabled"):
             return
-        
+
         # Save the page context
         # We'll use the same context of the last rendered page
         # And apply it to the print page as well (in on_post_build event)
 
-
-        
         # Note a theme can have multiple templates
-        # Found a bug where in the mkdocs theme, 
+        # Found a bug where in the mkdocs theme,
         # the "sitemap.xml" static template
         # has incorrect 'extra_css' and 'extra_js' paths
-        # leading to breaking the print page 
+        # leading to breaking the print page
         # at random (when sitemap.xml was rendered last)
         # we're assuming here all templates have a 404.html template
         # print(f"\nName: {template_name}\nContext: {context.get('extra_css')}")
         if template_name == "404.html":
             self.context = context
-
 
     def on_post_build(self, config, **kwargs):
         """
@@ -264,17 +274,21 @@ class PrintSitePlugin(BasePlugin):
         js_file_path = os.path.join(js_output_base_path, "print-site.js")
         copy_file(os.path.join(os.path.join(HERE, "js"), "print-site.js"), js_file_path)
 
-        if self.config.get('include_css'):        
+        if self.config.get("include_css"):
             # Add print-site.css
             css_output_base_path = os.path.join(config["site_dir"], "css")
             css_file_path = os.path.join(css_output_base_path, "print-site.css")
-            copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
+            copy_file(
+                os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path
+            )
 
-            # Add theme CSS file        
+            # Add theme CSS file
             css_file = "print-site-%s.css" % get_theme_name(config)
             if css_file in os.listdir(os.path.join(HERE, "css")):
                 css_file_path = os.path.join(css_output_base_path, css_file)
-                copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
+                copy_file(
+                    os.path.join(os.path.join(HERE, "css"), css_file), css_file_path
+                )
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content = self.renderer.write_combined()
@@ -291,13 +305,12 @@ class PrintSitePlugin(BasePlugin):
         # Compatiblity with mkdocs-chart-plugin
         # As this plugin adds some javascript to every page
         # It should be included in the print site also
-        if config.get('plugins',{}).get('charts'):
-            html = (config
-                .get('plugins',{})
-                .get('charts')
+        if config.get("plugins", {}).get("charts"):
+            html = (
+                config.get("plugins", {})
+                .get("charts")
                 .add_javascript_variables(html, self.print_page, config)
             )
-
 
         # Determine calls to required javascript functions
         js_calls = "remove_material_navigation();"

@@ -1,6 +1,7 @@
 from mkdocs_print_site_plugin.exclude import exclude
 import pytest
 
+
 def test_exclude():
 
     with pytest.raises(AssertionError):

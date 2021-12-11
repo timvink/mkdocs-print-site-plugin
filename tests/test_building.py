@@ -90,7 +90,9 @@ def check_build(tmp_path, project_mkdocs, exit_code=0):
     """
     Test to make sure build fails or succeeds.
     """
-    tmp_proj = setup_clean_mkdocs_folder("tests/fixtures/projects/%s" % project_mkdocs, tmp_path)
+    tmp_proj = setup_clean_mkdocs_folder(
+        "tests/fixtures/projects/%s" % project_mkdocs, tmp_path
+    )
     result = build_docs_setup(tmp_proj)
 
     msg = "cwd: %s, result: %s, exception: %s, exc_info: %s" % (
@@ -130,7 +132,9 @@ def test_no_toc(tmp_path):
     prj_path = check_build(tmp_path, "basic/mkdocs_no_toc.yml")
 
     # Table of contents should NOT be there
-    assert not text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
+    assert not text_in_page(
+        prj_path, "print_page/index.html", '<div id="print-page-toc"'
+    )
 
 
 def test_add_to_nav_works(tmp_path):
@@ -156,7 +160,9 @@ def test_basic_build(tmp_path):
     assert text_in_page(prj_path, "print_page/index.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
+    assert text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
+    )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A<')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
 
@@ -174,7 +180,9 @@ def test_basic_build2(tmp_path):
     assert text_in_page(prj_path, "print_page.html", '<div id="print-page-toc"')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>')
+    assert text_in_page(
+        prj_path, "print_page.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
     assert text_in_page(prj_path, "print_page.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page.html", '<h1 id="z-z">Z</h1>')
 
@@ -189,7 +197,9 @@ def test_basic_build3(tmp_path):
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
+    assert text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
@@ -208,7 +218,9 @@ def test_basic_build4(tmp_path):
     )
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>')
+    assert text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage</h1>'
+    )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
 
@@ -297,6 +309,8 @@ def test_basic_build99(tmp_path):
     assert text_in_page(prj_path, "index.html", 'class="nav-link">Print Site</a>')
 
     # Make sure all 3 pages are combined and present
-    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage')
+    assert text_in_page(
+        prj_path, "print_page/index.html", '<h1 id="index-homepage">Homepage'
+    )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')

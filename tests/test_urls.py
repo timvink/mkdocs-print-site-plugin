@@ -107,19 +107,30 @@ def test_update_anchor_ids_noupdate():
         assert update_anchor_ids(html, "this_page") == html
 
 
-@pytest.mark.parametrize("html_element", ["h1", "h2", "h3", "h4", "h5", "h6", "li", "sup"])
+@pytest.mark.parametrize(
+    "html_element", ["h1", "h2", "h3", "h4", "h5", "h6", "li", "sup"]
+)
 def test_update_anchor_ids(html_element):
     """
     Test changing ids.
     """
-    html = '<%s id="a-section-on-something">A Section on something</%s>' % (html_element, html_element)
-    result = '<%s id="this_page-a-section-on-something">A Section on something</%s>' % (html_element, html_element)
+    html = '<%s id="a-section-on-something">A Section on something</%s>' % (
+        html_element,
+        html_element,
+    )
+    result = '<%s id="this_page-a-section-on-something">A Section on something</%s>' % (
+        html_element,
+        html_element,
+    )
     assert update_anchor_ids(html, "this_page") == result
 
     # Make sure changes are made
-    html = '<%s class="something" id="a-section-on-something">A Section on something</%s>' % (
-        html_element,
-        html_element,
+    html = (
+        '<%s class="something" id="a-section-on-something">A Section on something</%s>'
+        % (
+            html_element,
+            html_element,
+        )
     )
     result = '<%s class="something" id="this_page-a-section-on-something">A Section on something</%s>' % (
         html_element,

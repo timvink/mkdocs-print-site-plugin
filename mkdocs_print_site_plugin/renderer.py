@@ -3,7 +3,11 @@ import logging
 
 from mkdocs.structure.toc import AnchorLink, TableOfContents
 
-from mkdocs_print_site_plugin.urls import fix_internal_links, get_page_key, to_snake_case
+from mkdocs_print_site_plugin.urls import (
+    fix_internal_links,
+    get_page_key,
+    to_snake_case,
+)
 from mkdocs_print_site_plugin.exclude import exclude
 
 logger = logging.getLogger("mkdocs.plugins")
@@ -66,7 +70,9 @@ class Renderer(object):
         if self.plugin_config.get("add_table_of_contents"):
             html += self._toc()
 
-        def get_html_from_items(items: list, dir_urls: bool, excluded_pages: list, section_depth: int = 0) -> str:
+        def get_html_from_items(
+            items: list, dir_urls: bool, excluded_pages: list, section_depth: int = 0
+        ) -> str:
             """
             Get all the HTML from the pages.
             """
@@ -83,10 +89,15 @@ class Renderer(object):
                     # so we need to check if the html attribute exists
                     if hasattr(item, "html"):
                         if item.html == "":
-                            logger.warning("[mkdocs-print-site] %s is empty and will be ignored" % item.file.src_path)
+                            logger.warning(
+                                "[mkdocs-print-site] %s is empty and will be ignored"
+                                % item.file.src_path
+                            )
                             continue
                         # Update internal anchor links, image urls, etc
-                        item_html += fix_internal_links(item.html, item.url, directory_urls=dir_urls)
+                        item_html += fix_internal_links(
+                            item.html, item.url, directory_urls=dir_urls
+                        )
 
                 if item.is_section:
                     item_html += """
@@ -100,11 +111,15 @@ class Renderer(object):
                         to_snake_case(item.title),
                         min(6, section_depth + 1),
                     )
-                    item_html += get_html_from_items(item.children, dir_urls, excluded_pages, section_depth + 1)
+                    item_html += get_html_from_items(
+                        item.children, dir_urls, excluded_pages, section_depth + 1
+                    )
                     # We also need to indicate the end of section page
                     # We do that using a h1 with a specific class
                     # In CSS we display:none, in JS we can use it for formatting the table of contents.
-                    item_html += "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
+                    item_html += (
+                        "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
+                    )
             return item_html
 
         html += get_html_from_items(
@@ -124,7 +139,9 @@ class Renderer(object):
         env = jinja2.Environment()
         env.globals = {"config": self.mkdocs_config, "page": self.print_page}
 
-        with open(self.cover_page_template_path, "r", encoding="utf-8-sig", errors="strict") as f:
+        with open(
+            self.cover_page_template_path, "r", encoding="utf-8-sig", errors="strict"
+        ) as f:
             cover_page_tpl = f.read()
 
         cover_page_html = env.from_string(cover_page_tpl).render()
@@ -145,7 +162,9 @@ class Renderer(object):
         env = jinja2.Environment()
         env.globals = {"config": self.mkdocs_config, "page": self.print_page}
 
-        with open(self.banner_template_path, "r", encoding="utf-8-sig", errors="strict") as f:
+        with open(
+            self.banner_template_path, "r", encoding="utf-8-sig", errors="strict"
+        ) as f:
             banner_tpl = f.read()
 
         banner_html = env.from_string(banner_tpl).render()
@@ -192,12 +211,16 @@ class Renderer(object):
                 toc.append(AnchorLink(title=item.title, id=f"{page_key}", level=0))
             if item.is_section:
 
-                section_link = AnchorLink(title=item.title, id=f"section-{to_snake_case(item.title)}", level=0)
+                section_link = AnchorLink(
+                    title=item.title, id=f"section-{to_snake_case(item.title)}", level=0
+                )
 
                 subpages = [p for p in item.children if p.is_page]
                 for page in subpages:
                     page_key = get_page_key(page.url)
-                    section_link.children.append(AnchorLink(title=page.title, id=f"{page_key}", level=1))
+                    section_link.children.append(
+                        AnchorLink(title=page.title, id=f"{page_key}", level=1)
+                    )
 
                 toc.append(section_link)
 

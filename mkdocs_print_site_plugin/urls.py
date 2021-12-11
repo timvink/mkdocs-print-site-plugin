@@ -69,7 +69,14 @@ def get_page_key(page_url):
     Args:
         page_url (str): The MkDocs url of the page
     """
-    page_key = page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-").lstrip("-")
+    page_key = (
+        page_url.lower()
+        .strip()
+        .rstrip("/")
+        .replace(".html", "")
+        .replace("/", "-")
+        .lstrip("-")
+    )
     if len(page_key) > 0:
         return page_key
     else:
@@ -195,7 +202,9 @@ def fix_image_src(page_html, page_url, directory_urls):
     """
     # Loop over all images src attributes
     # Example regex https://regex101.com/r/TTRsVW/1
-    img_regex = re.compile(r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE)
+    img_regex = re.compile(
+        r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE
+    )
     matches = re.finditer(img_regex, page_html)
 
     for m in matches:
@@ -263,7 +272,9 @@ def fix_internal_links(page_html, page_url, directory_urls):
         raise
 
     # Finally, wrap the entire page in a section with an anchor ID
-    page_html = ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
+    page_html = (
+        ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
+    )
 
     return page_html
 
