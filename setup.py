@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="UTF-8") as f:
 
 setup(
     name="mkdocs-print-site-plugin",
-    version="2.2",
+    version="2.2.1",
     description="MkDocs plugin that combines all pages into one, allowing for easy export to PDF and standalone HTML.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,9 +25,10 @@ setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Topic :: Documentation",
         "Topic :: Text Processing",
