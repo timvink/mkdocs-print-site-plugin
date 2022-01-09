@@ -279,7 +279,7 @@ def fix_internal_links(page_html, page_url, directory_urls):
     return page_html
 
 
-def to_snake_case(text):
+def to_snake_case(text: str):
     """
     Convert string to snake_case.
 
@@ -287,4 +287,4 @@ def to_snake_case(text):
 
     'Hi there!' -> 'hi_there_'
     """
-    return re.sub("\W+", "-", text).lower()
+    return re.sub("\W+", "-", str(text)).lower()
