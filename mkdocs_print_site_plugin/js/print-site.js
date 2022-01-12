@@ -147,3 +147,20 @@ function remove_element_by_classname(class_name) {
     el[0].style.display = "none"
   }
 }
+
+function remove_lazy_loading() {
+
+  // https://gist.github.com/hzr/1188747
+  window.opera.addEventListener("AfterScript", function(e) {
+    if (typeof jQuery != "undefined" && jQuery.prototype.lazyload) {
+      jQuery.prototype.lazyload = function() {};
+    }
+  }, false);
+
+  images = document.getElementsByTagName("img");
+  for (var i = 0; i < images.length; i++) {
+    el = images[i];
+    el.removeAttribute("loading");
+  }
+
+}

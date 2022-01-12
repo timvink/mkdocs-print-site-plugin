@@ -14,3 +14,7 @@ nav:
     - Home: index.md
     - Page Z: z.md
     - Page A: a.md
+
+markdown_extensions:
+  - attr_list
+  - md_in_html

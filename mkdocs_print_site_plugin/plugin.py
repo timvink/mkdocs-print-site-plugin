@@ -322,6 +322,7 @@ class PrintSitePlugin(BasePlugin):
         # Determine calls to required javascript functions
         js_calls = "remove_material_navigation();"
         js_calls += "remove_mkdocs_theme_navigation();"
+        js_calls += "remove_lazy_loading();"
         if self.config.get("add_table_of_contents"):
             js_calls += "generate_toc();"
 
