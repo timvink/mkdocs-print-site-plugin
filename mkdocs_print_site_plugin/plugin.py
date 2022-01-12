@@ -253,6 +253,12 @@ class PrintSitePlugin(BasePlugin):
         # print(f"\nName: {template_name}\nContext: {context.get('extra_css')}")
         if template_name == "404.html":
             self.context = context
+            # Make sure paths are OK
+            if config.get('extra_css'):
+                self.context['extra_css'] = [get_relative_url(f, self.print_page.file.url) for f in config.get('extra_css')]
+            if config.get('extra_javascript'):
+                self.context['extra_javascript'] = [get_relative_url(f, self.print_page.file.url) for f in config.get('extra_javascript')]
+
 
     def on_post_build(self, config, **kwargs):
         """
@@ -297,6 +303,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
+        # env.list_templates()
         template = env.get_template("main.html")
         self.context["page"] = self.print_page
         # Render the theme template for the print page
