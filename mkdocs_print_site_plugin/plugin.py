@@ -309,6 +309,10 @@ class PrintSitePlugin(BasePlugin):
         # Render the theme template for the print page
         html = template.render(self.context)
 
+        # Remove lazy loading attributes from images
+        # https://regex101.com/r/HVpKPs/1
+        html = re.sub(r"(\<img.+)(loading=\"lazy\")", r"\1", html)        
+
         # Compatiblity with mkdocs-chart-plugin
         # As this plugin adds some javascript to every page
         # It should be included in the print site also
