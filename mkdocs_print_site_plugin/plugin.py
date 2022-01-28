@@ -32,6 +32,7 @@ class PrintSitePlugin(BasePlugin):
         ("toc_depth", config_options.Type(int, default=3)),
         ("add_full_urls", config_options.Type(bool, default=False)),
         ("enumerate_headings", config_options.Type(bool, default=True)),
+        ("enumerate_headings_depth", config_options.Type(int, default=6)),
         ("enumerate_figures", config_options.Type(bool, default=True)),
         ("add_cover_page", config_options.Type(bool, default=False)),
         ("cover_page_template", config_options.Type(str, default="")),
@@ -54,6 +55,8 @@ class PrintSitePlugin(BasePlugin):
         # Check valid table of contents depth
         assert self.config.get("toc_depth") >= 1
         assert self.config.get("toc_depth") <= 6
+        assert self.config.get("enumerate_headings_depth") >= 1
+        assert self.config.get("enumerate_headings_depth") <= 6
 
         # Because other plugins can alter the navigation
         # (and thus which pages should be in the print page)
@@ -128,6 +131,25 @@ class PrintSitePlugin(BasePlugin):
 
             # Add pointer to print-site css files
             config["extra_css"] = ["css/print-site.css"] + config["extra_css"]
+
+            # Enumeration CSS files
+            self.enum_css_files = []
+
+            if self.config.get('enumerate_headings'):
+                self.enum_css_files += ["css/print-site-enum-headings1.css"]
+            if self.config.get('enumerate_headings_depth') >= 2:
+                self.enum_css_files += ["css/print-site-enum-headings2.css"]
+            if self.config.get('enumerate_headings_depth') >= 3:
+                self.enum_css_files += ["css/print-site-enum-headings3.css"]
+            if self.config.get('enumerate_headings_depth') >= 4:
+                self.enum_css_files += ["css/print-site-enum-headings4.css"]
+            if self.config.get('enumerate_headings_depth') >= 5:
+                self.enum_css_files += ["css/print-site-enum-headings5.css"]
+            if self.config.get('enumerate_headings_depth') >= 6:
+                self.enum_css_files += ["css/print-site-enum-headings6.css"]
+
+            config["extra_css"] = self.enum_css_files + config["extra_css"]
+
 
         # Create MkDocs Page and File instances
         self.print_file = File(
@@ -287,6 +309,14 @@ class PrintSitePlugin(BasePlugin):
             copy_file(
                 os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path
             )
+
+            # Add enumeration css
+            for f in self.enum_css_files:
+                f = f.replace("/", os.sep)
+                css_file_path = os.path.join(config["site_dir"], f)
+                copy_file(
+                    os.path.join(HERE, f), css_file_path
+                )
 
             # Add theme CSS file
             css_file = "print-site-%s.css" % get_theme_name(config)
