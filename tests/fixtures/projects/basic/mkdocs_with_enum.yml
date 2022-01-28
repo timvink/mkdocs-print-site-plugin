@@ -3,4 +3,5 @@ site_name: Test
 plugins:
     - print-site:
         enumerate_headings: true
+        enumerate_headings_depth: 6
   

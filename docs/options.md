@@ -45,9 +45,12 @@ plugins:
     For example "[google.com](https://www.google.com)" will be replaced by "[google.com](https://www.google.com) (https://www.google.com)"
 
 `enumerate_headings`
-:   Default `true`. This will add numbering (enumeration) to all headings as well as the table of contents. Note this will only enumerate the print site page; if you want to enumerate the entire site, you can use [mkdocs-enumerate-headings-plugin](https://github.com/timvink/mkdocs-enumerate-headings-plugin).
+:   Default `true`. This will add numbering (enumeration) to all headings and sections, as well as the table of contents. Note this will only enumerate the print site page; if you want to enumerate the entire site, you can use [mkdocs-enumerate-headings-plugin](https://github.com/timvink/mkdocs-enumerate-headings-plugin).
 
     Example "1.2 A chapter subsection".
+
+`enumerate_headings_depth`
+:   Default `6`. If `enumerate_headings`, the depth until which headings and sections are enumerated.
 
 `enumerate_figures`
 :   Default `true`. This will add numbering to all figure captions (for example "Figure 1: <caption>"). Works especially well with [mkdocs-img2fig-plugin](https://github.com/stuebersystems/mkdocs-img2fig-plugin).
