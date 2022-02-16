@@ -353,6 +353,15 @@ class PrintSitePlugin(BasePlugin):
                 .add_javascript_variables(html, self.print_page, config)
             )
 
+        # Compatibility with https://github.com/g-provost/lightgallery-markdown
+        # This plugin insert link hrefs with double dashes, f.e.
+        # <link href="//assets/css/somecss.css">
+        # Details https://github.com/timvink/mkdocs-print-site-plugin/issues/68
+        htmls = html.split("</head>")
+        htmls[0] = htmls[0].replace("href=\"//", "href=\"")
+        htmls[0] = htmls[0].replace("src=\"//", "src=\"")
+        html = "</head>".join(htmls)
+
         # Determine calls to required javascript functions
         js_calls = "remove_material_navigation();"
         js_calls += "remove_mkdocs_theme_navigation();"
