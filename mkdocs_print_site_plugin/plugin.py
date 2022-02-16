@@ -358,8 +358,9 @@ class PrintSitePlugin(BasePlugin):
         # <link href="//assets/css/somecss.css">
         # Details https://github.com/timvink/mkdocs-print-site-plugin/issues/68
         htmls = html.split("</head>")
-        htmls[0] = htmls[0].replace("href=\"//", "href=\"")
-        htmls[0] = htmls[0].replace("src=\"//", "src=\"")
+        base_url = "../" if config.get("use_directory_urls") else ""
+        htmls[0] = htmls[0].replace("href=\"//", f"href=\"{base_url}")
+        htmls[0] = htmls[0].replace("src=\"//", f"src=\"{base_url}")
         html = "</head>".join(htmls)
 
         # Determine calls to required javascript functions
