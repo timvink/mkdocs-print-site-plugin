@@ -202,26 +202,78 @@ class Renderer(object):
         """
         toc = []
 
+        if self.plugin_config.get("enumerate_headings"):
+            chapter_number = 0
+            section_number = 0
+
         for item in self._get_items():
             if item.is_page:
                 page_key = get_page_key(item.url)
                 # navigate to top of page if page is homepage
                 if page_key == "index":
                     page_key = ""
-                toc.append(AnchorLink(title=item.title, id=f"{page_key}", level=0))
+                
+                if self.plugin_config.get("enumerate_headings"):
+                    chapter_number += 1
+                    title = f"{chapter_number}. {item.title}"
+                else:
+                    title = item.title
+                toc.append(AnchorLink(title=title, id=f"{page_key}", level=0))
+            
             if item.is_section:
 
+                if self.plugin_config.get("enumerate_headings"):
+                    section_number += 1
+                    title = f"{int_to_roman(section_number)}. {item.title}"
+                else:
+                    title = item.title
+
                 section_link = AnchorLink(
-                    title=item.title, id=f"section-{to_snake_case(item.title)}", level=0
+                    title=title, id=f"section-{to_snake_case(item.title)}", level=0
                 )
 
                 subpages = [p for p in item.children if p.is_page]
                 for page in subpages:
+                    if self.plugin_config.get("enumerate_headings"):
+                        chapter_number += 1
+                        title = f"{chapter_number}. {page.title}"
+                    else:
+                        title = page.title
+                    
                     page_key = get_page_key(page.url)
                     section_link.children.append(
-                        AnchorLink(title=page.title, id=f"{page_key}", level=1)
+                        AnchorLink(title=title, id=f"{page_key}", level=1)
                     )
 
                 toc.append(section_link)
 
         return TableOfContents(toc)
+
+
+
+def int_to_roman(num):
+    """
+    Integer to roman number.
+
+    Copied from https://www.w3resource.com/python-exercises/class-exercises/python-class-exercise-1.php
+    """
+    lookup = [
+        (1000, 'M'),
+        (900, 'CM'),
+        (500, 'D'),
+        (400, 'CD'),
+        (100, 'C'),
+        (90, 'XC'),
+        (50, 'L'),
+        (40, 'XL'),
+        (10, 'X'),
+        (9, 'IX'),
+        (5, 'V'),
+        (4, 'IV'),
+        (1, 'I'),
+    ]
+    res = ''
+    for (n, roman) in lookup:
+        (d, num) = divmod(num, n)
+        res += roman * d
+    return res
