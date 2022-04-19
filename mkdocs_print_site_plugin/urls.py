@@ -201,9 +201,9 @@ def fix_image_src(page_html, page_url, directory_urls):
     This is because flattening all pages into 1 print page will break any relative links.
     """
     # Loop over all images src attributes
-    # Example regex https://regex101.com/r/TTRsVW/1
+    # Example regex https://regex101.com/r/PLUmZ7/2
     img_regex = re.compile(
-        r"\<img.+src=\"([aA-zZ|0-9|\-|\_|\.|\:|\/]+)\"", flags=re.IGNORECASE
+        r"<img[^>]+src=\"([^\">]+)\"", flags=re.IGNORECASE
     )
     matches = re.finditer(img_regex, page_html)
 
