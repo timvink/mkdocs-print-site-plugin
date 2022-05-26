@@ -41,6 +41,13 @@ def is_external(url):
     prefixes = ("http", "www", "mailto:", "tel:", "skype:", "ftp:")
     return url.startswith(prefixes)
 
+def is_base64_image(url):
+    """
+    Test if a url is a base64 data image.
+    """
+    prefixes = ("data:image")
+    return url.startswith(prefixes)
+
 
 def is_attachment(url):
     """
@@ -211,6 +218,9 @@ def fix_image_src(page_html, page_url, directory_urls):
         img_src = m.group(1)
         if is_external(img_src):
             continue
+        elif is_base64_image(img_src):
+            continue
+        
         img_text = m.group()
 
         new_url = get_url_from_root(img_src, page_url)
