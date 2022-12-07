@@ -30,7 +30,7 @@ As an example, have a look at the default [print_site_banner.tpl](https://github
 
 ## Adding configurable content
 
-You might want to add some content to your cover page that's not yet specified in your `mkdocs.yml` file.
+You might want to add some content to your print banner that's not yet specified in your `mkdocs.yml` file.
 Of course you could just hard-code it in your custom template file, but you could also make use of MkDocs's [extra context](https://www.mkdocs.org/user-guide/custom-themes/#extra-context) feature, allowing you to use custom variables from your config file with `{{ config.extra.<your variable> }}`.
 
 _Example_:
