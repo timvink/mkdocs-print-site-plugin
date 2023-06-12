@@ -51,3 +51,5 @@ Is in `docs/`. To [deploy the docs](https://www.mkdocs.org/user-guide/deploying-
 ```bash
 mkdocs gh-deploy
 ```
+
+Note: there is no automated github action for this currently.
