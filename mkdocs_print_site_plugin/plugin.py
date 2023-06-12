@@ -12,6 +12,7 @@ from mkdocs.exceptions import PluginError
 
 from mkdocs_print_site_plugin.renderer import Renderer
 from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
+from mkdocs_print_site_plugin.urls import is_external
 
 logger = logging.getLogger("mkdocs.plugins")
 logger.addFilter(warning_filter)
@@ -231,9 +232,14 @@ class PrintSitePlugin(BasePlugin):
 
         # Link to the PDF version of the entire site on a page.
         if self.config.get("path_to_pdf") != "":
-            page.url_to_pdf = get_relative_url(
-                self.config.get("path_to_pdf"), page.file.url
-            )
+            pdf_url = self.config.get("path_to_pdf")
+            if is_external(pdf_url):
+                page.url_to_pdf = pdf_url
+            else:
+                breakpoint()
+                page.url_to_pdf = get_relative_url(
+                    pdf_url, page.file.url
+                )
 
         return html
 
