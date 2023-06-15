@@ -236,7 +236,6 @@ class PrintSitePlugin(BasePlugin):
             if is_external(pdf_url):
                 page.url_to_pdf = pdf_url
             else:
-                breakpoint()
                 page.url_to_pdf = get_relative_url(
                     pdf_url, page.file.url
                 )
