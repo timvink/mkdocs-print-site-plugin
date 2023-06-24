@@ -297,7 +297,7 @@ class PrintSitePlugin(BasePlugin):
         if not self.config.get("enabled"):
             return
 
-        if len(self.context) == 0:
+        if len(self.context) == 0 and get_theme_name(config) != None:
             msg = "Could not find a template context.\n"
             msg += "Report an issue at https://github.com/timvink/mkdocs-print-site-plugin\n"
             msg += f"And mention the template you're using: {get_theme_name(config)}"
@@ -347,7 +347,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Remove lazy loading attributes from images
         # https://regex101.com/r/HVpKPs/1
-        html = re.sub(r"(\<img.+)(loading=\"lazy\")", r"\1", html)        
+        html = re.sub(r"(\<img.+)(loading=\"lazy\")", r"\1", html)
 
         # Compatiblity with mkdocs-chart-plugin
         # As this plugin adds some javascript to every page

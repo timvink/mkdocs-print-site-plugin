@@ -33,7 +33,7 @@ To quickly serve a website with your latest changes to the plugin use the sites 
 ```bash
 pip install -r tests/test_requirements.txt
 pip install -e .
-mkdocs serve -f tests/fixutures/basic/mkdocs.yml
+mkdocs serve -f tests/fixtures/projects/basic/mkdocs.yml
 ```
 
 Tip: If you use google chrome, you can also view the print version of a page inside the browser [by setting the renderer](https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/).
