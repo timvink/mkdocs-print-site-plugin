@@ -284,7 +284,7 @@ class PrintSitePlugin(BasePlugin):
             if config.get('extra_css'):
                 self.context['extra_css'] = [get_relative_url(f, self.print_page.file.url) for f in config.get('extra_css')]
             if config.get('extra_javascript'):
-                self.context['extra_javascript'] = [get_relative_url(f, self.print_page.file.url) for f in config.get('extra_javascript')]
+                self.context['extra_javascript'] = [get_relative_url(str(f), self.print_page.file.url) for f in config.get('extra_javascript')]
 
 
     def on_post_build(self, config, **kwargs):
