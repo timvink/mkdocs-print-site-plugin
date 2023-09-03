@@ -387,6 +387,8 @@ class PrintSitePlugin(BasePlugin):
         )
         html = html.replace("</head>", print_site_js + "</head>")
 
+        html = config.plugins.on_post_page(html, page=self.print_page, config=config)
+
         # Write the print_page file to the output folder
         write_file(
             html.encode("utf-8", errors="xmlcharrefreplace"),
