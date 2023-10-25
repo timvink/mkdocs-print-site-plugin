@@ -3,5 +3,6 @@ site_name: Test
 plugins:
     - print-site:
         add_to_navigation: true
-        exclude:
   
+markdown_extensions:
+    - attr_list
