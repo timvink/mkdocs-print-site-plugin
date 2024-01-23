@@ -26,7 +26,7 @@ _Example_:
 
     plugins:
         - print-site:
-            - path_to_pdf: "assets/the_name_of_your_file.pdf"
+            path_to_pdf: "assets/the_name_of_your_file.pdf"
     ```
 
 === "docs/overrides/main.html"
@@ -62,7 +62,7 @@ _Example_:
 
     plugins:
         - print-site:
-            - path_to_pdf: "assets/the_name_of_your_file.pdf"
+            path_to_pdf: "assets/the_name_of_your_file.pdf"
     ```
 
 === "docs/overrides/main.html"
