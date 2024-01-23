@@ -7,7 +7,7 @@ from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.utils import write_file, copy_file, get_relative_url, warning_filter
+from mkdocs.utils import write_file, copy_file, get_relative_url
 from mkdocs.exceptions import PluginError
 
 from mkdocs_print_site_plugin.renderer import Renderer
@@ -15,7 +15,6 @@ from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
 from mkdocs_print_site_plugin.urls import is_external
 
 logger = logging.getLogger("mkdocs.plugins")
-logger.addFilter(warning_filter)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
