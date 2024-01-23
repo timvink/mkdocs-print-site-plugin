@@ -22,7 +22,6 @@ plugins:
         add_table_of_contents: true
         toc_title: "Table of Contents"
         toc_depth: 2
-        add_full_urls: false
         enumerate_headings: true
         enumerate_figures: true
         add_cover_page: true
