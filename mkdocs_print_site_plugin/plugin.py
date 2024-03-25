@@ -357,6 +357,18 @@ class PrintSitePlugin(BasePlugin):
                 .add_javascript_variables(html, self.print_page, config)
             )
 
+        # Compatibility with mkdocs-drawio
+        # As this plugin adds renderer html for every drawio diagram
+        # referenced in your markdown files. This rendering happens
+        # in the on_post_page event, which is skipped by this plugin
+        # therefore we need to manual execute the drawio plugin renderer here. 
+        if config.get("plugins", {}).get("drawio"):
+            html = (
+                config.get("plugins", {})
+                    .get("drawio")
+                    .render_drawio_diagrams(html, self.print_page)
+            )
+
         # Compatibility with https://github.com/g-provost/lightgallery-markdown
         # This plugin insert link hrefs with double dashes, f.e.
         # <link href="//assets/css/somecss.css">
