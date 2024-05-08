@@ -13,6 +13,7 @@
 ## Features :star2:
 
 - Support for [mkdocs-material](https://github.com/squidfunk/mkdocs-material) theme, including features like instant loading and dark color themes.
+- Support for [readthedocs](https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs) theme
 - Support for pagination in PDFs.
 - Many options to customize appearance
 - Option to add a cover page

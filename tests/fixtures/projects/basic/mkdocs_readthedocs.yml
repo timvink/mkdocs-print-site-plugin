@@ -1,0 +1,13 @@
+site_name: Test
+
+theme:
+    name: readthedocs
+
+plugins:
+    - print-site:
+        add_to_navigation: true
+
+nav:
+    - Home: index.md
+    - Page Z: z.md
+    - Page A: a.md

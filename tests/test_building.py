@@ -116,6 +116,11 @@ def text_in_page(tmp_proj, page_path, text):
 
 
 # Tests ####
+def test_readthedocs(tmp_path):
+    """
+    Test.
+    """
+    check_build(tmp_path, "basic/mkdocs_readthedocs.yml")
 
 
 def test_windmill(tmp_path):
