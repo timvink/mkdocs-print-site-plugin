@@ -102,6 +102,16 @@ class Renderer(object):
                             item_html = f"<h1 id=\"{to_snake_case(item.title)}\">{item.title}</h1>{item_html}"
                             logger.warning(f"[mkdocs-print-site] '{item.file.src_path}' file is missing a leading h1 tag. Added to the print-page with title '{item.title}'")
                         
+                        # Support mkdocs-material tags
+                        # See https://squidfunk.github.io/mkdocs-material/plugins/tags
+                        if "tags" in item.meta:
+                            tags = item.meta["tags"]
+                            tags_html = "<nav class='md-tags'>"
+                            for tag in tags:
+                                tags_html += f"<span class='md-tag'>{tag}</span>"
+                            tags_html += "</nav>"
+                            item_html = tags_html + item_html
+                        
                         # Update internal anchor links, image urls, etc
                         items_html += fix_internal_links(
                             item_html, item.url, directory_urls=dir_urls

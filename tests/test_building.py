@@ -275,6 +275,11 @@ def test_basic_build7(tmp_path):
     """
     check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=0)
 
+def test_build_with_material_tags(tmp_path):
+    """
+    Test support with tags.
+    """
+    check_build(tmp_path, "mkdocs_material_tags/mkdocs.yml", exit_code=0)
 
 def test_basic_disable_plugin(tmp_path):
     """
