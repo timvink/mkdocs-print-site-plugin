@@ -269,9 +269,11 @@ def test_basic_build6(tmp_path):
 
 def test_basic_build7(tmp_path):
     """
-    Test error when page does not start with h1 heading.
+    Test when page does not start with h1 heading.
+
+    As of v2.5.0, this is allowed (the plugin will add a heading to the print page)
     """
-    check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=1)
+    check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=0)
 
 
 def test_basic_disable_plugin(tmp_path):

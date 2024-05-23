@@ -216,19 +216,6 @@ class PrintSitePlugin(BasePlugin):
         if page != self.print_page:
             page.html = html
 
-        # We need to validate that the first heading on each page is a h1
-        # This is required for the print page table of contents and enumeration logic
-        if self.config.get("add_table_of_contents") or self.config.get(
-            "enumerate_headings"
-        ):
-            if page in self.all_pages_in_nav:
-                match = re.search(r"\<h[0-6]", html)
-                if match:
-                    if not match.group() == "<h1":
-                        msg = f"The page {page.title} ({page.file.src_path}) does not start with a level 1 heading."
-                        msg += "This is required for print page Table of Contents and/or enumeration of headings."
-                        raise AssertionError(msg)
-
         # Link to the PDF version of the entire site on a page.
         if self.config.get("path_to_pdf") != "":
             pdf_url = self.config.get("path_to_pdf")
