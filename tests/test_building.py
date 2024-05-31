@@ -269,10 +269,17 @@ def test_basic_build6(tmp_path):
 
 def test_basic_build7(tmp_path):
     """
-    Test error when page does not start with h1 heading.
-    """
-    check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=1)
+    Test when page does not start with h1 heading.
 
+    As of v2.5.0, this is allowed (the plugin will add a heading to the print page)
+    """
+    check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=0)
+
+def test_build_with_material_tags(tmp_path):
+    """
+    Test support with tags.
+    """
+    check_build(tmp_path, "mkdocs_material_tags/mkdocs.yml", exit_code=0)
 
 def test_basic_disable_plugin(tmp_path):
     """

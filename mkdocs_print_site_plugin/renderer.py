@@ -76,7 +76,7 @@ class Renderer(object):
             """
             Get all the HTML from the pages.
             """
-            item_html = ""
+            items_html = ""
 
             for item in items:
                 if item.is_page:
@@ -94,13 +94,31 @@ class Renderer(object):
                                 % item.file.src_path
                             )
                             continue
+
+                        item_html = item.html
+                        
+                        # Add missing h1 tag if it doesn't exist
+                        if not item_html.startswith("<h1"):
+                            item_html = f"<h1 id=\"{to_snake_case(item.title)}\">{item.title}</h1>{item_html}"
+                            logger.warning(f"[mkdocs-print-site] '{item.file.src_path}' file is missing a leading h1 tag. Added to the print-page with title '{item.title}'")
+                        
+                        # Support mkdocs-material tags
+                        # See https://squidfunk.github.io/mkdocs-material/plugins/tags
+                        if "tags" in item.meta:
+                            tags = item.meta["tags"]
+                            tags_html = "<nav class='md-tags'>"
+                            for tag in tags:
+                                tags_html += f"<span class='md-tag'>{tag}</span>"
+                            tags_html += "</nav>"
+                            item_html = tags_html + item_html
+                        
                         # Update internal anchor links, image urls, etc
-                        item_html += fix_internal_links(
-                            item.html, item.url, directory_urls=dir_urls
+                        items_html += fix_internal_links(
+                            item_html, item.url, directory_urls=dir_urls
                         )
 
                 if item.is_section:
-                    item_html += """
+                    items_html += """
                         <h%s class='nav-section-title' id='section-%s'>
                             %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
                         </h%s>
@@ -111,16 +129,16 @@ class Renderer(object):
                         to_snake_case(item.title),
                         min(6, section_depth + 1),
                     )
-                    item_html += get_html_from_items(
+                    items_html += get_html_from_items(
                         item.children, dir_urls, excluded_pages, section_depth + 1
                     )
                     # We also need to indicate the end of section page
                     # We do that using a h1 with a specific class
                     # In CSS we display:none, in JS we can use it for formatting the table of contents.
-                    item_html += (
+                    items_html += (
                         "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
                     )
-            return item_html
+            return items_html
 
         html += get_html_from_items(
             self._get_items(),
