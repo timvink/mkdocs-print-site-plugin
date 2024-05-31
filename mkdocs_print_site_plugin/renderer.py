@@ -1,3 +1,4 @@
+import re
 import jinja2
 import logging
 
@@ -21,7 +22,7 @@ class Renderer(object):
     def __init__(
         self,
         plugin_config,
-        mkdocs_config={},
+        mkdocs_config=None,
         cover_page_template_path="",
         banner_template_path="",
         print_page=None,
@@ -30,7 +31,7 @@ class Renderer(object):
         Inits the class.
         """
         self.plugin_config = plugin_config
-        self.mkdocs_config = mkdocs_config
+        self.mkdocs_config = mkdocs_config or {}
         self.cover_page_template_path = cover_page_template_path
         self.banner_template_path = banner_template_path
         self.print_page = print_page
@@ -82,26 +83,25 @@ class Renderer(object):
                 if item.is_page:
                     # Do not include page in print page if excluded
                     if exclude(item.file.src_path, excluded_pages):
-                        logging.debug("Excluding page " + item.file.src_path)
+                        logging.debug(f"Excluding page '{item.file.src_path}'")
                         continue
 
                     # If you specify the same page twice in your navigation, it is only rendered once
                     # so we need to check if the html attribute exists
                     if hasattr(item, "html"):
                         if item.html == "":
-                            logger.warning(
-                                "[mkdocs-print-site] %s is empty and will be ignored"
-                                % item.file.src_path
-                            )
+                            logger.warning(f"[mkdocs-print-site] {item.file.src_path} is empty and will be ignored")
                             continue
 
                         item_html = item.html
                         
-                        # Add missing h1 tag if it doesn't exist
-                        if not item_html.startswith("<h1"):
-                            item_html = f"<h1 id=\"{to_snake_case(item.title)}\">{item.title}</h1>{item_html}"
-                            logger.warning(f"[mkdocs-print-site] '{item.file.src_path}' file is missing a leading h1 tag. Added to the print-page with title '{item.title}'")
-                        
+                        # Add missing h1 tag if the first heading is not a h1
+                        match = re.search(r"\<h[0-6]", item_html)
+                        if match:
+                            if not match.group() == "<h1":
+                                item_html = f"<h1 id=\"{to_snake_case(item.title)}\">{item.title}</h1>{item_html}"
+                                logger.warning(f"[mkdocs-print-site] '{item.file.src_path}' file is missing a leading h1 tag. Added to the print-page with title '{item.title}'")
+                            
                         # Support mkdocs-material tags
                         # See https://squidfunk.github.io/mkdocs-material/plugins/tags
                         if "tags" in item.meta:
