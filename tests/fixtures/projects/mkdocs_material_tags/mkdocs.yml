@@ -1,0 +1,12 @@
+site_name: Test
+
+theme:
+  name: material
+
+plugins:
+    - tags
+    - print-site:
+        add_to_navigation: true
+  
+markdown_extensions:
+    - attr_list
