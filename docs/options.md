@@ -22,6 +22,7 @@ plugins:
       include_css: true
       enabled: true
       exclude:
+      include:
 ```
 
 `add_to_navigation`
@@ -92,3 +93,5 @@ plugins:
 
 `exclude`
 : Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](how-to/do_not_print.md#ignoring-an-entire-page) for more info.
+`include`
+: Default is * to include the entire site. Allows to specify a list of page source paths that is then filtered by the exclude options to create a final list that should be included in the print page. 
