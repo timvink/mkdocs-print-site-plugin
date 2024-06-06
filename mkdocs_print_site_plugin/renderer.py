@@ -72,7 +72,7 @@ class Renderer(object):
             html += self._toc()
 
         def get_html_from_items(
-            items: list, dir_urls: bool, excluded_pages: list, section_depth: int = 0
+            items: list, dir_urls: bool, included_pages: list, excluded_pages: list, section_depth: int = 0
         ) -> str:
             """
             Get all the HTML from the pages.
@@ -81,6 +81,10 @@ class Renderer(object):
 
             for item in items:
                 if item.is_page:
+                    # Do not exclude page in print page if included
+                    if not exclude(item.file.src_path,included_pages):
+                        logging.debug(f"Excluding page '{item.file.src_path}'")
+                        continue
                     # Do not include page in print page if excluded
                     if exclude(item.file.src_path, excluded_pages):
                         logging.debug(f"Excluding page '{item.file.src_path}'")
@@ -119,7 +123,7 @@ class Renderer(object):
 
                 if item.is_section:
                     section_html=get_html_from_items(
-                        item.children, dir_urls, excluded_pages, section_depth + 1
+                        item.children, dir_urls, included_pages, excluded_pages, section_depth + 1
                     )
                     if len(section_html)>0:
                         items_html += """
@@ -141,11 +145,12 @@ class Renderer(object):
                             "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
                         )
             return items_html
-
+        
         html += get_html_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
-            excluded_pages=self.plugin_config.get("exclude", []),
+            included_pages=self.plugin_config.get("included", []),
+            excluded_pages=self.plugin_config.get("exclude", [])
         )
 
         html += "</div>"
@@ -225,16 +230,20 @@ class Renderer(object):
             chapter_number = 0
             section_number = 0
         toc = []
-        toc = self.get_toc_sidebar_section(items=self._get_items() , excluded_pages=self.plugin_config.get("exclude", []))
+        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.plugin_config.get("include", []), excluded_pages=self.plugin_config.get("exclude", []))
 
 
         return TableOfContents(toc)
 
-    def get_toc_sidebar_section(self, items: list, excluded_pages: list, level: int = 0, chapter_number:int =0, section_number:int =0  ):
+    def get_toc_sidebar_section(self, items: list, included_pages: list, excluded_pages: list, level: int = 0, chapter_number:int =0, section_number:int =0  ):
         toc=[]
         for item in items:
             if item.is_page:
                 page_key = get_page_key(item.url)
+                # Do not exclude page in print page if included
+                if not exclude(item.file.src_path,included_pages):
+                    logging.debug(f"Excluding page '{item.file.src_path}'")
+                    continue
                 # Do not include page in print page if excluded
                 if exclude(item.file.src_path, excluded_pages):
                     logging.debug(f"Excluding page '{item.file.src_path}'")
@@ -261,6 +270,7 @@ class Renderer(object):
                     title=title, id=f"section-{to_snake_case(item.title)}", level=0
                 )
                 section_toc = self.get_toc_sidebar_section(items=item.children,
+                                                           included_pages=included_pages,
                                                            excluded_pages=excluded_pages,
                                                            level=(level+1), 
                                                            chapter_number = chapter_number, 

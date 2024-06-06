@@ -42,6 +42,7 @@ class PrintSitePlugin(BasePlugin):
         ("include_css", config_options.Type(bool, default=True)),
         ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
+        ("include", config_options.Type(list, default=["*"])),
     )
 
     def on_config(self, config, **kwargs):
