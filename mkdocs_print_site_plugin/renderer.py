@@ -82,6 +82,8 @@ class Renderer(object):
             for item in items:
                 if item.is_page:
                     # Do not exclude page in print page if included
+                    if "Policies" in item.file.src_path:
+                        x = item.file.src_path
                     if not exclude(item.file.src_path,included_pages):
                         logging.debug(f"Excluding page '{item.file.src_path}'")
                         continue
@@ -149,7 +151,7 @@ class Renderer(object):
         html += get_html_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
-            included_pages=self.plugin_config.get("included", []),
+            included_pages=self.plugin_config.get("include", []),
             excluded_pages=self.plugin_config.get("exclude", [])
         )
 
