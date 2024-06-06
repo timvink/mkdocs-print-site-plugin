@@ -118,26 +118,28 @@ class Renderer(object):
                         )
 
                 if item.is_section:
-                    items_html += """
-                        <h%s class='nav-section-title' id='section-%s'>
-                            %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
-                        </h%s>
-                        """ % (
-                        min(6, section_depth + 1),
-                        to_snake_case(item.title),
-                        item.title,
-                        to_snake_case(item.title),
-                        min(6, section_depth + 1),
-                    )
-                    items_html += get_html_from_items(
+                    section_html=get_html_from_items(
                         item.children, dir_urls, excluded_pages, section_depth + 1
                     )
-                    # We also need to indicate the end of section page
-                    # We do that using a h1 with a specific class
-                    # In CSS we display:none, in JS we can use it for formatting the table of contents.
-                    items_html += (
-                        "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
-                    )
+                    if len(section_html)>0:
+                        items_html += """
+                            <h%s class='nav-section-title' id='section-%s'>
+                                %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
+                            </h%s>
+                            """ % (
+                            min(6, section_depth + 1),
+                            to_snake_case(item.title),
+                            item.title,
+                            to_snake_case(item.title),
+                            min(6, section_depth + 1),
+                        )
+                        items_html += section_html
+                        # We also need to indicate the end of section page
+                        # We do that using a h1 with a specific class
+                        # In CSS we display:none, in JS we can use it for formatting the table of contents.
+                        items_html += (
+                            "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
+                        )
             return items_html
 
         html += get_html_from_items(
@@ -218,15 +220,25 @@ class Renderer(object):
 
         Reference: https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
         """
-        toc = []
 
         if self.plugin_config.get("enumerate_headings"):
             chapter_number = 0
             section_number = 0
+        toc = []
+        toc = self.get_toc_sidebar_section(items=self._get_items() , excluded_pages=self.plugin_config.get("exclude", []))
 
-        for item in self._get_items():
+
+        return TableOfContents(toc)
+
+    def get_toc_sidebar_section(self, items: list, excluded_pages: list, level: int = 0, chapter_number:int =0, section_number:int =0  ):
+        toc=[]
+        for item in items:
             if item.is_page:
                 page_key = get_page_key(item.url)
+                # Do not include page in print page if excluded
+                if exclude(item.file.src_path, excluded_pages):
+                    logging.debug(f"Excluding page '{item.file.src_path}'")
+                    continue
                 # navigate to top of page if page is homepage
                 if page_key == "index":
                     page_key = ""
@@ -239,7 +251,6 @@ class Renderer(object):
                 toc.append(AnchorLink(title=title, id=f"{page_key}", level=0))
             
             if item.is_section:
-
                 if self.plugin_config.get("enumerate_headings"):
                     section_number += 1
                     title = f"{int_to_roman(section_number)}. {item.title}"
@@ -249,24 +260,18 @@ class Renderer(object):
                 section_link = AnchorLink(
                     title=title, id=f"section-{to_snake_case(item.title)}", level=0
                 )
-
-                subpages = [p for p in item.children if p.is_page]
-                for page in subpages:
-                    if self.plugin_config.get("enumerate_headings"):
-                        chapter_number += 1
-                        title = f"{chapter_number}. {page.title}"
-                    else:
-                        title = page.title
-                    
-                    page_key = get_page_key(page.url)
-                    section_link.children.append(
-                        AnchorLink(title=title, id=f"{page_key}", level=1)
-                    )
-
-                toc.append(section_link)
-
-        return TableOfContents(toc)
-
+                section_toc = self.get_toc_sidebar_section(items=item.children,
+                                                           excluded_pages=excluded_pages,
+                                                           level=(level+1), 
+                                                           chapter_number = chapter_number, 
+                                                           section_number=section_number )
+                if len(section_toc) > 0:
+                    toc.append(section_link)
+                    for link in section_toc:
+                        toc.append(link)
+                else:
+                    section_number -= 1
+        return toc 
 
 
 def int_to_roman(num):
