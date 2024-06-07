@@ -25,7 +25,34 @@ def get_theme_name(config) -> str:
     else:
         return name
 
-
+def find_new_root( root, path):
+    # Split the path by '/'
+    path_parts = path.strip('/').split('/')
+    
+    # Recursive helper function
+    def _find_node(current_node, parts):
+        if not parts:
+            return current_node
+        
+        # Get the next part of the path
+        next_part = parts[0]
+        
+        # Look for the next node among the current node's children
+        if not hasattr(current_node, 'children'):
+            return None
+        for child in current_node.children:
+            if child.is_section:
+                if child.title in next_part:
+                    return _find_node(child, parts[1:])
+        
+        return None  # If the node is not found
+    for node in root:
+        if node.is_section:
+            if node.title == path_parts[0]:
+                return _find_node(node, path_parts[1:])
+    
+    return None
+    
 def flatten_nav(items):
     """
     Create a flat list of pages from a nested navigation.

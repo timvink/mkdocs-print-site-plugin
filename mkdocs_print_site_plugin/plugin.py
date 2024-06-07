@@ -11,13 +11,13 @@ from mkdocs.utils import write_file, copy_file, get_relative_url
 from mkdocs.exceptions import PluginError
 
 from mkdocs_print_site_plugin.renderer import Renderer
-from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
+from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name, find_new_root
 from mkdocs_print_site_plugin.urls import is_external
 
 logger = logging.getLogger("mkdocs.plugins")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-
+from mkdocs_print_site_plugin.exclude import exclude
 
 class PrintSitePlugin(BasePlugin):
     """
@@ -43,6 +43,7 @@ class PrintSitePlugin(BasePlugin):
         ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
         ("include", config_options.Type(list, default=["*"])),
+        ("print_docs_dir", config_options.Type(str, default="")),
     )
 
     def on_config(self, config, **kwargs):
@@ -181,6 +182,8 @@ class PrintSitePlugin(BasePlugin):
         self.context = {}
 
         return config
+    
+
 
     def on_nav(self, nav, config, files, **kwargs):
         """
@@ -193,8 +196,17 @@ class PrintSitePlugin(BasePlugin):
             return nav
 
         # Save the (order of) pages and sections in the navigation before adding the print page
-        self.renderer.items = nav.items
-        self.all_pages_in_nav = flatten_nav(nav.items)
+        print_dir=self.config.get("print_docs_dir","")
+        x = find_new_root(nav.items,print_dir )
+        if hasattr(x, 'children'):
+            self.renderer.items = x.children
+            self.all_pages_in_nav = flatten_nav(x.children)
+        else:
+            self.renderer.items = x
+            self.all_pages_in_nav = flatten_nav(x)
+
+        # self.renderer.items = nav.items
+        # self.all_pages_in_nav = flatten_nav(nav.items)
 
         # Optionally add the print page to the site navigation
         if self.config.get("add_to_navigation"):
