@@ -21,7 +21,7 @@ class Renderer(object):
 
     def __init__(
         self,
-        plugin_config,
+        page_config,
         mkdocs_config=None,
         cover_page_template_path="",
         banner_template_path="",
@@ -30,7 +30,7 @@ class Renderer(object):
         """
         Inits the class.
         """
-        self.plugin_config = plugin_config
+        self.page_config = page_config
         self.mkdocs_config = mkdocs_config or {}
         self.cover_page_template_path = cover_page_template_path
         self.banner_template_path = banner_template_path
@@ -48,13 +48,13 @@ class Renderer(object):
         enabled_classes = []
 
         # Enable options via CSS
-        if self.plugin_config.get("add_full_urls"):
+        if self.page_config['add_full_urls']:
             enabled_classes.append("print-site-add-full-url")
 
-        if self.plugin_config.get("enumerate_headings"):
+        if self.page_config['enumerate_headings']:
             enabled_classes.append("print-site-enumerate-headings")
 
-        if self.plugin_config.get("enumerate_figures"):
+        if self.page_config['enumerate_figures']:
             enabled_classes.append("print-site-enumerate-figures")
 
         # Wrap entire print page in a div
@@ -62,13 +62,13 @@ class Renderer(object):
         html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 
         # Enable options via HTML injection
-        if self.plugin_config.get("add_cover_page"):
+        if self.page_config['add_cover_page':
             html += self._cover_page()
 
-        if self.plugin_config.get("add_print_site_banner"):
+        if self.page_config['add_print_site_banner']:
             html += self._print_site_banner()
 
-        if self.plugin_config.get("add_table_of_contents"):
+        if self.page_config['add_table_of_contents']:
             html += self._toc()
 
         def get_html_from_items(
@@ -151,8 +151,8 @@ class Renderer(object):
         html += get_html_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
-            included_pages=self.plugin_config.get("include", []),
-            excluded_pages=self.plugin_config.get("exclude", [])
+            included_pages=self.page_config['include],
+            excluded_pages=self.page_config['exclude']'
         )
 
         html += "</div>"
@@ -232,7 +232,7 @@ class Renderer(object):
             chapter_number = 0
             section_number = 0
         toc = []
-        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.plugin_config.get("include", []), excluded_pages=self.plugin_config.get("exclude", []))
+        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.page_config['include'], excluded_pages=self.page_config['exclude')
 
 
         return TableOfContents(toc)
@@ -254,7 +254,7 @@ class Renderer(object):
                 if page_key == "index":
                     page_key = ""
                 
-                if self.plugin_config.get("enumerate_headings"):
+                if self.page_config['enumerate_headings']:
                     chapter_number += 1
                     title = f"{chapter_number}. {item.title}"
                 else:
@@ -262,7 +262,7 @@ class Renderer(object):
                 toc.append(AnchorLink(title=title, id=f"{page_key}", level=0))
             
             if item.is_section:
-                if self.plugin_config.get("enumerate_headings"):
+                if self.page_config['enumerate_headings']:
                     section_number += 1
                     title = f"{int_to_roman(section_number)}. {item.title}"
                 else:
@@ -311,4 +311,5 @@ def int_to_roman(num):
     for (n, roman) in lookup:
         (d, num) = divmod(num, n)
         res += roman * d
+        
     return res
