@@ -62,7 +62,7 @@ class Renderer(object):
         html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 
         # Enable options via HTML injection
-        if self.page_config['add_cover_page':
+        if self.page_config['add_cover_page']:
             html += self._cover_page()
 
         if self.page_config['add_print_site_banner']:
@@ -151,8 +151,8 @@ class Renderer(object):
         html += get_html_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
-            included_pages=self.page_config['include],
-            excluded_pages=self.page_config['exclude']'
+            included_pages=self.page_config['include'],
+            excluded_pages=self.page_config['exclude']
         )
 
         html += "</div>"
@@ -208,9 +208,9 @@ class Renderer(object):
         """
         return f"""
         <section class="print-page">
-            <div id="print-page-toc" data-toc-depth="{self.plugin_config.get("toc_depth")}">
+            <div id="print-page-toc" data-toc-depth="{self.page_config["toc_depth"]}">
                 <nav role='navigation' class='print-page-toc-nav'>
-                <h1 class='print-page-toc-title'>{self.plugin_config.get("toc_title")}</h1>
+                <h1 class='print-page-toc-title'>{self.page_config["toc_title"]}</h1>
                 </nav>
             </div>
         </section>
@@ -228,11 +228,11 @@ class Renderer(object):
         Reference: https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
         """
 
-        if self.plugin_config.get("enumerate_headings"):
+        if self.page_config["enumerate_headings"]:
             chapter_number = 0
             section_number = 0
         toc = []
-        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.page_config['include'], excluded_pages=self.page_config['exclude')
+        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.page_config['include'], excluded_pages=self.page_config['exclude'])
 
 
         return TableOfContents(toc)

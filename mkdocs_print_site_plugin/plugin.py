@@ -174,7 +174,7 @@ class PrintSitePlugin(BasePlugin):
                 #validate the data
                 validate_page_entry(new_page)
                 self.print_pages[new_page["page_name"]] =merge_config(
-                                                            global_page[config],
+                                                            global_page['config'],
                                                             convert_config_to_dict(new_page["config"]))
         else:
         # If not add default single site content
@@ -304,7 +304,7 @@ class PrintSitePlugin(BasePlugin):
         """
         if not self.config.get("enabled"):
             return html
-        html_pages = [val['print_page'] for k, val in self.print_pages]
+        html_pages = [val['print_page'] for k, val in self.print_pages.items()]
         
         for page_name, page_config in self.print_pages.items():
             if not page_config['enabled']:
@@ -373,10 +373,10 @@ class PrintSitePlugin(BasePlugin):
             if template_name == "404.html":
                 page_config['context'] = context
                 # Make sure paths are OK
-                if page_config['extra_css']:
-                    page_config['context']['extra_css'] = [get_relative_url(f, page_config['print_page'].file.url) for f in page_config['extra_css']]
-                if page_config['extra_javascript']:
-                    self.context['extra_javascript'] = [get_relative_url(str(f), page_config['print_page'].file.url) for f in page_config['extra_javascript']]
+                if config.get('extra_css'):
+                    page_config['context']['extra_css'] = [get_relative_url(f, page_config['print_page'].file.url) for f in config.get('extra_css')]
+                if config.get('extra_javascript'):
+                    page_config['context']['extra_javascript'] = [get_relative_url(str(f), page_config['print_page'].file.url) for f in config.get('extra_javascript')]
 
 
     def on_post_build(self, config, **kwargs):
