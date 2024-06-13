@@ -278,13 +278,23 @@ class PrintSitePlugin(BasePlugin):
                 continue
             # Save the (order of) pages and sections in the navigation before adding the print page
             print_dir=page_config['print_docs_dir']
-            x = find_new_root(nav.items,print_dir )
-            if hasattr(x, 'children'):
-                self.page_renderers[page_name].items = x.children
-                page_config['all_pages_in_nav'] = flatten_nav(x.children)
+            new_root = find_new_root(nav.items,print_dir )
+            # If x == None the print_docs_dir is an invalid path.
+            if new_root is None:
+                msg = f'[mkdocs-print-site] Warning the \'print_docs_dir\' path '
+                msg += f'{page_config["print_docs_dir"]} is invalid for page_name: {page_name}. '
+                msg += "Format is Section\Section\Section.  This corresponds "
+                msg += "to Directory\Directory\Directory, but mkdocs will upper case "
+                msg += "a Directory from 'project' to 'Project'"
+                msg += "Please update the 'plugins:' section in your mkdocs.yml"
+                logger.warning(msg)
             else:
-                self.page_renderers[page_name].items = x
-                page_config['all_pages_in_nav'] = flatten_nav(x)
+                if hasattr(new_root, 'children'):
+                    self.page_renderers[page_name].items = new_root.children
+                    page_config['all_pages_in_nav'] = flatten_nav(new_root.children)
+                else:
+                    self.page_renderers[page_name].items = new_root
+                    page_config['all_pages_in_nav'] = flatten_nav(new_root)
 
 
             # Optionally add the print page to the site navigation

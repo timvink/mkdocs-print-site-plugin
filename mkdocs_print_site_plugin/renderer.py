@@ -164,7 +164,7 @@ class Renderer(object):
         Inserts the cover page.
         """
         env = jinja2.Environment()
-        env.globals = {"config": self.mkdocs_config, "page": self.print_page}
+        env.globals = {"config": self.mkdocs_config, "page": self.print_page, "page_config": self.page_config}
 
         with open(
             self.cover_page_template_path, "r", encoding="utf-8-sig", errors="strict"
@@ -187,7 +187,7 @@ class Renderer(object):
         Inserts the print site banner.
         """
         env = jinja2.Environment()
-        env.globals = {"config": self.mkdocs_config, "page": self.print_page}
+        env.globals = {"config": self.mkdocs_config, "page": self.print_page, "page_config": self.page_config}
 
         with open(
             self.banner_template_path, "r", encoding="utf-8-sig", errors="strict"
