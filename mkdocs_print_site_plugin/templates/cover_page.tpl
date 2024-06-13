@@ -5,6 +5,10 @@
         <h1>{{ config.site_name }}</h1>
     {% endif %}
 
+    {% if page_config.print_page_title %}
+        <h1>{{ page_config.print_page_title }}</h1>
+    {% endif %}
+
 </div>
 
 

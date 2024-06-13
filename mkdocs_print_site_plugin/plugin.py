@@ -43,7 +43,7 @@ class PrintSitePlugin(BasePlugin):
         ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
         ("include", config_options.Type(list, default=["*"])),
-        ("print_docs_dir", config_options.Type(str, default="")),
+        ("print_docs_dir", config_options.Type(str, default="*")),
         ("pages_to_print", config_options.Type(list, default=[])),
     )
     page_renderers = {}
@@ -278,24 +278,27 @@ class PrintSitePlugin(BasePlugin):
                 continue
             # Save the (order of) pages and sections in the navigation before adding the print page
             print_dir=page_config['print_docs_dir']
-            new_root = find_new_root(nav.items,print_dir )
-            # If x == None the print_docs_dir is an invalid path.
-            if new_root is None:
-                msg = f'[mkdocs-print-site] Warning the \'print_docs_dir\' path '
-                msg += f'{page_config["print_docs_dir"]} is invalid for page_name: {page_name}. '
-                msg += "Format is Section\Section\Section.  This corresponds "
-                msg += "to Directory\Directory\Directory, but mkdocs will upper case "
-                msg += "a Directory from 'project' to 'Project'"
-                msg += "Please update the 'plugins:' section in your mkdocs.yml"
-                logger.warning(msg)
-            else:
-                if hasattr(new_root, 'children'):
-                    self.page_renderers[page_name].items = new_root.children
-                    page_config['all_pages_in_nav'] = flatten_nav(new_root.children)
+            if print_dir != "*":
+                new_root = find_new_root(nav.items,print_dir )
+                # If x == None the print_docs_dir is an invalid path.
+                if new_root is None:
+                    msg = f'[mkdocs-print-site] Warning the \'print_docs_dir\' path '
+                    msg += f'{page_config["print_docs_dir"]} is invalid for page_name: {page_name}. '
+                    msg += "Check the path.  If correct the format is Section\\Section\\Section.  "
+                    msg += "This corresponds to Directory\\Directory\\Directory, but mkdocs "
+                    msg += "will upper case a Directory from 'project' to 'Project'. "
+                    msg += "Please update the 'plugins:' section in your mkdocs.yml"
+                    logger.warning(msg)
                 else:
-                    self.page_renderers[page_name].items = new_root
-                    page_config['all_pages_in_nav'] = flatten_nav(new_root)
-
+                    if hasattr(new_root, 'children'):
+                        self.page_renderers[page_name].items = new_root.children
+                        page_config['all_pages_in_nav'] = flatten_nav(new_root.children)
+                    else:
+                        self.page_renderers[page_name].items = new_root
+                        page_config['all_pages_in_nav'] = flatten_nav(new_root)
+            else:
+                self.page_renderers[page_name].items = nav.items
+                page_config['all_pages_in_nav'] = flatten_nav(nav.items)
 
             # Optionally add the print page to the site navigation
             if self.config.get("add_to_navigation"):

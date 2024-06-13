@@ -24,6 +24,9 @@ plugins:
       exclude:
       include:
       print_docs_dir: ""
+      pages_to_print:
+      - page_name: 'print_page'
+        config:
 ```
 
 `add_to_navigation`
@@ -95,6 +98,76 @@ plugins:
 `exclude`
 : Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](how-to/do_not_print.md#ignoring-an-entire-page) for more info.
 `include`
-: Default is * to include the entire site. Allows to specify a list of page source paths that is then filtered by the exclude options to create a final list that should be included in the print page. 
+: Default is * to include the entire site. Allows to specify a list of page source paths that is then filtered by the exclude options to create a final list that should be included in the print page. This does not change the root.
 `print_docs_dir`
-: Default is "" to use the site docs_dir.  This can be set to a sub folder of the site docs_dir to set the root for print_site.  
+: Default is "*" to use the site docs_dir.  This can be set to a sub folder of the site docs_dir to set the new root for the PDF print page.  
+
+`pages_to_print`
+: This is to define multiple pdf print areas with their own config sections that allow overriding the global parameters.
+
+`page_name`
+: This is the name of the page to be used to access the pdf print page. e.g.  sitename/%page_name%
+`config`
+: Configurations specific to the page_name that override the global level options. 
+
+
+## Multiple PDFs
+A site can contain directory structures to support various aspects of a business or product.  Help Guides, Setup Guides, Onboarding Guides or Maintenance processes.  These areas often consist of multiple markdown pages of content that would need to be aggregated using the mkdocs_print_site_plugin into a single page.   The pages_to_print section allows defining the name of the single page and config overrides for that PDF page. 
+
+If the pages_to_print is not present the configuration settings for a single 'print_page' will apply. 
+
+```yml
+  - print-site:
+      add_cover_page: true
+      cover_page_template: "docs/assets/cover_page_policy.tpl"
+      add_table_of_contents: true
+      add_print_site_banner: false
+      pages_to_print:
+      - page_name: 'print_page'
+        config:
+          - add_table_of_contents: true
+          - add_print_site_banner: false
+          - print_page_title: "Full Web Site"
+      - page_name: 'print_policy_page'
+        config:
+          - add_table_of_contents: true
+          - add_print_site_banner: false
+          - print_page_title: "Policy"
+          - print_docs_dir: "Reference/Policies"
+      - page_name: 'print_presales'
+        config:
+          - add_table_of_contents: false
+          - add_print_site_banner: true
+          - print_page_title: "Pre Sales Guide"
+          - print_docs_dir: "Reference/Pre Sales Guide"
+          - exclude:
+              - InternalProcesses*
+      - page_name: 'print_summer_catalog'
+        config:
+          - add_cover_page: true
+          - add_table_of_contents: true
+          - add_print_site_banner: false
+          - print_page_title: "Summer Catalog"
+          - cover_page_template: "docs/assets/cover_page_summer_catalog.tpl"
+          - include:
+            - jetskis*
+            - motorbikes*
+          - exclude:
+            - data*
+      - page_name: 'print_winter_catalog'
+        config:
+          - add_cover_page: true
+          - add_table_of_contents: true
+          - add_print_site_banner: false
+          - print_page_title: "Winter Catalog"
+          - include:
+            - snowmobiles*
+            - skiis*
+          - exclude:
+            - data*
+          - cover_page_template: "docs/assets/cover_page_winter_catalog.tpl"
+
+```
+
+The example above is contrived, but illustrates generation of pdfs for different topics or areas of a docs site.  
+
