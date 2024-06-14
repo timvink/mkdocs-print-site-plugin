@@ -1,0 +1,13 @@
+site_name: Test
+
+theme:
+    name: material
+    palette:
+        scheme: slate
+
+plugins:
+    - print-site:
+        add_to_navigation: true
+        include:
+          - z.md
+          - a.md

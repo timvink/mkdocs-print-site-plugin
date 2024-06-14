@@ -21,7 +21,7 @@ class Renderer(object):
 
     def __init__(
         self,
-        plugin_config,
+        page_config,
         mkdocs_config=None,
         cover_page_template_path="",
         banner_template_path="",
@@ -30,7 +30,7 @@ class Renderer(object):
         """
         Inits the class.
         """
-        self.plugin_config = plugin_config
+        self.page_config = page_config
         self.mkdocs_config = mkdocs_config or {}
         self.cover_page_template_path = cover_page_template_path
         self.banner_template_path = banner_template_path
@@ -48,13 +48,13 @@ class Renderer(object):
         enabled_classes = []
 
         # Enable options via CSS
-        if self.plugin_config.get("add_full_urls"):
+        if self.page_config['add_full_urls']:
             enabled_classes.append("print-site-add-full-url")
 
-        if self.plugin_config.get("enumerate_headings"):
+        if self.page_config['enumerate_headings']:
             enabled_classes.append("print-site-enumerate-headings")
 
-        if self.plugin_config.get("enumerate_figures"):
+        if self.page_config['enumerate_figures']:
             enabled_classes.append("print-site-enumerate-figures")
 
         # Wrap entire print page in a div
@@ -62,17 +62,17 @@ class Renderer(object):
         html = '<div id="print-site-page" class="%s">' % " ".join(enabled_classes)
 
         # Enable options via HTML injection
-        if self.plugin_config.get("add_cover_page"):
+        if self.page_config['add_cover_page']:
             html += self._cover_page()
 
-        if self.plugin_config.get("add_print_site_banner"):
+        if self.page_config['add_print_site_banner']:
             html += self._print_site_banner()
 
-        if self.plugin_config.get("add_table_of_contents"):
+        if self.page_config['add_table_of_contents']:
             html += self._toc()
 
         def get_html_from_items(
-            items: list, dir_urls: bool, excluded_pages: list, section_depth: int = 0
+            items: list, dir_urls: bool, included_pages: list, excluded_pages: list, section_depth: int = 0
         ) -> str:
             """
             Get all the HTML from the pages.
@@ -81,6 +81,12 @@ class Renderer(object):
 
             for item in items:
                 if item.is_page:
+                    # Do not exclude page in print page if included
+                    if "Policies" in item.file.src_path:
+                        x = item.file.src_path
+                    if not exclude(item.file.src_path,included_pages):
+                        logging.debug(f"Excluding page '{item.file.src_path}'")
+                        continue
                     # Do not include page in print page if excluded
                     if exclude(item.file.src_path, excluded_pages):
                         logging.debug(f"Excluding page '{item.file.src_path}'")
@@ -118,32 +124,35 @@ class Renderer(object):
                         )
 
                 if item.is_section:
-                    items_html += """
-                        <h%s class='nav-section-title' id='section-%s'>
-                            %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
-                        </h%s>
-                        """ % (
-                        min(6, section_depth + 1),
-                        to_snake_case(item.title),
-                        item.title,
-                        to_snake_case(item.title),
-                        min(6, section_depth + 1),
+                    section_html=get_html_from_items(
+                        item.children, dir_urls, included_pages, excluded_pages, section_depth + 1
                     )
-                    items_html += get_html_from_items(
-                        item.children, dir_urls, excluded_pages, section_depth + 1
-                    )
-                    # We also need to indicate the end of section page
-                    # We do that using a h1 with a specific class
-                    # In CSS we display:none, in JS we can use it for formatting the table of contents.
-                    items_html += (
-                        "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
-                    )
+                    if len(section_html)>0:
+                        items_html += """
+                            <h%s class='nav-section-title' id='section-%s'>
+                                %s <a class='headerlink' href='#section-%s' title='Permanent link'>↵</a>
+                            </h%s>
+                            """ % (
+                            min(6, section_depth + 1),
+                            to_snake_case(item.title),
+                            item.title,
+                            to_snake_case(item.title),
+                            min(6, section_depth + 1),
+                        )
+                        items_html += section_html
+                        # We also need to indicate the end of section page
+                        # We do that using a h1 with a specific class
+                        # In CSS we display:none, in JS we can use it for formatting the table of contents.
+                        items_html += (
+                            "<h1 class='nav-section-title-end'>Ended: %s</h1>" % item.title
+                        )
             return items_html
-
+        
         html += get_html_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),
-            excluded_pages=self.plugin_config.get("exclude", []),
+            included_pages=self.page_config['include'],
+            excluded_pages=self.page_config['exclude']
         )
 
         html += "</div>"
@@ -155,7 +164,7 @@ class Renderer(object):
         Inserts the cover page.
         """
         env = jinja2.Environment()
-        env.globals = {"config": self.mkdocs_config, "page": self.print_page}
+        env.globals = {"config": self.mkdocs_config, "page": self.print_page, "page_config": self.page_config}
 
         with open(
             self.cover_page_template_path, "r", encoding="utf-8-sig", errors="strict"
@@ -178,7 +187,7 @@ class Renderer(object):
         Inserts the print site banner.
         """
         env = jinja2.Environment()
-        env.globals = {"config": self.mkdocs_config, "page": self.print_page}
+        env.globals = {"config": self.mkdocs_config, "page": self.print_page, "page_config": self.page_config}
 
         with open(
             self.banner_template_path, "r", encoding="utf-8-sig", errors="strict"
@@ -199,9 +208,9 @@ class Renderer(object):
         """
         return f"""
         <section class="print-page">
-            <div id="print-page-toc" data-toc-depth="{self.plugin_config.get("toc_depth")}">
+            <div id="print-page-toc" data-toc-depth="{self.page_config["toc_depth"]}">
                 <nav role='navigation' class='print-page-toc-nav'>
-                <h1 class='print-page-toc-title'>{self.plugin_config.get("toc_title")}</h1>
+                <h1 class='print-page-toc-title'>{self.page_config["toc_title"]}</h1>
                 </nav>
             </div>
         </section>
@@ -218,20 +227,34 @@ class Renderer(object):
 
         Reference: https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
         """
-        toc = []
 
-        if self.plugin_config.get("enumerate_headings"):
+        if self.page_config["enumerate_headings"]:
             chapter_number = 0
             section_number = 0
+        toc = []
+        toc = self.get_toc_sidebar_section(items=self._get_items(),included_pages=self.page_config['include'], excluded_pages=self.page_config['exclude'])
 
-        for item in self._get_items():
+
+        return TableOfContents(toc)
+
+    def get_toc_sidebar_section(self, items: list, included_pages: list, excluded_pages: list, level: int = 0, chapter_number:int =0, section_number:int =0  ):
+        toc=[]
+        for item in items:
             if item.is_page:
                 page_key = get_page_key(item.url)
+                # Do not exclude page in print page if included
+                if not exclude(item.file.src_path,included_pages):
+                    logging.debug(f"Excluding page '{item.file.src_path}'")
+                    continue
+                # Do not include page in print page if excluded
+                if exclude(item.file.src_path, excluded_pages):
+                    logging.debug(f"Excluding page '{item.file.src_path}'")
+                    continue
                 # navigate to top of page if page is homepage
                 if page_key == "index":
                     page_key = ""
                 
-                if self.plugin_config.get("enumerate_headings"):
+                if self.page_config['enumerate_headings']:
                     chapter_number += 1
                     title = f"{chapter_number}. {item.title}"
                 else:
@@ -239,8 +262,7 @@ class Renderer(object):
                 toc.append(AnchorLink(title=title, id=f"{page_key}", level=0))
             
             if item.is_section:
-
-                if self.plugin_config.get("enumerate_headings"):
+                if self.page_config['enumerate_headings']:
                     section_number += 1
                     title = f"{int_to_roman(section_number)}. {item.title}"
                 else:
@@ -249,24 +271,19 @@ class Renderer(object):
                 section_link = AnchorLink(
                     title=title, id=f"section-{to_snake_case(item.title)}", level=0
                 )
-
-                subpages = [p for p in item.children if p.is_page]
-                for page in subpages:
-                    if self.plugin_config.get("enumerate_headings"):
-                        chapter_number += 1
-                        title = f"{chapter_number}. {page.title}"
-                    else:
-                        title = page.title
-                    
-                    page_key = get_page_key(page.url)
-                    section_link.children.append(
-                        AnchorLink(title=title, id=f"{page_key}", level=1)
-                    )
-
-                toc.append(section_link)
-
-        return TableOfContents(toc)
-
+                section_toc = self.get_toc_sidebar_section(items=item.children,
+                                                           included_pages=included_pages,
+                                                           excluded_pages=excluded_pages,
+                                                           level=(level+1), 
+                                                           chapter_number = chapter_number, 
+                                                           section_number=section_number )
+                if len(section_toc) > 0:
+                    toc.append(section_link)
+                    for link in section_toc:
+                        toc.append(link)
+                else:
+                    section_number -= 1
+        return toc 
 
 
 def int_to_roman(num):
@@ -294,4 +311,5 @@ def int_to_roman(num):
     for (n, roman) in lookup:
         (d, num) = divmod(num, n)
         res += roman * d
+        
     return res
