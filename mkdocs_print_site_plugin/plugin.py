@@ -301,9 +301,9 @@ class PrintSitePlugin(BasePlugin):
                 page_config['all_pages_in_nav'] = flatten_nav(nav.items)
 
             # Optionally add the print page to the site navigation
-            if self.config.get("add_to_navigation"):
-                nav.items.append(self.print_page)
-                nav.pages.append(self.print_page)
+            if page_config['add_to_navigation']:
+                nav.items.append(page_config['print_page'])
+                nav.pages.append(page_config['print_page'])
 
 
         return nav

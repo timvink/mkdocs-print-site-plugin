@@ -1,0 +1,31 @@
+site_name: Test
+
+theme:
+    name: material
+    palette:
+        scheme: slate
+
+plugins:
+    - print-site:
+        add_to_navigation: true
+        exclude:
+            - exclude.md
+            - Sub2/sub2_exclude.md
+        pages_to_print:
+            - page_name: 'print_sub1'
+              config:
+                - add_table_of_contents: true
+                - print_page_title: "Sub 1 Title"
+                - print_docs_dir: "Sub1"
+                - exclude:
+                  - Sub1/sub1_exclude.md
+            - page_name: 'print_sub2'
+              config:
+                - add_table_of_contents: true
+                - print_page_title: "Sub 2 Title"
+                - add_to_navigation: false
+                - exclude:
+                   - '**exclude**'
+                - include:
+                   - z.md
+                   - Sub2*

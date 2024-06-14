@@ -275,6 +275,68 @@ def test_basic_build7(tmp_path):
     """
     check_build(tmp_path, "bad_headings/mkdocs.yml", exit_code=0)
 
+
+def test_basic_build8(tmp_path):
+    """
+    Test include
+    """
+    prj_path = check_build(tmp_path, "basic/mkdocs_with_include_and_theme.yml")
+
+    # Print page should be in the navigation
+    assert text_in_page(
+        prj_path,
+        "index.html",
+        'href="print_page\/" class="md-nav__link"',
+    )
+
+    # Make sure the 2 pages are combined and present
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A</h1>')
+    assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z</h1>')
+
+def test_basic_build9(tmp_path):
+    """
+    Test include
+    """
+    prj_path = check_build(tmp_path, "basic/mkdocs_with_multi_pdf_and_theme.yml")
+
+    # Sub 1 print page should be in the navigation
+    assert text_in_page(
+        prj_path,
+        "index.html",
+        'href="print_sub1\/" class="md-nav__link"',
+    )
+    # Test  override
+    # Sub 2 print page should not be in navigation
+    assert not text_in_page(
+        prj_path,
+        "index.html",
+        'href="print_sub2\/" class="md-nav__link"',
+    )
+    # print_sub1 Tests
+    # Make sure the 2 pages are combined and present in sub1
+    assert text_in_page(prj_path, "print_sub1/index.html", 'This is page B')
+    assert text_in_page(prj_path, "print_sub1/index.html", 'This is page C')
+    assert text_in_page(prj_path, "print_sub1/index.html", 'Sub1')
+    # Make sure content not in Sub1 is excluded
+    assert not text_in_page(prj_path, "print_sub1/index.html", 'This is page Z')
+    assert not text_in_page(prj_path, "print_sub1/index.html", 'This is page A')
+    assert not text_in_page(prj_path, "print_sub1/index.html", 'This is page Exclude')
+    # Check exclude parameter
+    assert not text_in_page(prj_path, "print_sub1/index.html", 'This is page Sub 1 Exclude')
+
+    # print_sub2 Tests
+    # make sure sub 2 includes a, z, and sub2 folder
+    assert text_in_page(prj_path, "print_sub2/index.html", 'This is page Z')
+    assert text_in_page(prj_path, "print_sub2/index.html", 'This is page D')
+    assert text_in_page(prj_path, "print_sub2/index.html", 'This is page E')
+    assert not text_in_page(prj_path, "print_sub2/index.html", 'This is page Sub 1 Exclude')
+    assert not text_in_page(prj_path, "print_sub2/index.html", 'This is page Sub 2 Exclude')
+    assert not text_in_page(prj_path, "print_sub2/index.html", 'This is page Exclude')
+    
+
+
+
+
 def test_build_with_material_tags(tmp_path):
     """
     Test support with tags.
