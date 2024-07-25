@@ -180,7 +180,6 @@ class PrintSitePlugin(BasePlugin):
         # If not add default single site content
             self.print_pages[global_page["page_name"]]=global_page['config']
 
-
         # Loop though the self.print_pages and 
         # convert the single page self._____ attribute storage 
         # to a self.print_pages[key]._____ attribute storage 
