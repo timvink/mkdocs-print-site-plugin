@@ -219,6 +219,7 @@ class Renderer(object):
         Reference: https://github.com/mkdocs/mkdocs/blob/master/mkdocs/structure/toc.py
         """
         toc = []
+        excluded_pages = self.plugin_config.get("exclude", [])        
 
         if self.plugin_config.get("enumerate_headings"):
             chapter_number = 0
@@ -250,7 +251,7 @@ class Renderer(object):
                     title=title, id=f"section-{to_snake_case(item.title)}", level=0
                 )
 
-                subpages = [p for p in item.children if p.is_page]
+                subpages = [p for p in item.children if p.is_page and not exclude(p.file.src_path, excluded_pages)]
                 for page in subpages:
                     if self.plugin_config.get("enumerate_headings"):
                         chapter_number += 1
@@ -263,7 +264,8 @@ class Renderer(object):
                         AnchorLink(title=title, id=f"{page_key}", level=1)
                     )
 
-                toc.append(section_link)
+                if len(subpages) > 0:
+                    toc.append(section_link)
 
         return TableOfContents(toc)
 
