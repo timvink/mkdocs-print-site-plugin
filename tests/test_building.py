@@ -326,3 +326,27 @@ def test_basic_build99(tmp_path):
     )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
+
+
+def test_nested_sections(tmp_path):
+    """
+    Test nested sections.
+    """
+
+    prj_path = check_build(tmp_path, "nested_sections/mkdocs_basetheme.yml")
+
+    # All pages should be in the navigation.
+    items = [
+        '<li class="nav-item" data-bs-level="0"><a href="#section-section" class="nav-link">I. Section</a>',
+        '<li class="nav-item" data-bs-level="1"><a href="#page1" class="nav-link">2. page1</a>',
+        '<li class="nav-item" data-bs-level="1"><a href="#page5" class="nav-link">3. page 5</a>',
+        '<li class="nav-item" data-bs-level="1"><a href="#section-subsection" class="nav-link">I.I. Subsection</a>',
+        '<li class="nav-item" data-bs-level="2"><a href="#page2" class="nav-link">4. page 2</a>',
+        '<li class="nav-item" data-bs-level="2"><a href="#section-another-subsection" class="nav-link">I.I.I. Another subsection</a>',
+        '<li class="nav-item" data-bs-level="2"><a href="#section-and-another" class="nav-link">I.I.II. And another</a>',
+        '<li class="nav-item" data-bs-level="1"><a href="#page4" class="nav-link">8. page 4</a>',
+        '<li class="nav-item" data-bs-level="1"><a href="#page8" class="nav-link">9. page 8</a>',
+        '<li class="nav-item" data-bs-level="0"><a href="#info" class="nav-link">10. info</a>',
+    ]
+    for item in items:
+        assert text_in_page(prj_path, "print_page/index.html", item)
