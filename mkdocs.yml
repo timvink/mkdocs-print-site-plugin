@@ -3,7 +3,7 @@ repo_url: https://github.com/timvink/mkdocs-print-site-plugin
 site_url: https://timvink.github.io/mkdocs-print-site-plugin/
 site_description: MkDocs Plugin allowing your site visitors to *File > Print > Save as PDF* the entire site.
 site_author: Tim Vink
-copyright: Copyright &copy; 2020 Maintained by <a href="https://github.com/timvink">Tim Vink</a>.
+copyright: Copyright &copy; 2024 Maintained by <a href="https://github.com/timvink">Tim Vink</a>.
 
 use_directory_urls: false
 
@@ -107,7 +107,6 @@ markdown_extensions:
 
 extra_javascript:
     - javascripts/config.js
-    - https://polyfill.io/v3/polyfill.min.js?features=es6
     - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
     - https://cdn.jsdelivr.net/npm/vega@5
     - https://cdn.jsdelivr.net/npm/vega-lite@5
