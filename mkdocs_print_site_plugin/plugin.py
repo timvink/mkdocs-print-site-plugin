@@ -27,6 +27,7 @@ class PrintSitePlugin(BasePlugin):
     config_scheme = (
         ("add_to_navigation", config_options.Type(bool, default=False)),
         ("print_page_title", config_options.Type(str, default="Print Site")),
+        ("print_page_basename", config_options.Type(str, default="print_page")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
         ("toc_title", config_options.Type(str, default="Table of Contents")),
         ("toc_depth", config_options.Type(int, default=3)),
@@ -153,7 +154,7 @@ class PrintSitePlugin(BasePlugin):
 
         # Create MkDocs Page and File instances
         self.print_file = File(
-            path="print_page.md",
+            path=self.config.get("print_page_basename") + ".md",
             src_dir="",
             dest_dir=config["site_dir"],
             use_directory_urls=config.get("use_directory_urls"),
