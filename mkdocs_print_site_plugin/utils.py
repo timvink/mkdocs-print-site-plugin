@@ -42,7 +42,7 @@ def find_new_root( root, path):
             return None
         for child in current_node.children:
             if child.is_section:
-                if child.title in next_part:
+                if child.title.lower() in next_part.lower():
                     return _find_node(child, parts[1:])
         
         return None  # If the node is not found
