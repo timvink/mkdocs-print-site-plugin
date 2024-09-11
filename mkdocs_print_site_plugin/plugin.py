@@ -63,7 +63,15 @@ class PrintSitePlugin(BasePlugin):
         # it is important 'print-site' is defined last in the 'plugins'
         plugins = config.get("plugins")
         print_site_position = [*dict(plugins)].index("print-site")
-        if print_site_position != len(plugins) - 1:
+
+        # Offset begins at 1 due to indexing starting at 0
+        position_offset = 1
+
+        # Check if 'hooks' is defined in the 'plugins' section
+        if isinstance(config.get("hooks"), dict):
+            position_offset += len(config.get("hooks"))
+            
+        if print_site_position != len(plugins) - position_offset:
             msg = "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin,"
             msg += "to ensure the print page has any changes other plugins make."
             msg += "Please update the 'plugins:' section in your mkdocs.yml"
