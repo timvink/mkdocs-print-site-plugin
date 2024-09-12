@@ -23,7 +23,7 @@ jobs:
         pip install setuptools wheel twine
     - name: Make sure unit tests succeed
       run: |
-        pip install ".[dev]""
+        pip install ".[dev]"
         pytest
     - name: Build package
       run: |
