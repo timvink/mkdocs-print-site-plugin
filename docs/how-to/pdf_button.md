@@ -6,8 +6,8 @@ MkDocs supports [theme extension](https://www.mkdocs.org/user-guide/styling-your
 
 This plugin adds to the context a `page.url_to_print_page` which contains the relative link from a page to the print page. You can use `page.url_to_print_page` when customizing a theme:
 
-!!! info
-    While it might be easier for your users, using this option means you need to re-create the PDF everytime you make a change to your website.
+!!! info "Exporting to PDF is a separate step"
+    While it might be easier for your users, using this option means you need to re-create the PDF everytime you make a change to your website. See [how to export to PDF](pdf_button.md).
 
     If you use this option and you are using version control like git, you might want to also [gitignore](https://git-scm.com/docs/gitignore) the PDF file.
 
