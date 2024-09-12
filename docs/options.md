@@ -7,6 +7,7 @@ plugins:
   - print-site:
       add_to_navigation: false
       print_page_title: 'Print Site'
+      print_page_basename: 'print_page'
       add_print_site_banner: false
       # Table of contents
       add_table_of_contents: true
@@ -29,6 +30,9 @@ plugins:
 
 `print_page_title`
 :   Default is `'Print Site'`. When `add_to_navigation` is set to `true` this setting controls the name of the print page in the navigation of the site. This setting is ignored when `add_to_navigation` is set to `false`.
+
+`print_page_basename`
+:   Default is `'print_page'`. Can be used to cutomized the path to the print page in the URL.
 
 `add_table_of_contents`
 :   Default is `true`. Adds a table of contents section at the beginning of the print page (in print version, the HTML version has a different sidebar ToC).
