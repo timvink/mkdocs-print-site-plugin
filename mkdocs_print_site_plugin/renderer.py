@@ -241,6 +241,7 @@ class Renderer(object):
         """
 
         toc = []
+        excluded_pages = self.plugin_config.get("exclude", [])        
 
         # The level is simply the number of section numbers we have (e.g. an empty list is the start
         # of recursion, at level 0).
@@ -285,7 +286,22 @@ class Renderer(object):
                 section_link = AnchorLink(
                     title=title, id=f"section-{to_snake_case(item.title)}", level=level
                 )
-                toc.append(section_link)
+
+                subpages = [p for p in item.children if p.is_page and not exclude(p.file.src_path, excluded_pages)]
+                for page in subpages:
+                    if self.plugin_config.get("enumerate_headings"):
+                        chapter_number += 1
+                        title = f"{chapter_number}. {page.title}"
+                    else:
+                        title = page.title
+                    
+                    page_key = get_page_key(page.url)
+                    section_link.children.append(
+                        AnchorLink(title=title, id=f"{page_key}", level=1)
+                    )
+
+                if len(subpages) > 0:
+                    toc.append(section_link)
 
                 # Now recurse into the children. Note we're setting chapter_number to be
                 # the last chapter number used in the recursion.
