@@ -1,0 +1,13 @@
+mkdocs
+mkdocs-material
+mkdocs-git-revision-date-localized-plugin
+# building the package
+build
+# testing
+pytest
+pytest-cov
+click
+# testing for compatibility
+mkdocs-windmill
+mkdocs-img2fig-plugin
+mkdocs-charts-plugin

@@ -23,12 +23,11 @@ jobs:
         pip install setuptools wheel twine
     - name: Make sure unit tests succeed
       run: |
-        pip install -r tests/test_requirements.txt
-        pip install .
+        pip install ".[dev]""
         pytest
     - name: Build package
       run: |
-        python setup.py sdist bdist_wheel
+        python -m build
     # See https://docs.pypi.org/trusted-publishers/using-a-publisher/
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1

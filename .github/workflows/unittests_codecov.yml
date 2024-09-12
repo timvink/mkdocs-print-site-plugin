@@ -24,14 +24,9 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Static code checking with pyflakes
-      run: |
-        pip install pyflakes
-        pyflakes mkdocs_print_site_plugin
     - name: Generate coverage report
       run: |
-        pip install -r tests/test_requirements.txt
-        pip install .
+        pip install ".[dev]"
         pytest --cov=mkdocs_print_site_plugin --cov-report=xml -vvv
     - name: Upload coverage to Codecov
       if: "contains(env.USING_COVERAGE, matrix.python-version)"
