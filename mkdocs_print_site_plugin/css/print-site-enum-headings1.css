@@ -8,12 +8,12 @@ print-site:
 */
 
 /* Reset all enumeration at start of page */
-body {counter-reset: chapter sec-top toc-chapter toc-sec-chapter figurecounter;}
+body {counter-reset: enum-level1 enum-level2 enum-level3 enum-level4 enum-level5 enum-level6 figurecounter;}
 
-/* Enumerate headings of CHAPTERS,
-that are part of an original included page */
-.print-site-enumerate-headings .print-page h1 {counter-reset: section sub-section composite detail last; }
-.print-site-enumerate-headings .print-page h2 {counter-reset: sub-section composite detail last; }
+/* Enumerate headings of chapters and sections that are part of an original included page */
+.print-site-enumerate-headings .print-page h1 {counter-reset: enum-level2 enum-level3 enum-level4 enum-level5 enum-level6; }
+.print-site-enumerate-headings .print-page h2 {counter-reset: enum-level3 enum-level4 enum-level5 enum-level6; }
+/* TODO: continue this work */
 .print-site-enumerate-headings .print-page h3 {counter-reset: composite detail last; }
 .print-site-enumerate-headings .print-page h4 {counter-reset: detail last; }
 .print-site-enumerate-headings .print-page h5 {counter-reset: last; }

@@ -337,7 +337,7 @@ def test_nested_sections(tmp_path):
 
     # All pages should be in the navigation.
     items = [
-        '<li class="nav-item" data-bs-level="0"><a href="#section-section" class="nav-link">I. Section</a>',
+        '<li class="nav-item" data-bs-level="0"><a href="#section-section" class="nav-link">1. Section</a>',
         '<li class="nav-item" data-bs-level="1"><a href="#page1" class="nav-link">2. page1</a>',
         '<li class="nav-item" data-bs-level="1"><a href="#page5" class="nav-link">3. page 5</a>',
         '<li class="nav-item" data-bs-level="1"><a href="#section-subsection" class="nav-link">I.I. Subsection</a>',
