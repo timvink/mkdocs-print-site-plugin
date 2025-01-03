@@ -104,7 +104,7 @@ class Renderer(object):
                             
                         # Support mkdocs-material tags
                         # See https://squidfunk.github.io/mkdocs-material/plugins/tags
-                        if "tags" in item.meta:
+                        if hasattr(item, "tags") and item.meta["tags"]:
                             tags = item.meta["tags"]
                             tags_html = "<nav class='md-tags'>"
                             for tag in tags:
