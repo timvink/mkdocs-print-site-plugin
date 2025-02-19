@@ -10,116 +10,72 @@ function generate_toc() {
 
   var ToC = ""
 
-  var newLine, el, title, link;
+  var el, title, link;
 
-  const toc_elements = document.querySelectorAll(
-    "#print-site-page h1.nav-section-title, #print-site-page h1.nav-section-title-end," +
-    "#print-site-page h2.nav-section-title, #print-site-page h2.nav-section-title-end," +
-    "#print-site-page h3.nav-section-title, #print-site-page h3.nav-section-title-end," +
-    "#print-site-page h4.nav-section-title, #print-site-page h4.nav-section-title-end," +
-    "#print-site-page h5.nav-section-title, #print-site-page h5.nav-section-title-end," +
-    "#print-site-page h6.nav-section-title, #print-site-page h6.nav-section-title-end," +
-    "section.print-page h1,section.print-page h2,section.print-page h3," +
-    "section.print-page h4,section.print-page h5,section.print-page h6")
+  var headingNumberStyles = "<style>";
   
-  var current_heading_depth = 0;
-  var current_section_depth = 0;
+  function getEntry(link, title, id, level) {
+    let className = !!level ? `print-site-toc-level-${level}` : '';
+    return `<li class='${className}'>
+      <a id='${id}' href='${link}'>${title}</a></li>`;
+  }
 
-  // Extract table of contents depth
-  // basically plugin setting, passed via a data attribute
-  var toc_depth = document.getElementById("print-page-toc").getAttribute("data-toc-depth")
+  function recursion(elements, level) {
+    let tocElements = Array.from(elements).filter(el => el.classList.contains('print-page') &&
+      (el.id ?? '') != '');
 
-  for (var i = 0; i < toc_elements.length; i++) {
-    
-    // Get the info from the element
-    el = toc_elements[i]
-    link = "#" + el.id;
-    tag = el.tagName
-    tag_level = tag.substring(1)
-    // Get the text of a heading
-    // We use .firstChild.nodeValue instead of .innerText
-    // because of elements like:
-    // <h1 id="index-mkdocs-print-site-plugin">
-    //     mkdocs-print-site-plugin<a class="headerlink" href="#index-mkdocs-print-site-plugin" title="Permanent link">↵</a>
-    //  </h1>
-    title = el.firstChild.nodeValue;
-    if ( ! title ) {
-      continue;
-    }
+    // Extract table of contents depth
+    // basically plugin setting, passed via a data attribute
+    var tocDepth = document.getElementById("print-page-toc").getAttribute("data-toc-depth")
 
-    // Don't put the toc h1 in the toc
-    if ( el.classList.contains('print-page-toc-title') ) {
-      continue;
-    }
-    // Ignore the MkDocs keyboard Model
-    if ( el.id.indexOf("keyboardModalLabel") > -1 ) {
-      continue;
-    }
-
-    // print-site-plugin has a setting to control TOC depth
-    if ( tag_level > toc_depth ) {
-      continue;
-    }
-
-    if (el.classList.contains('nav-section-title') ) {
-      // Use the tag level of the first item in the section to close off any nested <ul>
-      el = toc_elements[i+1]
+    for (var i = 0; i < tocElements.length; i++) {
+      // Get the info from the element
+      el = tocElements[i];
       link = "#" + el.id;
-      tag = el.tagName
-      tag_level = tag.substring(1)
-      while (tag_level > current_heading_depth) {
-        current_heading_depth++;
-        ToC += "<ul class='print-site-toc-level-" + current_heading_depth + "'>";
+      tag = el.firstElementChild.tagName;
+      tagLevel = tag.substring(1);
+      headingNumber = el.getAttribute('heading-number');
+
+      // Get the text of a heading
+      // We use .firstChild.nodeValue instead of .innerText
+      // because of elements like:
+      // <h1 id="index-mkdocs-print-site-plugin">
+      //     mkdocs-print-site-plugin<a class="headerlink" href="#index-mkdocs-print-site-plugin" title="Permanent link">↵</a>
+      //  </h1>
+      title = el.firstElementChild.firstChild.nodeValue;
+
+      if ( ! title ) {
+        continue;
       }
-      while (tag_level < current_heading_depth) {
-        current_heading_depth--;
-        ToC += "</ul>"; 
+
+      // Ignore the MkDocs keyboard Model
+      if ( el.id.indexOf("keyboardModalLabel") > -1 ) {
+        continue;
       }
 
-      // Insert a section heading <li> item, however deeply we are nested.
-      current_section_depth++;
-      // Insert item as a section title in the current list
-      ToC += "<li class='toc-nav-section-title toc-nav-section-title-level-" + (current_section_depth) + "'>" + title + "</li>";
-      
-      // Start a new ul for the section
-      ToC += "<ul class='print-site-toc-level-" + current_heading_depth + " toc-section-line-border'>";
-      continue;
+      tocEntryId = `toc-heading-${headingNumber.replaceAll(".", "-")}`;
+      headingNumberStyles += `
+        .print-site-enumerate-headings #${tocEntryId}:before { content: '${headingNumber} ' }`;
+
+      if (el.classList.contains('md-section')) {
+        ToC += "<ul class='print-site-toc-level-" + (+tagLevel+level) + "'>";
+        ToC += getEntry(link, title, tocEntryId, null, null);
+        recursion(el.children, level + 1);
+        ToC += "</ul>"
+      } else {
+        ToC += getEntry(link, title, tocEntryId, +tagLevel+level);
+      }
     }
+  }
 
-
-    if (el.classList.contains('nav-section-title-end') ) {
-
-      current_section_depth--;
-      // Close the special section ul
-      ToC += "</ul>";
-
-      continue;
-    }
-
-    while (tag_level > current_heading_depth) {
-      current_heading_depth++;
-      ToC += "<ul class='print-site-toc-level-" + current_heading_depth + "'>";
-    }
-    while (tag_level < current_heading_depth) {
-      current_heading_depth--;
-      ToC += "</ul>"; 
-    }
-
-
-    newLine = "<li>" +
-      "<a href='" + link + "'>" +
-        title +
-      "</a>" +
-    "</li>";
-
-    ToC += newLine;
-
-  };
-
+  ToC = "<ul>"
+  let topElements = document.querySelectorAll('#print-site-page > .print-page');
+  recursion(topElements, 0);
   ToC += "</ul>"
+  headingNumberStyles += '</style>';
 
   document.querySelectorAll("#print-page-toc nav")[0].insertAdjacentHTML("beforeend", ToC);
-
+  document.querySelectorAll("style")[0].insertAdjacentHTML("afterend", headingNumberStyles);
 }
 
 

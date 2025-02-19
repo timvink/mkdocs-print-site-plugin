@@ -1,18 +1,18 @@
+import logging
 import os
 import re
-import logging
 import sys
 
-from mkdocs.plugins import BasePlugin
 from mkdocs.config import config_options
+from mkdocs.exceptions import PluginError
+from mkdocs.plugins import BasePlugin
 from mkdocs.structure.files import File
 from mkdocs.structure.pages import Page
-from mkdocs.utils import write_file, copy_file, get_relative_url
-from mkdocs.exceptions import PluginError
+from mkdocs.utils import copy_file, get_relative_url, write_file
 
 from mkdocs_print_site_plugin.renderer import Renderer
-from mkdocs_print_site_plugin.utils import flatten_nav, get_theme_name
 from mkdocs_print_site_plugin.urls import is_external
+from mkdocs_print_site_plugin.utils import get_theme_name
 
 logger = logging.getLogger("mkdocs.plugins")
 
@@ -144,19 +144,6 @@ class PrintSitePlugin(BasePlugin):
             # Enumeration CSS files
             self.enum_css_files = []
 
-            if self.config.get('enumerate_headings'):
-                self.enum_css_files += ["css/print-site-enum-headings1.css"]
-            if self.config.get('enumerate_headings_depth') >= 2:
-                self.enum_css_files += ["css/print-site-enum-headings2.css"]
-            if self.config.get('enumerate_headings_depth') >= 3:
-                self.enum_css_files += ["css/print-site-enum-headings3.css"]
-            if self.config.get('enumerate_headings_depth') >= 4:
-                self.enum_css_files += ["css/print-site-enum-headings4.css"]
-            if self.config.get('enumerate_headings_depth') >= 5:
-                self.enum_css_files += ["css/print-site-enum-headings5.css"]
-            if self.config.get('enumerate_headings_depth') >= 6:
-                self.enum_css_files += ["css/print-site-enum-headings6.css"]
-
             config["extra_css"] = self.enum_css_files + config["extra_css"]
 
 
@@ -202,7 +189,6 @@ class PrintSitePlugin(BasePlugin):
 
         # Save the (order of) pages and sections in the navigation before adding the print page
         self.renderer.items = nav.items
-        self.all_pages_in_nav = flatten_nav(nav.items)
 
         # Optionally add the print page to the site navigation
         if self.config.get("add_to_navigation"):
@@ -327,9 +313,7 @@ class PrintSitePlugin(BasePlugin):
                 )
 
         # Combine the HTML of all pages present in the navigation
-        self.print_page.content = self.renderer.write_combined()
-        # Generate a TOC sidebar for HTML version of print page
-        self.print_page.toc = self.renderer.get_toc_sidebar()
+        self.print_page.content, self.print_page.toc = self.renderer.write_combined()
 
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
@@ -393,9 +377,10 @@ class PrintSitePlugin(BasePlugin):
             % js_calls
         )
         html = html.replace("</head>", print_site_js + "</head>")
+        html = html.replace("</head>", "<link href='../css/page-ordering.css' rel='stylesheet'>" + "</head>")
 
         # Write the print_page file to the output folder
         write_file(
             html.encode("utf-8", errors="xmlcharrefreplace"),
-            self.print_page.file.abs_dest_path,
+            self.print_page.file.abs_dest_path
         )

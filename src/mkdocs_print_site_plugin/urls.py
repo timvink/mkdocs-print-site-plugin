@@ -255,7 +255,7 @@ def get_url_from_root(target_link, current_page_url):
     return new_url
 
 
-def fix_internal_links(page_html, page_url, directory_urls):
+def fix_internal_links(page_html, page_url, directory_urls, heading_number):
     """
     Updates links to internal pages to anchor links.
 
@@ -283,18 +283,7 @@ def fix_internal_links(page_html, page_url, directory_urls):
 
     # Finally, wrap the entire page in a section with an anchor ID
     page_html = (
-        ('<section class="print-page" id="%s">' % page_key) + page_html + "</section>"
+        ('<section class="print-page" id="%s" heading-number="%s">' % (page_key, heading_number)) + page_html + "</section>"
     )
 
     return page_html
-
-
-def to_snake_case(text: str):
-    """
-    Convert string to snake_case.
-
-    Example:
-
-    'Hi there!' -> 'hi_there_'
-    """
-    return re.sub("\W+", "-", str(text)).lower()
