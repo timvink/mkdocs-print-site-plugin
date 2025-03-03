@@ -377,7 +377,6 @@ class PrintSitePlugin(BasePlugin):
             % js_calls
         )
         html = html.replace("</head>", print_site_js + "</head>")
-        html = html.replace("</head>", "<link href='../css/page-ordering.css' rel='stylesheet'>" + "</head>")
 
         # Write the print_page file to the output folder
         write_file(
