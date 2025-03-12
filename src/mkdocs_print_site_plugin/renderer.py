@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import List, Tuple
 
 import jinja2
 from mkdocs.structure.toc import AnchorLink, TableOfContents
@@ -41,7 +42,7 @@ class Renderer(object):
     def _get_items(self):
         return [i for i in self.items if not i == self.print_page]
 
-    def write_combined(self) -> tuple[str, TableOfContents]:
+    def write_combined(self) -> Tuple[str, TableOfContents]:
         """
         Generates the HTML of the page that combines all page into one, while filling
         a table of contents.
@@ -78,8 +79,8 @@ class Renderer(object):
             excluded_pages: list,
             level: int = 0,
             prefix: str = "",
-            heading_styles: list[str] = [],
-        ) -> tuple[str, list[AnchorLink]]:
+            heading_styles: List[str] = [],
+        ) -> Tuple[str, List[AnchorLink]]:
             """
         Get all the HTML and anchor links from the pages.
             """
