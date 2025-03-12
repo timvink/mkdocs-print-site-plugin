@@ -96,8 +96,11 @@ Print site table of contents styling
     #print-page-toc { display: block }
 
     /* PDF page breaks on each MkDocs page, except the first one */
-    #print-site-page section.print-page:not(:has(> #print-page-toc)) {
+    #print-site-page section.print-page {
         page-break-before: always;
+    }
+    #print-site-page > section.print-page:first-of-type {
+        page-break-before: avoid;
     }
 
     /* PDF page breaks - separate title page for each section */
