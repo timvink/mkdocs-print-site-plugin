@@ -31,19 +31,16 @@ classifiers=[
     "Topic :: Text Processing",
 ]
 
-dynamic = ["version","dependencies","optional-dependencies"]
+dynamic = ["version"]
+dependencies = [
+    "mkdocs-material>=7.3.0",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/timvink/mkdocs-print-site-plugin"
 
 [tool.setuptools.dynamic]
 version = {attr = "mkdocs_print_site_plugin.__version__"}
-
-dependencies={file = ["requirements.txt"]}
-
-optional-dependencies.dev={file = ["requirements_dev.txt"]}
-optional-dependencies.base={file = ["requirements.txt"]}
-optional-dependencies.all={file = ["requirements.txt", "requirements_dev.txt"]}
 
 [tool.pytest.ini_options]
 markers = [
@@ -113,7 +110,17 @@ target-version = "py310"
 # Always autofix
 fix = true
 
-[tool.uv]
-dev-dependencies = [
-    "ruff",
+[dependency-groups]
+dev = [
+    "click>=8.1.8",
+    "mkdocs>=1.6.1",
+    "mkdocs-charts-plugin>=0.0.12",
+    "mkdocs-git-revision-date-localized-plugin>=1.4.4",
+    "mkdocs-img2fig-plugin>=0.9.3",
+    "mkdocs-material>=9.6.7",
+    "mkdocs-windmill>=1.0.5",
+    "pytest>=8.3.5",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.9.10",
 ]
+

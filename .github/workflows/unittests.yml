@@ -4,18 +4,22 @@ jobs:
   run:
     name: Run unit tests
     runs-on: ${{ matrix.os }}
+    env:
+      USING_COVERAGE: '3.10'
     strategy:
-      matrix: 
+      matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@master
-    - name: Setup Python  
-      uses: actions/setup-python@master
+
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Generate coverage report
+
+    - name: Run unit tests
       run: |
-        pip install ".[dev]"
-        pytest --cov=mkdocs_print_site_plugin --cov-report=xml
-  
+        git config --global user.name "Github Action"
+        git config --global user.email "githubaction@gmail.com"
+        uv run pytest --cov=mkdocs_print_site_plugin --cov-report=xml
