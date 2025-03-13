@@ -26,15 +26,5 @@ def get_theme_name(config) -> str:
         return name
 
 
-def flatten_nav(items):
-    """
-    Create a flat list of pages from a nested navigation.
-    """
-    pages = []
-
-    for item in items:
-        if item.is_page:
-            pages.append(item)
-        if item.is_section:
-            pages += flatten_nav(item.children)
-    return pages
+def get_section_id(section_number: str) -> str:
+    return f"section-{section_number.replace('.', '-')}"
