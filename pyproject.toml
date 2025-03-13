@@ -119,6 +119,7 @@ dev = [
     "mkdocs-img2fig-plugin>=0.9.3",
     "mkdocs-material>=9.6.7",
     "mkdocs-windmill>=1.0.5",
+    "mypy>=1.14.1",
     "pytest>=8.3.5",
     "pytest-cov>=5.0.0",
     "ruff>=0.9.10",

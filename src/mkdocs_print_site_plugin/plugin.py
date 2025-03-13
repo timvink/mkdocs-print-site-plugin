@@ -71,7 +71,7 @@ class PrintSitePlugin(BasePlugin):
         # Check if 'hooks' is defined in the 'plugins' section
         if isinstance(config.get("hooks"), dict):
             position_offset += len(config.get("hooks"))
-            
+
         if print_site_position != len(plugins) - position_offset:
             msg = "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin,"
             msg += "to ensure the print page has any changes other plugins make."
@@ -79,9 +79,7 @@ class PrintSitePlugin(BasePlugin):
             logger.warning(msg)
 
         if "--dirtyreload" in sys.argv:
-            msg = (
-                "[mkdocs-print-site] Note the 'print-site' page does render all pages "
-            )
+            msg = "[mkdocs-print-site] Note the 'print-site' page does render all pages "
             msg += "when using the --dirtyreload option."
             logger.warning(msg)
 
@@ -89,9 +87,7 @@ class PrintSitePlugin(BasePlugin):
         self.cover_page_template_path = ""
         if self.config.get("add_cover_page"):
             if self.config.get("cover_page_template") == "":
-                self.cover_page_template_path = os.path.join(
-                    HERE, "templates", "cover_page.tpl"
-                )
+                self.cover_page_template_path = os.path.join(HERE, "templates", "cover_page.tpl")
             else:
                 self.cover_page_template_path = os.path.join(
                     os.path.dirname(config.get("config_file_path")),
@@ -101,17 +97,13 @@ class PrintSitePlugin(BasePlugin):
                 msg = "[print-site-plugin]: Path specified in 'cover_page_template' not found."
                 msg += "\nMake sure to use the URL relative to your mkdocs.yml file."
                 logger.warning(msg)
-                raise FileNotFoundError(
-                    "File not found: %s" % self.cover_page_template_path
-                )
+                raise FileNotFoundError("File not found: %s" % self.cover_page_template_path)
 
         # Get abs path to print_site_banner_template
         self.banner_template_path = ""
         if self.config.get("add_print_site_banner"):
             if self.config.get("print_site_banner_template") == "":
-                self.banner_template_path = os.path.join(
-                    HERE, "templates", "print_site_banner.tpl"
-                )
+                self.banner_template_path = os.path.join(HERE, "templates", "print_site_banner.tpl")
             else:
                 self.banner_template_path = os.path.join(
                     os.path.dirname(config.get("config_file_path")),
@@ -121,9 +113,7 @@ class PrintSitePlugin(BasePlugin):
                 msg = "[print-site-plugin]: Path specified in 'print_site_banner_template' not found."
                 msg += "\nMake sure to use the URL relative to your mkdocs.yml file."
                 logger.warning(msg)
-                raise FileNotFoundError(
-                    "File not found: %s" % self.banner_template_path
-                )
+                raise FileNotFoundError("File not found: %s" % self.banner_template_path)
 
         # Add pointer to print-site javascript
         config["extra_javascript"] = ["js/print-site.js"] + config["extra_javascript"]
@@ -145,7 +135,6 @@ class PrintSitePlugin(BasePlugin):
             self.enum_css_files = []
 
             config["extra_css"] = self.enum_css_files + config["extra_css"]
-
 
         # Create MkDocs Page and File instances
         self.print_file = File(
@@ -217,9 +206,7 @@ class PrintSitePlugin(BasePlugin):
             if is_external(pdf_url):
                 page.url_to_pdf = pdf_url
             else:
-                page.url_to_pdf = get_relative_url(
-                    pdf_url, page.file.url
-                )
+                page.url_to_pdf = get_relative_url(pdf_url, page.file.url)
 
         return html
 
@@ -262,11 +249,14 @@ class PrintSitePlugin(BasePlugin):
         if template_name == "404.html":
             self.context = context
             # Make sure paths are OK
-            if config.get('extra_css'):
-                self.context['extra_css'] = [get_relative_url(f, self.print_page.file.url) for f in config.get('extra_css')]
-            if config.get('extra_javascript'):
-                self.context['extra_javascript'] = [get_relative_url(str(f), self.print_page.file.url) for f in config.get('extra_javascript')]
-
+            if config.get("extra_css"):
+                self.context["extra_css"] = [
+                    get_relative_url(f, self.print_page.file.url) for f in config.get("extra_css")
+                ]
+            if config.get("extra_javascript"):
+                self.context["extra_javascript"] = [
+                    get_relative_url(str(f), self.print_page.file.url) for f in config.get("extra_javascript")
+                ]
 
     def on_post_build(self, config, **kwargs):
         """
@@ -292,25 +282,19 @@ class PrintSitePlugin(BasePlugin):
             # Add print-site.css
             css_output_base_path = os.path.join(config["site_dir"], "css")
             css_file_path = os.path.join(css_output_base_path, "print-site.css")
-            copy_file(
-                os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path
-            )
+            copy_file(os.path.join(os.path.join(HERE, "css"), "print-site.css"), css_file_path)
 
             # Add enumeration css
             for f in self.enum_css_files:
                 f = f.replace("/", os.sep)
                 css_file_path = os.path.join(config["site_dir"], f)
-                copy_file(
-                    os.path.join(HERE, f), css_file_path
-                )
+                copy_file(os.path.join(HERE, f), css_file_path)
 
             # Add theme CSS file
             css_file = "print-site-%s.css" % get_theme_name(config)
             if css_file in os.listdir(os.path.join(HERE, "css")):
                 css_file_path = os.path.join(css_output_base_path, css_file)
-                copy_file(
-                    os.path.join(os.path.join(HERE, "css"), css_file), css_file_path
-                )
+                copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
 
         # Combine the HTML of all pages present in the navigation
         self.print_page.content, self.print_page.toc = self.renderer.write_combined()
@@ -325,29 +309,21 @@ class PrintSitePlugin(BasePlugin):
 
         # Remove lazy loading attributes from images
         # https://regex101.com/r/HVpKPs/1
-        html = re.sub(r"(\<img.+)(loading=\"lazy\")", r"\1", html)        
+        html = re.sub(r"(\<img.+)(loading=\"lazy\")", r"\1", html)
 
         # Compatiblity with mkdocs-chart-plugin
         # As this plugin adds some javascript to every page
         # It should be included in the print site also
         if config.get("plugins", {}).get("charts"):
-            html = (
-                config.get("plugins", {})
-                .get("charts")
-                .add_javascript_variables(html, self.print_page, config)
-            )
+            html = config.get("plugins", {}).get("charts").add_javascript_variables(html, self.print_page, config)
 
         # Compatibility with mkdocs-drawio
         # As this plugin adds renderer html for every drawio diagram
         # referenced in your markdown files. This rendering happens
         # in the on_post_page event, which is skipped by this plugin
-        # therefore we need to manual execute the drawio plugin renderer here. 
+        # therefore we need to manual execute the drawio plugin renderer here.
         if config.get("plugins", {}).get("drawio"):
-            html = (
-                config.get("plugins", {})
-                    .get("drawio")
-                    .render_drawio_diagrams(html, self.print_page)
-            )
+            html = config.get("plugins", {}).get("drawio").render_drawio_diagrams(html, self.print_page)
 
         # Compatibility with https://github.com/g-provost/lightgallery-markdown
         # This plugin insert link hrefs with double dashes, f.e.
@@ -355,8 +331,8 @@ class PrintSitePlugin(BasePlugin):
         # Details https://github.com/timvink/mkdocs-print-site-plugin/issues/68
         htmls = html.split("</head>")
         base_url = "../" if config.get("use_directory_urls") else ""
-        htmls[0] = htmls[0].replace("href=\"//", f"href=\"{base_url}")
-        htmls[0] = htmls[0].replace("src=\"//", f"src=\"{base_url}")
+        htmls[0] = htmls[0].replace('href="//', f'href="{base_url}')
+        htmls[0] = htmls[0].replace('src="//', f'src="{base_url}')
         html = "</head>".join(htmls)
 
         # Determine calls to required javascript functions
@@ -379,7 +355,4 @@ class PrintSitePlugin(BasePlugin):
         html = html.replace("</head>", print_site_js + "</head>")
 
         # Write the print_page file to the output folder
-        write_file(
-            html.encode("utf-8", errors="xmlcharrefreplace"),
-            self.print_page.file.abs_dest_path
-        )
+        write_file(html.encode("utf-8", errors="xmlcharrefreplace"), self.print_page.file.abs_dest_path)

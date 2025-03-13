@@ -82,7 +82,7 @@ class Renderer(object):
             heading_styles: List[str] = [],
         ) -> Tuple[str, List[AnchorLink]]:
             """
-        Get all the HTML and anchor links from the pages.
+            Get all the HTML and anchor links from the pages.
             """
             items_html = ""
             anchor_links = []
@@ -163,7 +163,7 @@ class Renderer(object):
 
             return items_html, anchor_links
 
-        heading_styles = []
+        heading_styles: List[str] = []
         items_html, anchor_links = get_html_and_anchor_links_from_items(
             self._get_items(),
             dir_urls=self.mkdocs_config.get("use_directory_urls"),

@@ -41,11 +41,12 @@ def is_external(url):
     prefixes = ("http", "www", "mailto:", "tel:", "skype:", "ftp:")
     return url.startswith(prefixes)
 
+
 def is_base64_image(url):
     """
     Test if a url is a base64 data image.
     """
-    prefixes = ("data:image")
+    prefixes = "data:image"
     return url.startswith(prefixes)
 
 
@@ -76,14 +77,7 @@ def get_page_key(page_url):
     Args:
         page_url (str): The MkDocs url of the page
     """
-    page_key = (
-        page_url.lower()
-        .strip()
-        .rstrip("/")
-        .replace(".html", "")
-        .replace("/", "-")
-        .lstrip("-")
-    )
+    page_key = page_url.lower().strip().rstrip("/").replace(".html", "").replace("/", "-").lstrip("-")
     if len(page_key) > 0:
         return page_key
     else:
@@ -190,13 +184,13 @@ def fix_tabbed_content(page_html, page_key):
     <label for="{page_key}__tabbed_1_1">C</label>
     """
     regex = re.compile(r"(\<input.*?name=\")([^\"]*?)(\".*?\>)", re.I)
-    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
+    page_html = re.sub(regex, rf"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
     regex = re.compile(r"(\<input.*?id=\")([^\"]*?)(\".*?\>)", re.I)
-    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
+    page_html = re.sub(regex, rf"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
     regex = re.compile(r"(\<label.*?for=\")([^\"]*?)(\".*?\>)", re.I)
-    page_html = re.sub(regex, fr"\g<1>{page_key}-\g<2>\g<3>", page_html)
+    page_html = re.sub(regex, rf"\g<1>{page_key}-\g<2>\g<3>", page_html)
 
     return page_html
 
@@ -209,9 +203,7 @@ def fix_image_src(page_html, page_url, directory_urls):
     """
     # Loop over all images src attributes
     # Example regex https://regex101.com/r/PLUmZ7/2
-    img_regex = re.compile(
-        r"<img[^>]+src=\"([^\">]+)\"", flags=re.IGNORECASE
-    )
+    img_regex = re.compile(r"<img[^>]+src=\"([^\">]+)\"", flags=re.IGNORECASE)
     matches = re.finditer(img_regex, page_html)
 
     for m in matches:
@@ -220,7 +212,7 @@ def fix_image_src(page_html, page_url, directory_urls):
             continue
         elif is_base64_image(img_src):
             continue
-        
+
         img_text = m.group()
 
         new_url = get_url_from_root(img_src, page_url)
@@ -283,7 +275,9 @@ def fix_internal_links(page_html, page_url, directory_urls, heading_number):
 
     # Finally, wrap the entire page in a section with an anchor ID
     page_html = (
-        ('<section class="print-page" id="%s" heading-number="%s">' % (page_key, heading_number)) + page_html + "</section>"
+        ('<section class="print-page" id="%s" heading-number="%s">' % (page_key, heading_number))
+        + page_html
+        + "</section>"
     )
 
     return page_html

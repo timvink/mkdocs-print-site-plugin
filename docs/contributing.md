@@ -9,21 +9,18 @@ Thanks for considering to contribute to this project! Some guidelines:
 
 ## Unit Tests
 
-Make sure to install an editable version before running tests:
+We use [uv](https://docs.astral.sh/uv/getting-started/installation/) to manage python:
 
 ```bash
-pip install -r tests/test_requirements.txt
-pip install -e .
-pytest --cov=mkdocs_print_site_plugin --cov-report term-missing tests/
+uv run pytest --cov=mkdocs_print_site_plugin --cov-report term-missing tests/
 ```
 
 If it makes sense, writing tests for your PRs is always appreciated and will help get them merged.
 
-In addition, this project uses [pyflakes](https://pypi.org/project/pyflakes/) for static code checking:
+You can also apply formatting using:
 
 ```bash
-pip install pyflakes
-pyflakes tests/ mkdocs_print_site_plugin/
+uv run --with ruff ruff format src/
 ```
 
 ## Manual testing
@@ -31,9 +28,7 @@ pyflakes tests/ mkdocs_print_site_plugin/
 To quickly serve a website with your latest changes to the plugin use the sites in our tests suite. For example:
 
 ```bash
-pip install -r tests/test_requirements.txt
-pip install -e .
-mkdocs serve -f tests/fixutures/basic/mkdocs.yml
+uv run mkdocs serve -f tests/fixutures/basic/mkdocs.yml
 ```
 
 Tip: If you use google chrome, you can also view the print version of a page inside the browser [by setting the renderer](https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/).
@@ -49,7 +44,7 @@ We use google-style docstrings.
 Is in `docs/`. To [deploy the docs](https://www.mkdocs.org/user-guide/deploying-your-docs/), run:
 
 ```bash
-mkdocs gh-deploy
+uv run mkdocs gh-deploy
 ```
 
 Note: there is no automated github action for this currently.
