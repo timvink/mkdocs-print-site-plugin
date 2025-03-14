@@ -308,6 +308,10 @@ def test_exclude_page(tmp_path):
         '<p class="print-site-plugin-ignore">This paragraph is ignored, this unique code should not be found: V5lI1bUdnUI9</p>',  # noqa
     )
 
+    # Test that globs also work for entire directories
+    # subfolder/another_page.md has a code 'd1231dct9dkqwn2' that should not be present because we excluded the subfolder/ directory
+    assert not text_in_page(prj_path, "print_page/index.html", "d1231dct9dkqwn2")
+
 
 def test_basic_build99(tmp_path):
     """

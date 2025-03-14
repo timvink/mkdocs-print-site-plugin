@@ -4,7 +4,8 @@ plugins:
     - print-site:
         exclude:
             - z.md
-            - subsection1.md
+            - subsection1.md 
+            - subfolder/
 
 markdown_extensions:
     - attr_list
