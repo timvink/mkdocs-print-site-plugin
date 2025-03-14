@@ -95,4 +95,4 @@ plugins:
     ```
 
 `exclude`
-: Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See [Do Not Print](how-to/do_not_print.md#ignoring-an-entire-page) for more info.
+: Default is empty. Allows to specify a list of page source paths that should not be included in the print page. Supports [glob](https://docs.python.org/3/library/glob.html)-like syntax such as `folder/` or `folder/*`. See [Do Not Print](how-to/do_not_print.md#ignoring-an-entire-page) for more info on excluding pages.

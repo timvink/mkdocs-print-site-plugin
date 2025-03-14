@@ -17,4 +17,6 @@ def test_exclude():
 
     globs = ["folder/*"]
     assert exclude("folder/index.md", globs)
+    assert exclude("folder/index.md", ["folder"])
     assert not exclude("subfolder/index.md", globs)
+    assert not exclude("subfolder", globs)
