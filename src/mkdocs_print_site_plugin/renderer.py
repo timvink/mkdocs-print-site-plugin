@@ -231,16 +231,26 @@ class Renderer(object):
         """
 
     def _set_inner_heading_styles(self, id: str, prefix: str, level: int) -> str:
+        """
+        By "inner heading" we mean that even if the heading numbers are fully determined by
+        the nav's hierarchy, if a page has number 3.2.1, we will add a further numbering
+        to headings such as h2 and h3 inside the page, so that the first h2 that appears is
+        3.2.1.1, the next one is 3.2.1.2, etc. In this case we will require that the number
+        of items in this index be <= toc_depth, which is not the case in the ToC (as its depth
+        is fully determined by the nav's depth).
+        """
         result = ""
         toc_depth = self.plugin_config.get("toc_depth") or 1
-        h_level = level + 2
-        counter_names = [f"counter-{id}-{i}" for i in range(h_level, toc_depth + 1)]
-        while h_level <= toc_depth:
-            counters_to_reset = " ".join([f"{x} 1" for x in counter_names[h_level - 1 :]])
+        # Start from h2's
+        h_level = 2
+        counter_names = [f"counter-{id}-{i}" for i in range(h_level, toc_depth - level + 1)]
+        while h_level <= toc_depth - level:
+            counters_to_reset = " ".join([f"{x} " for x in counter_names[h_level - 1 :]])
+            counter_reset = f" counter-reset: {counters_to_reset}; " if len(counters_to_reset) > 0 else ""
             counters_to_display = " '.' ".join([f"counter({x})" for x in counter_names[: h_level - 1]])
             result += f"""
-                .print-site-enumerate-headings #{id} h{h_level} {{ counter-reset: {counters_to_reset}; counter-increment: counter-{id}-{h_level} }}
                 .print-site-enumerate-headings #{id} h{h_level}:before {{ content: '{prefix}.' {counters_to_display} ' ' }}
+                .print-site-enumerate-headings #{id} h{h_level} {{ {counter_reset} counter-increment: counter-{id}-{h_level} }}
             """
             h_level += 1
 
