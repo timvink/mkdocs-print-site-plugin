@@ -35,7 +35,7 @@ Tip: If you use google chrome, you can also view the print version of a page ins
 
 ## Code Style
 
-Make sure your code *roughly* follows [PEP-8](https://www.python.org/dev/peps/pep-0008/) and keeps things consistent with the rest of the code. I recommended using [black](https://github.com/psf/black) to automatically format your code.
+Make sure your code *roughly* follows [PEP-8](https://www.python.org/dev/peps/pep-0008/) and keeps things consistent with the rest of the code. I recommended using [Ruff](https://github.com/astral-sh/ruff) to automatically format your code.
 
 We use google-style docstrings.
 
