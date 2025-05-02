@@ -29,7 +29,7 @@ class PrintSitePlugin(BasePlugin):
         ("print_page_title", config_options.Type(str, default="Print Site")),
         ("print_page_basename", config_options.Type(str, default="print_page")),
         ("add_table_of_contents", config_options.Type(bool, default=True)),
-        ("toc_title", config_options.Type(str, default="Table of Contents")),
+        ("toc_title", config_options.Type(str, default=None)),
         ("toc_depth", config_options.Type(int, default=3)),
         ("add_full_urls", config_options.Type(bool, default=False)),
         ("enumerate_headings", config_options.Type(bool, default=True)),
@@ -58,6 +58,11 @@ class PrintSitePlugin(BasePlugin):
         assert self.config.get("toc_depth") <= 6
         assert self.config.get("enumerate_headings_depth") >= 1
         assert self.config.get("enumerate_headings_depth") <= 6
+
+        # If the user does not specify a value for the item
+        if self.config.get("toc_title") is None:
+            self.config["toc_title"] = config.get(
+                "mdx_configs", {}).get("toc", {}).get("title", "Table of Contents")
 
         # Because other plugins can alter the navigation
         # (and thus which pages should be in the print page)
