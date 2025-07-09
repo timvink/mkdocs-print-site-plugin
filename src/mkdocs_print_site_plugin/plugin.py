@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import functools
+import re as regex_module
 
 
 from mkdocs.config import config_options
@@ -341,7 +342,6 @@ class PrintSitePlugin(BasePlugin):
             from mkdocs_autorefs._internal.references import fix_refs
             
             # First, extract all available anchors from the HTML
-            import re as regex_module
             anchor_pattern = r'(?:id="([^"]+)"|name="([^"]+)")'
             anchor_matches = regex_module.findall(anchor_pattern, html, regex_module.IGNORECASE)
             available_anchors = set()
