@@ -3,7 +3,6 @@ import os
 import re
 import sys
 import functools
-import re as regex_module
 
 
 from mkdocs.config import config_options
@@ -417,12 +416,6 @@ class PrintSitePlugin(BasePlugin):
             )
             if unmapped:
                 logger.warning(f"[mkdocs-print-site] Unmapped autorefs: {[ref for ref, _ in unmapped]}")
-        else:
-            logger.info("[mkdocs-print-site] No autorefs plugin found")                   
-            except ImportError:
-                logger.warning("[mkdocs-print-site] mkdocs-autorefs not available for processing")
-            except Exception as e:
-                logger.warning(f"[mkdocs-print-site] Error processing autorefs: {e}")
 
         # Compatibility with https://github.com/g-provost/lightgallery-markdown
         # This plugin insert link hrefs with double dashes, f.e.
