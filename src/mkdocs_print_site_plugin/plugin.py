@@ -2,6 +2,8 @@ import logging
 import os
 import re
 import sys
+import functools
+
 
 from mkdocs.config import config_options
 from mkdocs.exceptions import PluginError
@@ -334,11 +336,8 @@ class PrintSitePlugin(BasePlugin):
         # As this plugin processes cross-references in the on_env event, 
         # which happens after the print page is generated, it's necessary to 
         # manually execute the autorefs fix_refs function here.
-        logger.info(f"[mkdocs-print-site] Available plugins: {list(config.get('plugins', {}).keys())}")
         autorefs_plugin = config.get("plugins", {}).get("mkdocs-autorefs") or config.get("plugins", {}).get("autorefs")
         if autorefs_plugin:
-            logger.info("[mkdocs-print-site] Processing autorefs cross-references...")
-            import functools
             from mkdocs_autorefs._internal.references import fix_refs
             
             # First, extract all available anchors from the HTML
@@ -418,48 +417,7 @@ class PrintSitePlugin(BasePlugin):
             if unmapped:
                 logger.warning(f"[mkdocs-print-site] Unmapped autorefs: {[ref for ref, _ in unmapped]}")
         else:
-            logger.info("[mkdocs-print-site] No autorefs plugin found")   
-
-        # Alternative autorefs implementation when plugin isn't available
-        if not autorefs_plugin:
-            # Try alternative approach: look for autorefs patterns in HTML and process them
-            try:
-                from mkdocs_autorefs._internal.references import AUTOREF_RE, fix_refs
-                
-                # Check if there are any autorefs patterns in the HTML
-                autoref_matches = AUTOREF_RE.findall(html)
-                if autoref_matches:
-                    # Extract available anchors (same as above)
-                    import re as regex_module
-                    anchor_pattern = r'(?:id="([^"]+)"|name="([^"]+)")'
-                    anchor_matches = regex_module.findall(anchor_pattern, html, regex_module.IGNORECASE)
-                    available_anchors = set()
-                    for match in anchor_matches:
-                        anchor = match[0] or match[1]
-                        if anchor:
-                            available_anchors.add(anchor)
-                    
-                    # Create url_mapper that converts to internal anchors
-                    def simple_url_mapper(identifier):
-                        # Check if identifier exists as anchor
-                        if identifier in available_anchors:
-                            return f"#{identifier}", identifier
-                        
-                        # Try to find similar anchor
-                        identifier_lower = identifier.lower()
-                        for available_anchor in available_anchors:
-                            if (available_anchor.lower() == identifier_lower or 
-                                identifier_lower in available_anchor.lower() or 
-                                available_anchor.lower() in identifier_lower):
-                                return f"#{available_anchor}", identifier
-                        
-                        # Fallback: use identifier anyway
-                        return f"#{identifier}", identifier
-                    
-                    html, unmapped = fix_refs(html, simple_url_mapper)
-                    if unmapped:
-                        logger.warning(f"[mkdocs-print-site] Could not resolve: {[ref for ref, _ in unmapped]}")
-                        
+            logger.info("[mkdocs-print-site] No autorefs plugin found")                   
             except ImportError:
                 logger.warning("[mkdocs-print-site] mkdocs-autorefs not available for processing")
             except Exception as e:
