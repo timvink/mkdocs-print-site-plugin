@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import functools
+import re as regex_module
 
 
 from mkdocs.config import config_options
