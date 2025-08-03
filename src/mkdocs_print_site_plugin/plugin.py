@@ -2,6 +2,9 @@ import logging
 import os
 import re
 import sys
+import functools
+import re as regex_module
+
 
 from mkdocs.config import config_options
 from mkdocs.exceptions import PluginError
@@ -329,6 +332,90 @@ class PrintSitePlugin(BasePlugin):
         # therefore we need to manual execute the drawio plugin renderer here.
         if config.get("plugins", {}).get("drawio"):
             html = config.get("plugins", {}).get("drawio").render_drawio_diagrams(html, self.print_page)
+
+        # Compatibility with mkdocs-autorefs
+        # As this plugin processes cross-references in the on_env event, 
+        # which happens after the print page is generated, it's necessary to 
+        # manually execute the autorefs fix_refs function here.
+        autorefs_plugin = config.get("plugins", {}).get("mkdocs-autorefs") or config.get("plugins", {}).get("autorefs")
+        if autorefs_plugin:
+            from mkdocs_autorefs._internal.references import fix_refs
+            
+            # First, extract all available anchors from the HTML
+            anchor_pattern = r'(?:id="([^"]+)"|name="([^"]+)")'
+            anchor_matches = regex_module.findall(anchor_pattern, html, regex_module.IGNORECASE)
+            available_anchors = set()
+            for match in anchor_matches:
+                # Each match is a tuple (id_value, name_value), one is empty
+                anchor = match[0] or match[1]
+                if anchor:
+                    available_anchors.add(anchor)
+            
+            # Create custom url_mapper that converts cross-references to internal anchors
+            def print_page_url_mapper(identifier, from_url=None):
+                """
+                Custom URL mapper for print page that converts all cross-references 
+                to internal anchors in the same page instead of external URLs.
+                """
+                try:
+                    # Get the original URL from autorefs
+                    original_url, title = autorefs_plugin.get_item_url(identifier, from_url)
+                    
+                    # Check if identifier directly exists as anchor
+                    if identifier in available_anchors:
+                        return f"#{identifier}", title
+                    
+                    # Extract anchor part from URL if it exists
+                    if '#' in original_url:
+                        anchor = original_url.split('#')[-1]
+                        
+                        # Check if this anchor actually exists in the HTML
+                        if anchor in available_anchors:
+                            return f"#{anchor}", title
+                        else:
+                            # Try to find a similar anchor (case-insensitive, partial match)
+                            anchor_lower = anchor.lower()
+                            for available_anchor in available_anchors:
+                                if (available_anchor.lower() == anchor_lower or 
+                                    anchor_lower in available_anchor.lower() or 
+                                    available_anchor.lower() in anchor_lower):
+                                    return f"#{available_anchor}", title
+                            
+                            return f"#{anchor}", title  # Return original anchor anyway
+                    else:
+                        # If no anchor in original URL, try fuzzy matching with identifier
+                        identifier_lower = identifier.lower()
+                        for available_anchor in available_anchors:
+                            if (available_anchor.lower() == identifier_lower or 
+                                identifier_lower in available_anchor.lower() or 
+                                available_anchor.lower() in identifier_lower):
+                                return f"#{available_anchor}", title
+                        
+                        return f"#{identifier}", title  # Return anyway, might work
+                        
+                except Exception as e:
+                    # Fallback: check if identifier exists as anchor or find fuzzy match
+                    if identifier in available_anchors:
+                        return f"#{identifier}", identifier
+                    else:
+                        # Try fuzzy matching as fallback
+                        identifier_lower = identifier.lower()
+                        for available_anchor in available_anchors:
+                            if (available_anchor.lower() == identifier_lower or 
+                                identifier_lower in available_anchor.lower()):
+                                return f"#{available_anchor}", identifier
+                        return f"#{identifier}", identifier  # Return anyway as last fallback
+            
+            # Apply cross-references to the HTML
+            html, unmapped = fix_refs(
+                html,
+                print_page_url_mapper,
+                link_titles=autorefs_plugin._link_titles,
+                strip_title_tags=autorefs_plugin._strip_title_tags,
+                _legacy_refs=autorefs_plugin.legacy_refs,
+            )
+            if unmapped:
+                logger.warning(f"[mkdocs-print-site] Unmapped autorefs: {[ref for ref, _ in unmapped]}")
 
         # Compatibility with https://github.com/g-provost/lightgallery-markdown
         # This plugin insert link hrefs with double dashes, f.e.
