@@ -1020,7 +1020,7 @@
 <dt><code>path_to_pdf</code></dt>
 <dd>Default is empty. Option to make it easier to add a link to the PDF version of the site on each page. See <a href="#how-to-pdf_button">Adding a PDF button</a> for more info.</dd>
 <dt><code>include_css</code></dt>
-<dd>Default is <code>true</code>. When disabled the <a href="https://github.com/timvink/mkdocs-print-site-plugin/tree/master/mkdocs_print_site_plugin/css">print-site stylesheets</a> are not included. This makes it easy to overwrite the CSS with your own stylesheets, using the <a href="https://www.mkdocs.org/user-guide/configuration/#extra_css">extra_css</a> option in your <code>mkdocs.yml</code> file.</dd>
+<dd>Default is <code>true</code>. When disabled the <a href="https://github.com/timvink/mkdocs-print-site-plugin/tree/master/src/mkdocs_print_site_plugin/css">print-site stylesheets</a> are not included. This makes it easy to overwrite the CSS with your own stylesheets, using the <a href="https://www.mkdocs.org/user-guide/configuration/#extra_css">extra_css</a> option in your <code>mkdocs.yml</code> file.</dd>
 <dt><code>enabled</code></dt>
 <dd>
 <p>Default is <code>true</code>. Enables you to deactivate this plugin. A possible use case is local development where you might want faster build times. It's recommended to use this option with an environment variable together with a default fallback (introduced in <code>mkdocs</code> v1.2.1, see <a href="https://www.mkdocs.org/user-guide/configuration/#environment-variables">docs</a>). Example:</p>
@@ -1035,7 +1035,7 @@ mkdocs<span class="w"> </span>serve
 </code></pre></div>
 </dd>
 <dt><code>exclude</code></dt>
-<dd>Default is empty. Allows to specify a list of page source paths that should not be included in the print page. See <a href="#how-to-do_not_print-ignoring-an-entire-page">Do Not Print</a> for more info.</dd>
+<dd>Default is empty. Allows to specify a list of page source paths that should not be included in the print page. Supports <a href="https://docs.python.org/3/library/glob.html">glob</a>-like syntax such as <code>folder/</code> or <code>folder/*</code>. See <a href="#how-to-do_not_print-ignoring-an-entire-page">Do Not Print</a> for more info on excluding pages.</dd>
 </dl></section>
                     <section class='print-page md-section' id='section-3' heading-number='3'>
                         <h1>How to guides<a class='headerlink' href='#section-3' title='Permanent link'></a>
@@ -1733,39 +1733,34 @@ massa, nec semper lorem quam in massa.&#160;<a class="footnote-backref" href="#d
 <li>When issues or pull requests are not going to be resolved or merged, they should be closed as soon as possible. This is kinder than deciding this after a long period. Our issue tracker should reflect work to be done.</li>
 </ul>
 <h2 id="contributing-unit-tests">Unit Tests<a class="headerlink" href="#contributing-unit-tests" title="Permanent link">↵</a></h2>
-<p>Make sure to install an editable version before running tests:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>tests/test_requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-pytest<span class="w"> </span>--cov<span class="o">=</span>mkdocs_print_site_plugin<span class="w"> </span>--cov-report<span class="w"> </span>term-missing<span class="w"> </span>tests/
+<p>We use <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a> to manage python:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--cov<span class="o">=</span>mkdocs_print_site_plugin<span class="w"> </span>--cov-report<span class="w"> </span>term-missing<span class="w"> </span>tests/
 </code></pre></div>
 <p>If it makes sense, writing tests for your PRs is always appreciated and will help get them merged.</p>
-<p>In addition, this project uses <a href="https://pypi.org/project/pyflakes/">pyflakes</a> for static code checking:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyflakes
-pyflakes<span class="w"> </span>tests/<span class="w"> </span>mkdocs_print_site_plugin/
+<p>You can also apply formatting using:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>--with<span class="w"> </span>ruff<span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>src/
 </code></pre></div>
 <h2 id="contributing-manual-testing">Manual testing<a class="headerlink" href="#contributing-manual-testing" title="Permanent link">↵</a></h2>
 <p>To quickly serve a website with your latest changes to the plugin use the sites in our tests suite. For example:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>tests/test_requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>tests/fixutures/basic/mkdocs.yml
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>tests/fixutures/basic/mkdocs.yml
 </code></pre></div>
 <p>Tip: If you use google chrome, you can also view the print version of a page inside the browser <a href="https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/">by setting the renderer</a>.</p>
 <h2 id="contributing-code-style">Code Style<a class="headerlink" href="#contributing-code-style" title="Permanent link">↵</a></h2>
-<p>Make sure your code <em>roughly</em> follows <a href="https://www.python.org/dev/peps/pep-0008/">PEP-8</a> and keeps things consistent with the rest of the code. I recommended using <a href="https://github.com/psf/black">black</a> to automatically format your code.</p>
+<p>Make sure your code <em>roughly</em> follows <a href="https://www.python.org/dev/peps/pep-0008/">PEP-8</a> and keeps things consistent with the rest of the code. I recommended using <a href="https://github.com/astral-sh/ruff">Ruff</a> to automatically format your code.</p>
 <p>We use google-style docstrings.</p>
 <h2 id="contributing-documentation">Documentation<a class="headerlink" href="#contributing-documentation" title="Permanent link">↵</a></h2>
 <p>Is in <code>docs/</code>. To <a href="https://www.mkdocs.org/user-guide/deploying-your-docs/">deploy the docs</a>, run:</p>
-<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>gh-deploy
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>gh-deploy
 </code></pre></div>
 <p>Note: there is no automated github action for this currently.</p></section></div><style>.print-site-enumerate-headings #index > h1:before { content: '1 ' }
 
-                .print-site-enumerate-headings #index h2 { counter-reset: ; counter-increment: counter-index-2 }
                 .print-site-enumerate-headings #index h2:before { content: '1.' counter(counter-index-2) ' ' }
+                .print-site-enumerate-headings #index h2 {  counter-increment: counter-index-2 }
             
 .print-site-enumerate-headings #options > h1:before { content: '2 ' }
 
-                .print-site-enumerate-headings #options h2 { counter-reset: ; counter-increment: counter-options-2 }
                 .print-site-enumerate-headings #options h2:before { content: '2.' counter(counter-options-2) ' ' }
+                .print-site-enumerate-headings #options h2 {  counter-increment: counter-options-2 }
             
 .print-site-enumerate-headings #section-3 > h1:before { content: '3 ' }
 .print-site-enumerate-headings #how-to-export-pdf > h1:before { content: '3.1 ' }
@@ -1784,13 +1779,13 @@ mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </
 
 .print-site-enumerate-headings #demo_content > h1:before { content: '4 ' }
 
-                .print-site-enumerate-headings #demo_content h2 { counter-reset: ; counter-increment: counter-demo_content-2 }
                 .print-site-enumerate-headings #demo_content h2:before { content: '4.' counter(counter-demo_content-2) ' ' }
+                .print-site-enumerate-headings #demo_content h2 {  counter-increment: counter-demo_content-2 }
             
 .print-site-enumerate-headings #contributing > h1:before { content: '5 ' }
 
-                .print-site-enumerate-headings #contributing h2 { counter-reset: ; counter-increment: counter-contributing-2 }
                 .print-site-enumerate-headings #contributing h2:before { content: '5.' counter(counter-contributing-2) ' ' }
+                .print-site-enumerate-headings #contributing h2 {  counter-increment: counter-contributing-2 }
             </style>
 
 

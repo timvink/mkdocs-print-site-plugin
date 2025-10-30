@@ -743,29 +743,24 @@
 <li>When issues or pull requests are not going to be resolved or merged, they should be closed as soon as possible. This is kinder than deciding this after a long period. Our issue tracker should reflect work to be done.</li>
 </ul>
 <h2 id="unit-tests">Unit Tests<a class="headerlink" href="#unit-tests" title="Permanent link">↵</a></h2>
-<p>Make sure to install an editable version before running tests:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>tests/test_requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-pytest<span class="w"> </span>--cov<span class="o">=</span>mkdocs_print_site_plugin<span class="w"> </span>--cov-report<span class="w"> </span>term-missing<span class="w"> </span>tests/
+<p>We use <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a> to manage python:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--cov<span class="o">=</span>mkdocs_print_site_plugin<span class="w"> </span>--cov-report<span class="w"> </span>term-missing<span class="w"> </span>tests/
 </code></pre></div>
 <p>If it makes sense, writing tests for your PRs is always appreciated and will help get them merged.</p>
-<p>In addition, this project uses <a href="https://pypi.org/project/pyflakes/">pyflakes</a> for static code checking:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyflakes
-pyflakes<span class="w"> </span>tests/<span class="w"> </span>mkdocs_print_site_plugin/
+<p>You can also apply formatting using:</p>
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>--with<span class="w"> </span>ruff<span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>src/
 </code></pre></div>
 <h2 id="manual-testing">Manual testing<a class="headerlink" href="#manual-testing" title="Permanent link">↵</a></h2>
 <p>To quickly serve a website with your latest changes to the plugin use the sites in our tests suite. For example:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>tests/test_requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>tests/fixutures/basic/mkdocs.yml
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </span>tests/fixutures/basic/mkdocs.yml
 </code></pre></div>
 <p>Tip: If you use google chrome, you can also view the print version of a page inside the browser <a href="https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/">by setting the renderer</a>.</p>
 <h2 id="code-style">Code Style<a class="headerlink" href="#code-style" title="Permanent link">↵</a></h2>
-<p>Make sure your code <em>roughly</em> follows <a href="https://www.python.org/dev/peps/pep-0008/">PEP-8</a> and keeps things consistent with the rest of the code. I recommended using <a href="https://github.com/psf/black">black</a> to automatically format your code.</p>
+<p>Make sure your code <em>roughly</em> follows <a href="https://www.python.org/dev/peps/pep-0008/">PEP-8</a> and keeps things consistent with the rest of the code. I recommended using <a href="https://github.com/astral-sh/ruff">Ruff</a> to automatically format your code.</p>
 <p>We use google-style docstrings.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">↵</a></h2>
 <p>Is in <code>docs/</code>. To <a href="https://www.mkdocs.org/user-guide/deploying-your-docs/">deploy the docs</a>, run:</p>
-<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>gh-deploy
+<div class="highlight"><pre><span></span><code>uv<span class="w"> </span>run<span class="w"> </span>mkdocs<span class="w"> </span>gh-deploy
 </code></pre></div>
 <p>Note: there is no automated github action for this currently.</p>
 
@@ -790,7 +785,7 @@ mkdocs<span class="w"> </span>serve<span class="w"> </span>-f<span class="w"> </
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="June 12, 2023 10:48:22"><span class="timeago" datetime="2023-06-12T10:48:22+02:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 12, 2023 10:48:22">2023-06-12</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="March 31, 2025 14:38:35"><span class="timeago" datetime="2025-03-31T14:38:35+02:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="March 31, 2025 14:38:35">2025-03-31</span>
   </span>
 
     
