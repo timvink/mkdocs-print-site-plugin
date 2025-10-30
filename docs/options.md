@@ -75,7 +75,7 @@ plugins:
 : Default is empty. Option to make it easier to add a link to the PDF version of the site on each page. See [Adding a PDF button](how-to/pdf_button.md) for more info.
 
 `include_css`
-: Default is `true`. When disabled the [print-site stylesheets](https://github.com/timvink/mkdocs-print-site-plugin/tree/master/mkdocs_print_site_plugin/css) are not included. This makes it easy to overwrite the CSS with your own stylesheets, using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option in your `mkdocs.yml` file.
+: Default is `true`. When disabled the [print-site stylesheets](https://github.com/timvink/mkdocs-print-site-plugin/tree/master/src/mkdocs_print_site_plugin/css) are not included. This makes it easy to overwrite the CSS with your own stylesheets, using the [extra_css](https://www.mkdocs.org/user-guide/configuration/#extra_css) option in your `mkdocs.yml` file.
 
 `enabled`
 : Default is `true`. Enables you to deactivate this plugin. A possible use case is local development where you might want faster build times. It's recommended to use this option with an environment variable together with a default fallback (introduced in `mkdocs` v1.2.1, see [docs](https://www.mkdocs.org/user-guide/configuration/#environment-variables)). Example:
