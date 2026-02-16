@@ -330,3 +330,15 @@ def test_basic_build99(tmp_path):
     )
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="a-a">A')
     assert text_in_page(prj_path, "print_page/index.html", '<h1 id="z-z">Z')
+
+def test_print_by_section(tmp_path):
+    """
+    Check if print_section works.
+    """
+    prj_path = check_build(tmp_path, "nested_sections/mkdocs_print_by_section.yml")
+
+    # Check that page1 content is included in print page section
+    assert text_in_page(prj_path, "print_page_section/index.html", "lRLw8LcChv")
+
+    # Check that index content is not included in print page section
+    assert not text_in_page(prj_path, "print_page_section/index.html", "GFp6NVqU7S")
