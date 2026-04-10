@@ -81,8 +81,8 @@ class PrintSitePlugin(BasePlugin):
             position_offset += len(config.get("hooks"))
 
         if print_site_position != len(plugins) - position_offset:
-            msg = "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin,"
-            msg += "to ensure the print page has any changes other plugins make."
+            msg = "[mkdocs-print-site] 'print-site' should be defined as the *last* plugin, "
+            msg += "to ensure the print page has any changes other plugins make. "
             msg += "Please update the 'plugins:' section in your mkdocs.yml"
             logger.warning(msg)
 
