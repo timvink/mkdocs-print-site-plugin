@@ -16,16 +16,16 @@ license = { text = "MIT" }
 description="MkDocs plugin that combines all pages into one, allowing for easy export to PDF and standalone HTML."
 readme = { file = "README.md", content-type = "text/markdown" }
 
-requires-python=">=3.8"
+requires-python=">=3.11"
 
 classifiers=[
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: MIT License",
     "Topic :: Documentation",
     "Topic :: Text Processing",
@@ -104,9 +104,9 @@ extend-exclude = [
         "*.txt",
 ]
 
-# Must match `requires-python` above: the package still supports Python 3.8,
-# so rules like UP006 must not rewrite `List[str]` to `list[str]`
-target-version = "py38"
+# Must match `requires-python` above, so rules like UP006 only rewrite to
+# syntax that every supported Python version can run
+target-version = "py311"
 
 # Always autofix
 fix = true

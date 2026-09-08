@@ -5,10 +5,9 @@ Inspired by https://github.com/apenwarr/mkdocs-exclude
 """
 
 import fnmatch
-from typing import List
 
 
-def exclude(path: str, exclude_patterns: List[str]) -> bool:
+def exclude(path: str, exclude_patterns: list[str]) -> bool:
     """
     Check if a path should be excluded based on a list of patterns.
 

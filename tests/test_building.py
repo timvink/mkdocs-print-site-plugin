@@ -220,7 +220,7 @@ def test_basic_build4(tmp_path):
     assert text_in_page(
         prj_path,
         "index.html",
-        'href="print_page\/" class="md-nav__link"',
+        r'href="print_page\/" class="md-nav__link"',
     )
 
     # Make sure all 3 pages are combined and present
