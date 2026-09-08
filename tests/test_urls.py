@@ -2,11 +2,11 @@ import pytest
 
 from mkdocs_print_site_plugin.urls import (
     fix_href_links,
-    update_anchor_ids,
     fix_image_src,
     get_page_key,
-    is_external,
     is_attachment,
+    is_external,
+    update_anchor_ids,
 )
 
 

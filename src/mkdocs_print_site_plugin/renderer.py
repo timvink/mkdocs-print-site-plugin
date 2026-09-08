@@ -15,7 +15,7 @@ from mkdocs_print_site_plugin.utils import get_section_id
 logger = logging.getLogger("mkdocs.plugins")
 
 
-class Renderer(object):
+class Renderer:
     """
     Renders the print site page.
     """
@@ -184,7 +184,7 @@ class Renderer(object):
         env = jinja2.Environment()
         env.globals = {"config": self.mkdocs_config, "page": self.print_page}
 
-        with open(self.cover_page_template_path, "r", encoding="utf-8-sig", errors="strict") as f:
+        with open(self.cover_page_template_path, encoding="utf-8-sig", errors="strict") as f:
             cover_page_tpl = f.read()
 
         cover_page_html = env.from_string(cover_page_tpl).render()
@@ -205,7 +205,7 @@ class Renderer(object):
         env = jinja2.Environment()
         env.globals = {"config": self.mkdocs_config, "page": self.print_page}
 
-        with open(self.banner_template_path, "r", encoding="utf-8-sig", errors="strict") as f:
+        with open(self.banner_template_path, encoding="utf-8-sig", errors="strict") as f:
             banner_tpl = f.read()
 
         banner_html = env.from_string(banner_tpl).render()

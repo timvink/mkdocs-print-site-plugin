@@ -20,10 +20,11 @@ os.mkdir(tmp_path)
 
 """
 
-import re
-import os
-import shutil
 import logging
+import os
+import re
+import shutil
+
 from click.testing import CliRunner
 from mkdocs.__main__ import build_command
 

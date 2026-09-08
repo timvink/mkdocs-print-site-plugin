@@ -1,5 +1,6 @@
-from mkdocs_print_site_plugin.exclude import exclude
 import pytest
+
+from mkdocs_print_site_plugin.exclude import exclude
 
 
 def test_exclude():
