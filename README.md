@@ -13,11 +13,12 @@
 ## Features :star2:
 
 - Support for [mkdocs-material](https://github.com/squidfunk/mkdocs-material) theme, including features like instant loading, dark color themes and certain plugins (f.e. the [tags](https://squidfunk.github.io/mkdocs-material/plugins/tags/) plugin)
+- Support for [mkdocs-materialx](https://github.com/jaywhj/mkdocs-materialx) theme
 - Support for [readthedocs](https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs) theme
 - Support for pagination in PDFs
 - Many options to customize appearance
 - Option to add a cover page
-- Lightweight, no dependencies
+- Lightweight, `mkdocs` is the only dependency
 - Support for the [autorefs plugin](https://github.com/mkdocstrings/autorefs)
 
 ## Setup

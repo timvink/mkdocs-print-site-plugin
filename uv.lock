@@ -709,7 +709,7 @@ wheels = [
 name = "mkdocs-print-site-plugin"
 source = { editable = "." }
 dependencies = [
-    { name = "mkdocs-material" },
+    { name = "mkdocs" },
 ]
 
 [package.dev-dependencies]
@@ -730,7 +730,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mkdocs-material", specifier = ">=7.3.0" }]
+requires-dist = [{ name = "mkdocs", specifier = ">=1.2.3,<=1.6.1" }]
 
 [package.metadata.requires-dev]
 dev = [
