@@ -30,6 +30,19 @@ plugins:
 
 > If you have no `plugins` entry in your config file yet, you'll likely also want to add the `search` plugin. MkDocs enables it by default if there is no `plugins` entry set.
 
+## Supported themes
+
+The plugin ships print stylesheets (margins, page breaks, hiding navigation) for the
+[mkdocs-material](https://github.com/squidfunk/mkdocs-material),
+[mkdocs-materialx](https://github.com/jaywhj/mkdocs-materialx),
+[mkdocs](https://www.mkdocs.org/user-guide/choosing-your-theme/#mkdocs) and
+[readthedocs](https://www.mkdocs.org/user-guide/choosing-your-theme/#readthedocs) themes.
+
+Other themes will still get a print page, but you'll see a warning that print margins and
+page breaks might be off. Feel free to
+[open an issue](https://github.com/timvink/mkdocs-print-site-plugin/issues) to request support
+for your theme, or write your own stylesheet using the [`include_css`](options.md) option.
+
 ## Usage
 
 - Navigate to `/print_page/` or `print_page.html`
