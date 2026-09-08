@@ -4,13 +4,7 @@ Module to assist exclude certain files being processed by plugin.
 Inspired by https://github.com/apenwarr/mkdocs-exclude
 """
 
-import os
 import fnmatch
-from typing import List
-
-
-import fnmatch
-import os
 from typing import List
 
 

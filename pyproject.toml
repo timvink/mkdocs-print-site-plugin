@@ -104,8 +104,9 @@ extend-exclude = [
         "*.txt",
 ]
 
- #supported for python 3.10
-target-version = "py310" 
+# Must match `requires-python` above: the package still supports Python 3.8,
+# so rules like UP006 must not rewrite `List[str]` to `list[str]`
+target-version = "py38"
 
 # Always autofix
 fix = true

@@ -27,9 +27,9 @@ So within a page:
 ['index.html', 'z.html', 'a.html']
 """
 
-import re
-import os
 import html
+import os
+import re
 from os.path import splitext
 from urllib.parse import urlparse
 
