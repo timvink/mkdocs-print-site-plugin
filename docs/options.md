@@ -8,6 +8,7 @@ plugins:
       add_to_navigation: false
       print_page_title: 'Print Site'
       print_page_basename: 'print_page'
+      print_by_section: false
       add_print_site_banner: false
       # Table of contents
       add_table_of_contents: true
@@ -33,6 +34,11 @@ plugins:
 
 `print_page_basename`
 :   Default is `'print_page'`. Can be used to cutomized the path to the print page in the URL.
+
+`print_by_section`
+:   Default is `false`. Used to generate a print page per level one section. The section print page will be generated at the root level of the site, with the `print_page_basename` followed by an `_` and the section title cleansed from all special characters and punctuation.
+
+    For example, a section named "Bob's list" will be availlable as `print_page_bobslist/`
 
 `add_table_of_contents`
 :   Default is `true`. Adds a table of contents section at the beginning of the print page (in print version, the HTML version has a different sidebar ToC).

@@ -14,6 +14,7 @@ from mkdocs.utils import copy_file, get_relative_url, write_file
 from mkdocs_print_site_plugin.renderer import Renderer
 from mkdocs_print_site_plugin.urls import is_external
 from mkdocs_print_site_plugin.utils import get_theme_name
+from mkdocs_print_site_plugin.utils import generate_link_from
 
 logger = logging.getLogger("mkdocs.plugins")
 
@@ -44,6 +45,7 @@ class PrintSitePlugin(BasePlugin):
         ("include_css", config_options.Type(bool, default=True)),
         ("enabled", config_options.Type(bool, default=True)),
         ("exclude", config_options.Type(list, default=[])),
+        ("print_by_section", config_options.Type(bool, default=False)),
     )
 
     def on_config(self, config, **kwargs):
@@ -184,11 +186,33 @@ class PrintSitePlugin(BasePlugin):
 
         # Save the (order of) pages and sections in the navigation before adding the print page
         self.renderer.items = nav.items
+        self.section_print_pages = []
 
         # Optionally add the print page to the site navigation
         if self.config.get("add_to_navigation"):
             nav.items.append(self.print_page)
             nav.pages.append(self.print_page)
+
+        if self.config.get("print_by_section"):
+            for item in nav.items:
+                if hasattr(item, "children") and item.children:
+                    # This is a section
+                    section_print_file = File(
+                        path=f"{self.config.get('print_page_basename')}_{generate_link_from(item.title)}.md",
+                        src_dir="",
+                        dest_dir=config["site_dir"],
+                        use_directory_urls=config.get("use_directory_urls"),
+                    )
+                    section_print_page = Page(
+                        title=f"{self.config.get('print_page_title')} - {item.title}",
+                        file=section_print_file,
+                        config=config,
+                    )
+                    section_print_page.edit_url = None
+
+                    # Add section print page to the navigation
+                    nav.pages.append(section_print_page)
+                    self.section_print_pages.append(section_print_page)
 
         return nav
 
@@ -301,15 +325,42 @@ class PrintSitePlugin(BasePlugin):
             if css_file in os.listdir(os.path.join(HERE, "css")):
                 css_file_path = os.path.join(css_output_base_path, css_file)
                 copy_file(os.path.join(os.path.join(HERE, "css"), css_file), css_file_path)
+        
+        self._render_print_page(self.print_page, self.renderer, config)
 
+        if self.config.get("print_by_section"):
+            for section_page in self.section_print_pages:
+                #self.js_loaded_for_section = False
+                # Find the corresponding section item from nav
+                section_title = section_page.title.split(" - ")[-1]
+                section_item = None
+                for item in self.renderer.items:  # self.renderer.items has all nav items
+                    if hasattr(item, "title") and item.title == section_title:
+                        section_item = item
+                        break
+
+                if section_item:
+                    section_renderer = Renderer(
+                        plugin_config=self.config,
+                        mkdocs_config=config,
+                        cover_page_template_path=self.cover_page_template_path,
+                        banner_template_path=self.banner_template_path,
+                        print_page=section_page,
+                    )
+                    section_renderer.items = [section_item]
+                    self._render_print_page(section_page, section_renderer, config)
+
+    def _render_print_page(self, page, renderer, config):
+        """
+        Renders a given page to a print page.
+        """
         # Combine the HTML of all pages present in the navigation
-        self.print_page.content, self.print_page.toc = self.renderer.write_combined()
-
+        page.content, page.toc = renderer.write_combined()
         # Get the info for MkDocs to be able to apply a theme template on our print page
         env = config["theme"].get_env()
         # env.list_templates()
         template = env.get_template("main.html")
-        self.context["page"] = self.print_page
+        self.context["page"] = page
         # Render the theme template for the print page
         html = template.render(self.context)
 
@@ -321,7 +372,7 @@ class PrintSitePlugin(BasePlugin):
         # As this plugin adds some javascript to every page
         # It should be included in the print site also
         if config.get("plugins", {}).get("charts"):
-            html = config.get("plugins", {}).get("charts").add_javascript_variables(html, self.print_page, config)
+            html = config.get("plugins", {}).get("charts").add_javascript_variables(html, page, config)
 
         # Compatibility with mkdocs-drawio
         # As this plugin adds renderer html for every drawio diagram
@@ -329,7 +380,7 @@ class PrintSitePlugin(BasePlugin):
         # in the on_post_page event, which is skipped by this plugin
         # therefore we need to manual execute the drawio plugin renderer here.
         if config.get("plugins", {}).get("drawio"):
-            html = config.get("plugins", {}).get("drawio").render_drawio_diagrams(html, self.print_page)
+            html = config.get("plugins", {}).get("drawio").render_drawio_diagrams(html, page)
 
         # Compatibility with mkdocs-autorefs
         # As this plugin processes cross-references in the on_env event, 
@@ -445,4 +496,4 @@ class PrintSitePlugin(BasePlugin):
         html = html.replace("</head>", print_site_js + "</head>")
 
         # Write the print_page file to the output folder
-        write_file(html.encode("utf-8", errors="xmlcharrefreplace"), self.print_page.file.abs_dest_path)
+        write_file(html.encode("utf-8", errors="xmlcharrefreplace"), page.file.abs_dest_path)
