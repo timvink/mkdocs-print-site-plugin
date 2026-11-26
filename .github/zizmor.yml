@@ -1,0 +1,5 @@
+rules:
+  dependabot-cooldown:
+    config:
+      # Monthly grouped updates; 3 days is enough to catch yanked releases.
+      days: 3
