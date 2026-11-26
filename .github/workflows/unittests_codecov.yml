@@ -27,7 +27,7 @@ jobs:
         persist-credentials: false
 
     - name: Install uv and set the python version
-      uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
+      uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -39,7 +39,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: "contains(env.USING_COVERAGE, matrix.python-version)"
-      uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v6.0.2
+      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
       with:
         files: ./coverage.xml
         flags: unittests
