@@ -8,6 +8,9 @@ on:
     pull_request:
       branches:
         - master
+permissions:
+  contents: read
+
 jobs:
   run:
     name: Run unit tests with codecov upload
@@ -20,6 +23,8 @@ jobs:
         python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
     steps:
     - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
+      with:
+        persist-credentials: false
 
     - name: Install uv and set the python version
       uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
